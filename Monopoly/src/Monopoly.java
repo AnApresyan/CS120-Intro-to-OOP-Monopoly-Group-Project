@@ -1,9 +1,9 @@
-
-
 public class Monopoly 
 {
     private Player[]    players;
     private Player      activePlayer;
+    // hey Anahit, how are we gon' pass the dice value to Utilities, to calculate the rent?
+    // each time we call throwDice, we must pass the value to Utils.
     private int[]       dice = new int[2];
     private Square[]    squares = new Square[40];
     private int         indexOfPlayer;
@@ -12,11 +12,15 @@ public class Monopoly
     {
         setPlayers(players);
         indexOfPlayer = 1;
-
-        // // setting up the squares
-        // squares[0] = new
-        // squares[1]
-        // squares[2]
+        // I'm thinking about splitting RailUtil into Railroad and Utility. if you agree,
+        // then pls split them
+        squares[0] = new GoTax(1);
+        squares[1] = new Property(2);
+        squares[2] = new Deck(3);
+        squares[3] = new Property(4);
+        squares[4] = new GoTax(5);
+        squares[5] = new RailUtil(6);
+        // ...
     }
     
     public void startGame(){
@@ -29,7 +33,7 @@ public class Monopoly
                 this.indexOfPlayer = 0;
             this.activePlayer = players[indexOfPlayer];
             throwDice();
-            this.activePlayer.set
+            // this.activePlayer.setCoordinate
         }
     }
     private void printHeader()

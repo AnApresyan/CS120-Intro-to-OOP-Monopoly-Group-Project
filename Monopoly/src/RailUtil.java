@@ -1,9 +1,8 @@
-public class Property extends Square
+public class RailUtil extends Square
 {
     private Player  owner;
-    private int     houses;
 
-    public Property(int square)
+    public RailUtil(int square)
     {
         setTitleDeed(square);
     }
