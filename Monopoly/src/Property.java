@@ -8,7 +8,9 @@ public class Property extends RailProperty
         super(coordinate);
     }
 
-    
+    // I am actually a bit confused now about the railraods, I don't want to have titleDeed in the
+    //RailProperty as they do not have color or mortgage price or whatever, but they have
+    // also have price
     public enum TitleDeed
     {
         MEDITERRANEAN_AVENUE    (60, new int[]{2, 10, 30, 90, 160, 250}, 50, "BROWN"),
