@@ -1,14 +1,16 @@
-public class Deck extends Square
+public abstract class Deck extends Square
 {
+
+    public Deck(int coordinate)
+    {
+        super(coordinate);
+    }
     // array for Chance
 
     // array for Community Chest
 
     // private deck 
-    public Deck(int square)
-    {
-        setTitleDeed(square);
-    }
+
     // public void drawCard()
     // {
 

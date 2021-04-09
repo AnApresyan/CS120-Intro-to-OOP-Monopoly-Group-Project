@@ -1,3 +1,4 @@
+
 public class Monopoly 
 {
     private Player[]    players;
@@ -12,15 +13,32 @@ public class Monopoly
     {
         setPlayers(players);
         indexOfPlayer = 1;
-        // I'm thinking about splitting RailUtil into Railroad and Utility. if you agree,
-        // then pls split them
-        squares[0] = new GoTax(1);
-        squares[1] = new Property(2);
-        squares[2] = new Deck(3);
-        squares[3] = new Property(4);
-        squares[4] = new GoTax(5);
-        squares[5] = new RailUtil(6);
-        // ...
+
+
+        //isn't this loop much better than wrtiting separate lines for all squares?
+        for (int i = 0; i < 40; i++){
+            if (i == 0 || i == 4 || i == 12 || i == 28 || i == 38 || i == 20)
+                squares[i] = new GoTax(i);              //I included Utility and GoTax, but we can still think about this
+            else if (i == 2 || i == 17 || i == 33)
+                squares[i] = new CommunityChest(i);
+            else if (i == 7 || i == 22 || i == 36)
+                squares[i] = new Chance(i);
+            else if (i == 10)
+                squares[i] = new Jail(i); 
+            else if (i == 30)
+                squares[i] = new GoToJail(i);
+            else if (i % 5 == 0)
+                squares[i] = new RailProperty(i);
+            else
+                squares[i] = new Property(i);
+
+        }
+        // squares[0] = new GoTax(1);
+        // squares[1] = new Property(2);
+        // squares[2] = new Deck(3);
+        // squares[3] = new Property(4);
+        // squares[4] = new GoTax(5);
+        // // ...
     }
     
     public void startGame(){

@@ -1,9 +1,11 @@
 public class GoTax extends Square
 {
-    public GoTax(int square) 
+    public GoTax(int coordinate) 
     {
-        setTitleDeed(square);
+        super(coordinate);
     }
+
+    
     // public int getReward()
     // {
 
