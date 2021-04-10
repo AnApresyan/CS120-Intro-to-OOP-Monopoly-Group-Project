@@ -18,7 +18,7 @@ public class Monopoly
         //isn't this loop much better than wrtiting separate lines for all squares?
         for (int i = 0; i < 40; i++){
             if (i == 0 || i == 4 || i == 12 || i == 28 || i == 38 || i == 20)
-                squares[i] = new GoTax(i);              //I included Utility and GoTax, but we can still think about this
+                squares[i] = new GoTax(i);              
             else if (i == 2 || i == 17 || i == 33)
                 squares[i] = new CommunityChest(i);
             else if (i == 7 || i == 22 || i == 36)
@@ -28,7 +28,7 @@ public class Monopoly
             else if (i == 30)
                 squares[i] = new GoToJail(i);
             else if (i % 5 == 0)
-                squares[i] = new RailProperty(i);
+                squares[i] = new RailRoad(i);
             else
                 squares[i] = new Property(i);
 
@@ -51,6 +51,8 @@ public class Monopoly
                 this.indexOfPlayer = 0;
             this.activePlayer = players[indexOfPlayer];
             throwDice();
+            activePlayer.movePlayer(dice);
+            squares[activePlayer.getCoordinate()].doAction(dice, activePlayer);
             // this.activePlayer.setCoordinate
         }
     }
@@ -73,7 +75,7 @@ public class Monopoly
     }
     public void setPlayers(Player[] players)
     {
-        this.players = players.clone();
+        this.players = players.clone();             //shallow copy?
     }
 
 }

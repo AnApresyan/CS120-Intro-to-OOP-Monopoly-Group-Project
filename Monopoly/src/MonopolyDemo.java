@@ -11,7 +11,8 @@ public class MonopolyDemo
         int num = input.nextInt();
         Player[] players = new Player[num];
         for (int i = 0; i < num; i++)
-            players[i] = new Player(input.nextLine());
+            players[i] = new Player(input.nextLine(), i);
+            
 
 
         //Monopoly newMonopoly = new Monopoly(players);
