@@ -3,13 +3,13 @@ import java.util.ArrayList;
 
 public class Monopoly 
 {
-    private ArrayList<Player> players = new ArrayList<>();
-    private Player      activePlayer;
+    private ArrayList<Player>   players = new ArrayList<>();
+    private Player              activePlayer;
     // hey Anahit, how are we gon' pass the dice value to Utilities, to calculate the rent?
     // each time we call throwDice, we must pass the value to Utils.
-    private int[]       dice = new int[2];
-    private Square[]    squares = new Square[40];
-    private int         indexOfPlayer;
+    private int[]               dice = new int[2];
+    private Square[]            squares = new Square[40];
+    private int                 indexOfPlayer;
 
     public Monopoly(ArrayList<Player> players)
     {

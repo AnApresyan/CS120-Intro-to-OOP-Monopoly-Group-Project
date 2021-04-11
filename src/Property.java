@@ -56,7 +56,10 @@ public class Property extends Buyable
                 this.titleDeed = p;
             }
     }
-
+    public String toString()
+    {
+        return (titleDeed.toString());
+    }
     public void doAction(int[] dice, Player activePlayer){
 
     }

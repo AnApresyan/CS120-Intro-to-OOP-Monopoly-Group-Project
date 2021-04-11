@@ -2,12 +2,12 @@ import java.util.ArrayList;
 
 public class Player
 {
-    private String  name;
-    private int     money;
-    private int     coordinate;
-    private int     index;
-    private ArrayList<Square> belongings = new ArrayList<Square>();
-    private boolean getouttajail;
+    private String              name;
+    private int                 money;
+    private int                 coordinate;
+    private int                 index;
+    public ArrayList<Square>    belongings = new ArrayList<>(); //made it public for testing!
+    private boolean             getouttajail;
 
     public Player(String name, int index)
     {
