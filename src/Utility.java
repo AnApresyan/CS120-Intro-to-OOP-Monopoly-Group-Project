@@ -16,18 +16,5 @@ public class Utility extends Buyable
     public void doAction(int[] dice, Player activePlayer){
         
     }
-    public int  ownsOfThisColor(Player activePlayer, Buyable property)
-    {
-        int     props;
-        int[]   owned = new int[activePlayer.belongings.size()];
-
-        // create an array of ints (coordinates) representing the belongings of a player
-        for (int x = 0; x < activePlayer.belongings.size(); x++)
-            owned[x] = activePlayer.belongings.get(x).getCoordinate();
-        props = 0;
-        for (int i = 0; i < COLORS[ft_searchintinmatrix(property.getCoordinate(), COLORS)].length; i++)
-        if (ft_searchintinarray(COLORS[ft_searchintinmatrix(property.getCoordinate(), COLORS)][i], owned))
-            props++;
-        return (props);
-    }
+    
 }

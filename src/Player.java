@@ -6,7 +6,7 @@ public class Player
     private int                 money;
     private int                 coordinate;
     private int                 index;
-    public ArrayList<Square>    belongings = new ArrayList<>(); //made it public for testing!
+    public ArrayList<Buyable>   belongings = new ArrayList<>(); //made it public for testing!
     private boolean             getouttajail;
 
     public Player(String name, int index)
@@ -32,6 +32,48 @@ public class Player
     public int getCoordinate(){
         return this.coordinate;
     }
+
+    public boolean doesOwnAllProps(Buyable property)
+    {
+        return Buyable.COLORS[ft_searchintinmatrix(property.getCoordinate(), Buyable.COLORS)].length == this.ownsOfThisColor(property) ? true : false;
+    }
+
+    public int  ownsOfThisColor(Buyable property)
+    {
+        int     props;
+        int[]   owned = new int[this.belongings.size()];
+
+        // create an array of ints (coordinates) representing the belongings of a player
+        for (int x = 0; x < this.belongings.size(); x++)
+            owned[x] = this.belongings.get(x).getCoordinate();
+        props = 0;
+        
+        int colorIndex = ft_searchintinmatrix(property.getCoordinate(), Buyable.COLORS);
+        for (int i = 0; i < Buyable.COLORS[colorIndex].length; i++)
+        if (ft_searchintinarray(Buyable.COLORS[colorIndex][i], owned))
+            props++;
+        return (props);
+    }
+
+    public static boolean  ft_searchintinarray(int num, int[] nums)
+    {
+        for (int i = 0; i < nums.length; i++)
+            if (num == nums[i])
+                return (true);
+        return (false);
+    }
+
+    // this is a helper for the searcher functions. returns the INDEX of the ARRAY (an element of the matrix)
+    // in which the given int was found (if not found, returns -1)
+    public static int      ft_searchintinmatrix(int num, int[][] nums)
+    {
+        for (int i = 0; i < nums.length; i++)
+            if (ft_searchintinarray(num, nums[i]))
+                return (i);
+        return (-1);
+    }
+
+
 
     // public static void main(String[] args){
     //     Player first = new Player("Anahit");
