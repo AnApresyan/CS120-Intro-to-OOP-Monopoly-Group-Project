@@ -52,7 +52,7 @@ public class Monopoly
             if (indexOfPlayer == players.size())
                 this.indexOfPlayer = 0;
             this.activePlayer = players.get(indexOfPlayer);
-            throwDice();
+            Utility.setDice(throwDice());
             activePlayer.movePlayer(dice);
             squares[activePlayer.getCoordinate()].doAction(dice, activePlayer);
             if (dice[0] != dice[1])
@@ -78,9 +78,10 @@ public class Monopoly
 
     }
 
-    private void throwDice(){
+    private int throwDice(){
         this.dice[0] = (int)(Math.random() * 6) + 1;
         this.dice[1] = (int)(Math.random() * 6) + 1;
+        return (this.dice[0] + this.dice[1]);
     }
 
     public void setPlayers(ArrayList<Player> players)

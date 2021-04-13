@@ -4,13 +4,12 @@ public class RailRoad extends Buyable {
         super(coordinate);
     }
 
-    public void doAction(int[] dice, Player activePlayer) {
+    // public void doAction(int[] dice, Player activePlayer) {
         
-    }
+    // }
 
     public int getRent() {
-        // TODO Auto-generated method stub
-        return 0;
+        return (25 * (int)Math.pow(2, this.getOwner().ownsOfThisColor(this) - 1));
     }
 
 }

@@ -12,17 +12,14 @@ public abstract class Buyable extends Square
     {
         super(coordinate);
     }
-
     public void setPrice(int price){
         this.price = price;
     } 
-    public int getPrice(){
-        return this.price;
-    }
+    // public int getPrice(){
+    //     return (25 * (int)Math.pow(2, this.owner.ownsOfThisColor(this) - 1));
+    // }
     
     public abstract int getRent();
-
-
 
     public void doAction(int[] dice, Player activePlayer){
         if (this.owner == null)
@@ -33,6 +30,9 @@ public abstract class Buyable extends Square
             }
         }
 
-    };
-    
+    }
+    public Player getOwner()
+    {
+        return (this.owner);
+    }
 }
