@@ -1,12 +1,12 @@
 public class Property extends Buyable
 {
-    private Player  owner;
     private int     houses;
     private TitleDeed titleDeed;
 
     public Property(int coordinate){
         super(coordinate);
-        setTitleDeed(); 
+        setTitleDeed();
+        setPrice(titleDeed.price); 
     }
 
     public enum TitleDeed
@@ -46,7 +46,10 @@ public class Property extends Buyable
                 res = res.replace('_', ' ');
             return (res);
         }
+
     }
+
+
 
     public void setTitleDeed() 
     {
@@ -65,7 +68,6 @@ public class Property extends Buyable
     }
     @Override
     public int getRent() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.titleDeed.rents[houses];
     }
 }

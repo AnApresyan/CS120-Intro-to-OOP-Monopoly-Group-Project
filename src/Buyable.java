@@ -19,6 +19,9 @@ public abstract class Buyable extends Square
     public int getPrice(){
         return this.price;
     }
+    public void setOwner(Player player){
+        this.owner = player;
+    }
     
     public abstract int getRent();
 
