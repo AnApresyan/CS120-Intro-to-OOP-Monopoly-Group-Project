@@ -63,4 +63,9 @@ public class Property extends Buyable
     public void doAction(int[] dice, Player activePlayer){
 
     }
+    @Override
+    public int getRent() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

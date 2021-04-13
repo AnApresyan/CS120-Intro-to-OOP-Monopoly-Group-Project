@@ -74,13 +74,14 @@ public class Player
     }
 
 
+    public void buyProperty(Buyable property){
+        //property.getPrice();
+    };
 
-    // public static void main(String[] args){
-    //     Player first = new Player("Anahit");
-        
-    //     first.movePlayer(10);
-    //     System.out.println(first.coordinates);
-    //     first.movePlayer(30);
-    //     System.out.println(first.coordinates);
-    // }
+    public void rentProperty(Buyable property){
+        //proprty.getRent();
+    }
+
+    //override equals
+
 }

@@ -21,4 +21,6 @@ public abstract class Square
 
     public abstract void doAction(int[] dice, Player activePlayer);
     
+
+    
 } 
