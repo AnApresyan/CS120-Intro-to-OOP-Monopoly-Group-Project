@@ -18,6 +18,12 @@ public abstract class Buyable extends Square
     // public int getPrice(){
     //     return (25 * (int)Math.pow(2, this.owner.ownsOfThisColor(this) - 1));
     // }
+    public int getPrice(){
+        return this.price;
+    }
+    public void setOwner(Player player){
+        this.owner = player;
+    }
     
     public abstract int getRent();
 

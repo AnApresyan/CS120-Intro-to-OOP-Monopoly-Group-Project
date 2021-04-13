@@ -6,7 +6,7 @@ public class Player
     private int                 money;
     private int                 coordinate;
     private int                 index;
-    public ArrayList<Buyable>   belongings = new ArrayList<>(); //made it public for testing!
+    public  ArrayList<Buyable>  belongings = new ArrayList<>(); //made it public for testing!
     private boolean             getouttajail;
 
     public Player(String name, int index)
@@ -75,11 +75,32 @@ public class Player
 
 
     public void buyProperty(Buyable property){
-        //property.getPrice();
+        //Prompt that it's gonna buy it
+        if (this.money > property.getPrice()){
+            //you bought it
+            this.money -= property.getPrice();
+            property.setOwner(this);
+            this.belongings.add(property);
+        }
+        else if (this.money < property.getPrice()){
+            //going bakrupt
+        }
+        else{
+            //if this.money == property.getprice();
+        }
     };
 
     public void rentProperty(Buyable property){
-        //proprty.getRent();
+        //Prompt it's gonna rent it
+        this.money -= property.getRent();
+        if (this.money < 0){   
+            //mortgage houses
+            //
+        }
+        else{
+
+        }
+
     }
 
     //override equals

@@ -86,7 +86,7 @@ public class Monopoly
 
     public void setPlayers(ArrayList<Player> players)
     {
-        this.players = players;             //shallow copy?
+        this.players = players;             
     }
 
 }
