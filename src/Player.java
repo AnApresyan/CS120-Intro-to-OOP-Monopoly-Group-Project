@@ -17,6 +17,13 @@ public class Player
         this.getouttajail = false;
     }
 
+    public String getName(){
+        return this.name;
+    }
+
+    public int getIndex(){
+        return this.index;
+    }
     public void setName(String name){
         this.name = name;
     }
@@ -91,7 +98,7 @@ public class Player
     };
 
     public void rentProperty(Buyable property){
-        //Prompt it's gonna rent it
+        //Prompt: you rent the house
         this.money -= property.getRent();
         if (this.money < 0){   
             //mortgage houses
@@ -103,6 +110,15 @@ public class Player
 
     }
 
-    //override equals
+    public boolean equals(Object obj){
+        if (obj == null)
+            return false;
+        else if (this.getClass() != obj.getClass())
+            return false;
+        else{
+            Player second = (Player) obj;
+            return this.name.equalsIgnoreCase(second.name);     //won't allow two players to have the same name, checked by SameNameException
+        }
+    }
 
 }

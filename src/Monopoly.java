@@ -5,8 +5,6 @@ public class Monopoly
 {
     private ArrayList<Player>   players = new ArrayList<>();
     private Player              activePlayer;
-    // hey Anahit, how are we gon' pass the dice value to Utilities, to calculate the rent?
-    // each time we call throwDice, we must pass the value to Utils.
     private int[]               dice = new int[2];
     private Square[]            squares = new Square[40];
     private int                 indexOfPlayer;
@@ -14,10 +12,9 @@ public class Monopoly
     public Monopoly(ArrayList<Player> players)
     {
         setPlayers(players);
-        indexOfPlayer = 1;
+        indexOfPlayer = 0;          //we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
 
-
-        //isn't this loop much better than wrtiting separate lines for all squares?
+        //Hey Alex, is there a need for a board class? new Boards() for example, but I am not sure at all
         for (int i = 0; i < 40; i++){
             if (i == 0 || i == 4 || i == 12 || i == 28 || i == 38 || i == 20)//separate utility/tax//railroads
                 squares[i] = new GoTax(i);              
@@ -35,12 +32,6 @@ public class Monopoly
                 squares[i] = new Property(i);
 
         }
-        // squares[0] = new GoTax(1);
-        // squares[1] = new Property(2);
-        // squares[2] = new Deck(3);
-        // squares[3] = new Property(4);
-        // squares[4] = new GoTax(5);
-        // // ...
     }
     
     public void startGame(){
