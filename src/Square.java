@@ -19,6 +19,10 @@ public abstract class Square
         this.title = title;
     }
 
+    public String getTitle(){
+        return this.title;
+    }
+
     public abstract void doAction(int[] dice, Player activePlayer);
     
 

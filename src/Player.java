@@ -6,7 +6,7 @@ public class Player
     private int                 money;
     private int                 coordinate;
     private int                 index;
-    public  ArrayList<Buyable>  belongings = new ArrayList<>(); //made it public for testing!
+    private  ArrayList<Buyable>  belongings = new ArrayList<>(); //made it public for testing!
     private boolean             getouttajail;
 
     public Player(String name, int index)
@@ -17,6 +17,9 @@ public class Player
         this.getouttajail = false;
     }
 
+    public ArrayList<Buyable> getBelongings(){                  //privacy leak?
+        return this.belongings;
+    }
     public String getName(){
         return this.name;
     }
@@ -101,14 +104,34 @@ public class Player
         //Prompt: you rent the house
         this.money -= property.getRent();
         if (this.money < 0){   
-            //mortgage houses
-            //
+            /*if (this.belongings.size() > 0){
+                for (Buyable belonging: belongings){
+                    if (belonging.getClass().getName().equals("Property")){
+                        Property toBeMorgaged = (Property) belonging;       //????
+                        if (!toBeMorgaged.isMortgaged() && !toBeMorgaged.isImproved()){
+
+                        }
+                    }
+                }
+                try{
+
+                }
+                catch (){
+
+                }
+
+            }
+            else{
+                System.out.println("You lost");
+            }*/
         }
         else{
 
         }
 
     }
+
+
 
     public boolean equals(Object obj){
         if (obj == null)

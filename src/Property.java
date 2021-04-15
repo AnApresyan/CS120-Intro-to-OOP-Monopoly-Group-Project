@@ -2,11 +2,21 @@ public class Property extends Buyable
 {
     private int     houses;
     private TitleDeed titleDeed;
+    private boolean mortgaged;
 
     public Property(int coordinate){
         super(coordinate);
         setTitleDeed();
-        setPrice(titleDeed.price); 
+        setPrice(titleDeed.price);
+        setTitle(titleDeed.toString());
+        this.mortgaged = false;
+    }
+
+    public boolean isMortgaged(){
+        return mortgaged;
+    }
+    public void setMortgaged(boolean mortgaged){
+        this.mortgaged = mortgaged;
     }
 
     public enum TitleDeed
@@ -50,6 +60,14 @@ public class Property extends Buyable
     }
 
 
+/*    public boolean isImproved(){
+        if (this.getOwner().doesOwnAllProps(this)){
+            int colorIndex = Player.ft_searchintinmatrix(this.getCoordinate(), Buyable.COLORS);
+            if (int propertyCord : Buyable.COLORS[colorIndex]){
+                if ()
+            }
+        }
+    }*/
 
     public void setTitleDeed() 
     {
