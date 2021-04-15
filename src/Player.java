@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 
 public class Player
 {
@@ -8,6 +11,8 @@ public class Player
     private int                 index;
     private  ArrayList<Buyable>  belongings = new ArrayList<>(); ////made it public for testing!
     private boolean             getouttajail;
+    
+    static Scanner input = new Scanner(System.in);
 
     public Player(String name, int index)
     {
@@ -113,34 +118,73 @@ public class Player
     public void rentProperty(Buyable property){
         //Prompt: you rent the house
         this.money -= property.getRent();
-        if (this.money < 0){   
-            /*if (this.belongings.size() > 0){
-                for (Buyable belonging: belongings){
-                    if (belonging.getClass().getName().equals("Property")){
-                        Property toBeMorgaged = (Property) belonging;       //????
-                        if (!toBeMorgaged.isMortgaged() && !toBeMorgaged.isImproved()){
-
-                        }
-                    }
+        while (this.money < 0){   
+            if (this.belongings.size() > 0){
+                for (Buyable belonging : belongings){
+                    if (canBeMortgaged(belonging))
+                        System.out.println(belonging.toString());
                 }
-                try{
-
-                }
-                catch (){
-
-                }
-
             }
             else{
                 System.out.println("You lost");
-            }*/
-        }
-        else{
-
+                //outtaGame();
+                break;
+            }
+            boolean done = false;
+            int coord = 0;
+            while(!done){
+                try{
+                    System.out.println("Please type the coordinate of the property you want to mortgage");
+                    coord = input.nextInt();
+                    done = true;
+                    if (!canBeMortgaged(coord)){
+                        System.out.println("Not yours or cannot be mortgaged");
+                        done = false;
+                    } 
+                }
+                catch(InputMismatchException e){
+                    input.nextLine();
+                    System.out.println("Not a number, please try again");
+                }
+            }
+            this.mortgage(coord);
         }
 
     }
 
+    public void mortgage(int coord){
+        for (Buyable belonging : belongings){
+            if (belonging.getCoordinate() == coord){
+                this.money += belonging.getPrice();
+                belonging.setisMortgaged(true);
+            }
+        }
+    }
+
+    // public boolean isYourProperty(int coordinate){
+    //     for (Buyable belonging : belongings){
+    //         if (belonging.getCoordinate() == coordinate)
+    //             return true;
+    //     }
+    //     return false;
+    // }
+
+
+    public boolean canBeMortgaged(int coordinate){
+        for (Buyable belonging : belongings){
+            if (belonging.getCoordinate() == coordinate && canBeMortgaged(belonging))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean canBeMortgaged(Buyable belonging){
+        if (!belonging.isMortgaged()){
+            if (belonging.getClass().getName() != "Property" || (belonging.getClass().getName() != "Property" && !((Property)belonging).isImproved()))
+                return true;
+        }
+        return false;
+    }
 
 
     public boolean equals(Object obj){
