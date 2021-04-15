@@ -6,7 +6,7 @@ public class Player
     private int                 money;
     private int                 coordinate;
     private int                 index;
-    private  ArrayList<Buyable>  belongings = new ArrayList<>(); //made it public for testing!
+    private  ArrayList<Buyable>  belongings = new ArrayList<>(); ////made it public for testing!
     private boolean             getouttajail;
 
     public Player(String name, int index)
@@ -94,9 +94,19 @@ public class Player
         }
         else if (this.money < property.getPrice()){
             //going bakrupt
+
+            /**
+             * if the player cannot afford the property, it's auctioned. while the latter is not implemented,
+             * we shouldn't do anything else in this if.
+             */
         }
         else{
             //if this.money == property.getprice();
+
+            /**
+             * this has to be included in the opening if statement. the player is playing as long as their
+             * balance is a POSITIVE number AND they have unmortgaged properties.
+             */
         }
     };
 
@@ -140,7 +150,7 @@ public class Player
             return false;
         else{
             Player second = (Player) obj;
-            return this.name.equalsIgnoreCase(second.name);     //won't allow two players to have the same name, checked by SameNameException
+            return this.name.equalsIgnoreCase(second.name);     //won't allow two players to have the same name, checked by SameNameException //// cool!
         }
     }
 
