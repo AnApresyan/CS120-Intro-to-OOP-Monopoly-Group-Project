@@ -2,14 +2,14 @@ public class Utility extends Buyable
 {
     private static int diceValue;
 
-    public Utility(int coordinate)
+    public Utility(int coordinate, String title)
     {
         super(coordinate);
         if (coordinate % 5 == 0)
             this.setPrice(200);
         else
             this.setPrice(100);
-            
+        setTitle(title);
     }
 
     public void doAction(int[] dice, Player activePlayer){

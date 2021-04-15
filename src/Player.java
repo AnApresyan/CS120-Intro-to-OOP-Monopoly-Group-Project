@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Player
 {
@@ -6,15 +7,15 @@ public class Player
     private int                 money;
     private int                 coordinate;
     private int                 index;
-    private  ArrayList<Buyable>  belongings = new ArrayList<>(); ////made it public for testing!
+    private ArrayList<Buyable>  belongings = new ArrayList<>(); ////made it public for testing!
     private boolean             getouttajail;
+    private boolean             isPrisoned;
 
     public Player(String name, int index)
     {
         setName(name);
         this.index = index;
         this.coordinate = 1;
-        this.getouttajail = false;
     }
 
     public ArrayList<Buyable> getBelongings(){                  //privacy leak?
@@ -32,11 +33,17 @@ public class Player
     }
     public void movePlayer(int[] dice)
     {
-        //check if in jail or not
-        if ((this.coordinate + dice[0] + dice[1]) > 39)
-            this.coordinate = this.coordinate + dice[0] + dice[1] - 39;
+        if (!(this.isPrisoned))
+        {
+            if ((this.coordinate + dice[0] + dice[1]) > 39)
+                this.coordinate = this.coordinate + dice[0] + dice[1] - 39;
+            else
+                this.coordinate = this.coordinate + dice[0]  + dice[1];
+        }
         else
-            this.coordinate = this.coordinate + dice[0]  + dice[1];
+        {
+            //ask whether the player wants to pay or throw a dice.
+        }
     }
 
     public int getCoordinate(){
@@ -84,36 +91,45 @@ public class Player
     }
 
 
-    public void buyProperty(Buyable property){
+    public void buyProperty(Buyable property)
+    {
         //Prompt that it's gonna buy it
         if (this.money > property.getPrice()){
+            String  response;
+            Scanner input;
             //you bought it
-            this.money -= property.getPrice();
-            property.setOwner(this);
-            this.belongings.add(property);
-        }
-        else if (this.money < property.getPrice()){
-            //going bakrupt
+            System.out.println("You've landed on " + property.getTitle() + " (price: " + property.getPrice() + "). Do you want to buy it? YES/NO");
+            input = new Scanner(System.in);
+            response = input.next();
+            while (true)
+            {
+                if (response.equals("YES"))
+                {
+                    this.money -= property.getPrice();
+                    property.setOwner(this);
+                    this.belongings.add(property);
+                    input.close();
+                    break ;
+                }
+                else if (response.equals("NO"))
+                {
+                    // do auction
+                    input.close();
+                    break ;
+                }
+                else
+                    System.out.println("Please input either YES or NO.");
+                // check for mismatched input!
+            }
 
-            /**
-             * if the player cannot afford the property, it's auctioned. while the latter is not implemented,
-             * we shouldn't do anything else in this if.
-             */
-        }
-        else{
-            //if this.money == property.getprice();
-
-            /**
-             * this has to be included in the opening if statement. the player is playing as long as their
-             * balance is a POSITIVE number AND they have unmortgaged properties.
-             */
         }
     };
 
     public void rentProperty(Buyable property){
         //Prompt: you rent the house
         this.money -= property.getRent();
-        if (this.money < 0){   
+        if (this.money < 0) // start the mortgage loop.
+        {   
             /*if (this.belongings.size() > 0){
                 for (Buyable belonging: belongings){
                     if (belonging.getClass().getName().equals("Property")){
@@ -135,7 +151,8 @@ public class Player
                 System.out.println("You lost");
             }*/
         }
-        else{
+        else
+        {
 
         }
 

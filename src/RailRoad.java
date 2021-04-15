@@ -1,7 +1,8 @@
-public class RailRoad extends Buyable {
+public class Railroad extends Buyable {
 
-    public RailRoad(int coordinate) {
+    public Railroad(int coordinate, String title) {
         super(coordinate);
+        setTitle(title);
     }
 
     // public void doAction(int[] dice, Player activePlayer) {

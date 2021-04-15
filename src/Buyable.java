@@ -37,12 +37,11 @@ public abstract class Buyable extends Square
     public void doAction(int[] dice, Player activePlayer){
         if (this.owner == null)
             activePlayer.buyProperty(this);
-        else{
-            if (!this.owner.equals(activePlayer)){
+        else
+        {
+            if (!this.owner.equals(activePlayer))
                 activePlayer.rentProperty(this);
-            }
         }
-
     }
     public Player getOwner()
     {
