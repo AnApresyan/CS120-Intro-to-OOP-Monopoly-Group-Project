@@ -3,7 +3,8 @@ public class GoToJail extends Square {
         super(coordinate);
         setTitle("Go To Jail");
     }
-    public void doAction(int[] dice, Player activePlayer){
-        
+    public void doAction(Player activePlayer){
+        activePlayer.setIsPrisoned(true);
+        activePlayer.setCoordinate(10);
     }
 }

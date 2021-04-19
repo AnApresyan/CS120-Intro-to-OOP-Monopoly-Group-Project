@@ -23,7 +23,7 @@ public abstract class Square
         return this.title;
     }
 
-    public abstract void doAction(int[] dice, Player activePlayer);
+    public abstract void doAction(Player activePlayer);
 
     public String toString(){
         return "Title: " + this.title + ", coordinate: " + this.coordinate;

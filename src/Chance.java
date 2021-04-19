@@ -3,7 +3,7 @@ public class Chance extends Deck {
         super(coordinate);
         setTitle("Chance");
     }
-    public void doAction(int[] dice, Player activePlayer){
+    public void doAction(Player activePlayer){
         
     }
 }

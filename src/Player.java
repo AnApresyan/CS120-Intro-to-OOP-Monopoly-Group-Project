@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.InputMismatchException;
-import java.util.Scanner;
-
 
 public class Player
 {
@@ -10,9 +8,11 @@ public class Player
     private int                 money;
     private int                 coordinate;
     private int                 index;
-    private ArrayList<Buyable>  belongings = new ArrayList<>(); ////made it public for testing!
-    private boolean             getouttajail;
+    private ArrayList<Buyable>  belongings = new ArrayList<>();
+    private boolean             getOutOfJail;
+    private int                 daysInJail;
     private boolean             isPrisoned;
+    private int[]               dice = new int[2];
     
     static Scanner input = new Scanner(System.in);
 
@@ -21,38 +21,107 @@ public class Player
         setName(name);
         this.index = index;
         this.coordinate = 1;
+        this.daysInJail = 1;
     }
 
-    public ArrayList<Buyable> getBelongings(){                  //privacy leak?
-        return this.belongings;
-    }
-    public String getName(){
-        return this.name;
+    public ArrayList<Buyable> getBelongings()
+    {                  //privacy leak?
+        return (this.belongings);
     }
 
-    public int getIndex(){
-        return this.index;
+    public String getName()
+    {
+        return (this.name);
     }
-    public void setName(String name){
+
+    public int getCoordinate()
+    {
+        return (this.coordinate);
+    }
+
+    public int getIndex()
+    {
+        return (this.index);
+    }
+
+    public int getMoney()
+    {
+        return (this.money);
+    }
+
+    public boolean getIsPrisoned()
+    {
+        return (this.isPrisoned);
+    }
+
+    public boolean getGetOutOfJail()
+    {
+        return (this.getOutOfJail);
+    }
+    
+    public int getDaysInJail()
+    {
+        return (this.daysInJail);
+    }
+    
+    public int getDice()
+    {
+        return (this.dice[0] + this.dice[1]);
+    }
+    public void setName(String name)
+    {
         this.name = name;
     }
-    public void movePlayer(int[] dice)
+    
+    public void setIsPrisoned(boolean bool)
     {
-        if (!(this.isPrisoned))
-        {
-            if ((this.coordinate + dice[0] + dice[1]) > 39)
-                this.coordinate = this.coordinate + dice[0] + dice[1] - 39;
-            else
-                this.coordinate = this.coordinate + dice[0]  + dice[1];
-        }
-        else
-        {
-            //ask whether the player wants to pay or throw a dice.
-        }
+        this.isPrisoned = bool;
     }
 
-    public int getCoordinate(){
-        return this.coordinate;
+    public void setGetOutOfJail(boolean bool)
+    {
+        this.getOutOfJail = bool;
+    }
+    
+    public void setCoordinate(int coordinate)
+    {
+        this.coordinate = coordinate;
+    }
+
+    public void setMoney(int money)
+    {
+        this.money = money;
+    }
+
+    public void setDaysInJail(int daysInJail)
+    {
+        this.daysInJail = daysInJail;
+    }
+
+    public int throwDice()
+    {
+        this.dice[0] = (int)(Math.random() * 6) + 1;
+        this.dice[1] = (int)(Math.random() * 6) + 1;
+        return (this.dice[0] + this.dice[1]);
+    }
+
+    public boolean holdsDoubles()
+    {
+        return (this.dice[0] == this.dice[1]);
+    }
+    public void movePlayer()
+    {
+
+        if (!(this.isPrisoned && this.coordinate == 10))
+        {
+            if ((this.coordinate + this.dice[0] + this.dice[1]) > 39)
+            {
+                this.coordinate = this.coordinate + this.dice[0] + this.dice[1] - 40;
+                this.money += 200;
+            }
+            else
+                this.coordinate = this.coordinate + this.dice[0] + this.dice[1];
+        }
     }
 
     public boolean doesOwnAllProps(Buyable property)
@@ -171,7 +240,7 @@ public class Player
         for (Buyable belonging : belongings){
             if (belonging.getCoordinate() == coord){
                 this.money += belonging.getPrice();
-                belonging.setisMortgaged(true);
+                belonging.setIsMortgaged(true);
             }
         }
     }

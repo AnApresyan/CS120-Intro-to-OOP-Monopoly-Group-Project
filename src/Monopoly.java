@@ -1,21 +1,30 @@
 import java.util.ArrayList;
-
-
+/**
+ * Al: CHANGELOG. MONOPOLY 1.0.1
+ * 1) moved dice[2] to Player;
+ * 2) created holdsDoubles() for Player class;
+ * 3) added getters and setters here and there;
+ * 4) added "Go To Jail" functionality and changed the startGame loop accordingly;
+ * 5) cleaned up the code a bit;
+ * 6) added daysInJail int in Player to force the player leave the jail after 3 days;
+ * 7) fixed a bug causing the player omit GO each time a new round around the map is passed;
+ * 7) modified movePlayer() such that if GO is passed, the player is granted $200.
+ */
 public class Monopoly 
 {
+    public static final int    JAIL_FINE = 50;
+
     private ArrayList<Player>   players = new ArrayList<>();
     private Player              activePlayer;
-    private int[]               dice = new int[2];
     private Square[]            squares = new Square[40];
     private int                 indexOfPlayer;
 
     public Monopoly(ArrayList<Player> players)
     {
         setPlayers(players);
-        indexOfPlayer = 0;          //we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
+        indexOfPlayer = 0;          // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
+                                    // Al: good idea, but let's leave it for later, if we have time 
 
-        //Hey Alex, is there a need for a board class? new Boards() for example, but I am not sure at all
-        
         /**
          * Setting up the board:
          */
@@ -70,10 +79,16 @@ public class Monopoly
             if (indexOfPlayer == players.size())
                 this.indexOfPlayer = 0;
             this.activePlayer = players.get(indexOfPlayer);
-            Utility.setDice(throwDice());
-            activePlayer.movePlayer(dice);
-            squares[activePlayer.getCoordinate()].doAction(dice, activePlayer);
-            if (dice[0] != dice[1])
+            // Al: added a check on throwing the dice to move for if the player's prisoned.
+            // if they are, then the dice will not be thrown, and the player won't move.
+            if (!(activePlayer.getIsPrisoned()))
+                Utility.setDice(activePlayer.throwDice());
+            // Al: updated movePlayer() such that if the player's prisoned, the coords do not change.
+            activePlayer.movePlayer();
+            // Al: having the dice not thrown, the player not moved, and the coords = 10 after landing 
+            // on "Go To Jail", the jail's doAction() will fire asking for more options 
+            squares[activePlayer.getCoordinate()].doAction(activePlayer);
+            if (!(activePlayer.holdsDoubles()))
                 indexOfPlayer++;
             printHeader();
             printMap();
@@ -83,28 +98,24 @@ public class Monopoly
         }
         System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
     }
+
     private void printHeader()
     {
 
     }
+
     private void printMap()
     {
 
     }
+
     private void printFooter()
     {
 
-    }
-
-    private int throwDice(){
-        this.dice[0] = (int)(Math.random() * 6) + 1;
-        this.dice[1] = (int)(Math.random() * 6) + 1;
-        return (this.dice[0] + this.dice[1]);
     }
 
     public void setPlayers(ArrayList<Player> players)
     {
         this.players = players;             
     }
-
 }

@@ -12,7 +12,8 @@ public class GoTaxFree extends Square
         else if (coordinate == 38)
             setTitle("Luxury Tax");
     }
-    public void doAction(int[] dice, Player activePlayer){
+    public void doAction(Player activePlayer)
+    {
         
     }
 
