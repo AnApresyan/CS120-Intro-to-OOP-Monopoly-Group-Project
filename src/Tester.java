@@ -2,7 +2,7 @@ public class Tester
 {
     public static void main (String[] args)
     {
-        Player player = new Player("Alex", 1);
+        /*Player player = new Player("Alex", 1);
         Player player2 = new Player("Anahit", 2);
         // player.getBelongings().add(new Property(1));
         // player.getBelongings().add(new Property(3));
@@ -16,6 +16,8 @@ public class Tester
         //Property prop = (Property) player.getBelongings().get(0);
         //System.out.println(prop.isImproved());
 
-        player2.rentProperty(player.getBelongings().get(0));
+        player2.rentProperty(player.getBelongings().get(0));*/
+
+        MainWindow frame = new MainWindow();
     }    
 }
