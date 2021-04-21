@@ -79,7 +79,10 @@ public class Player
     
     public void setCoordinate(int coordinate)
     {
-        this.coordinate = coordinate;
+        if (coordinate > 39)
+            this.coordinate = coordinate - 40;
+        else
+            this.coordinate = coordinate;
     }
 
     public void setMoney(int money)
@@ -103,18 +106,16 @@ public class Player
     {
         return (this.dice[0] == this.dice[1]);
     }
-    public void movePlayer()
+    public void movePlayer(int move)
     {
-
-        if (!(this.isPrisoned && this.coordinate == 10))
+        if (!(this.isPrisoned))
         {
-            if ((this.coordinate + this.dice[0] + this.dice[1]) > 39)
+            if ((this.coordinate + move) > 39)
             {
-                this.coordinate = this.coordinate + this.dice[0] + this.dice[1] - 40;
                 this.money += 200;
+                System.out.println("You passed the GO! Collect $200.");
             }
-            else
-                this.coordinate = this.coordinate + this.dice[0] + this.dice[1];
+            setCoordinate(this.coordinate + move);
         }
     }
 
