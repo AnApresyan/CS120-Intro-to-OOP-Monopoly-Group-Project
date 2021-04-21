@@ -7,7 +7,6 @@ public class Player
     private String              name;
     private int                 money;
     private int                 coordinate;
-    private int                 index;
     private ArrayList<Buyable>  belongings = new ArrayList<>();
     private boolean             getOutOfJail;
     private int                 daysInJail;
@@ -16,10 +15,9 @@ public class Player
     
     static Scanner input = new Scanner(System.in);
 
-    public Player(String name, int index)
+    public Player(String name)
     {
         setName(name);
-        this.index = index;
         this.coordinate = 1;
         this.daysInJail = 1;
     }
@@ -37,11 +35,6 @@ public class Player
     public int getCoordinate()
     {
         return (this.coordinate);
-    }
-
-    public int getIndex()
-    {
-        return (this.index);
     }
 
     public int getMoney()
@@ -85,7 +78,10 @@ public class Player
     
     public void setCoordinate(int coordinate)
     {
-        this.coordinate = coordinate;
+        if (coordinate > 39)
+            this.coordinate = coordinate - 40;
+        else
+            this.coordinate = coordinate;
     }
 
     public void setMoney(int money)
@@ -109,18 +105,16 @@ public class Player
     {
         return (this.dice[0] == this.dice[1]);
     }
-    public void movePlayer()
+    public void movePlayer(int move)
     {
-
-        if (!(this.isPrisoned && this.coordinate == 10))
+        if (!(this.isPrisoned))
         {
-            if ((this.coordinate + this.dice[0] + this.dice[1]) > 39)
+            if ((this.coordinate + move) > 39)
             {
-                this.coordinate = this.coordinate + this.dice[0] + this.dice[1] - 40;
                 this.money += 200;
+                System.out.println("You passed the GO! Collect $200.");
             }
-            else
-                this.coordinate = this.coordinate + this.dice[0] + this.dice[1];
+            setCoordinate(this.coordinate + move);
         }
     }
 

@@ -3,7 +3,8 @@ public class CommunityChest extends Deck {
         super(square);
         setTitle("Community Chest");
     }
-    public void doAction(Player activePlayer){
-        
+    public void doAction(Player activePlayer)
+    {
+
     }
 }

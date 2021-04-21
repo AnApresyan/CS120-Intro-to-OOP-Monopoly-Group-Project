@@ -21,7 +21,7 @@ public class MonopolyDemo
                         if (name.equalsIgnoreCase(player.getName()) || name.equals(""))
                             throw new SameNameException();
                     }
-                    players.add(new Player(name, players.size()));
+                    players.add(new Player(name));
                     break;
                 }
                 catch (SameNameException e){

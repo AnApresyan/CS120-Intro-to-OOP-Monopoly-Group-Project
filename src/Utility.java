@@ -12,10 +12,6 @@ public class Utility extends Buyable
         setTitle(title);
     }
 
-    public void doAction(int[] dice, Player activePlayer){
-        
-    }
-
     public int getRent() {
         if (this.getOwner().ownsOfThisColor(this) == 1)
             return (diceValue * 4);

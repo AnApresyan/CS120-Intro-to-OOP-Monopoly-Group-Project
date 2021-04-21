@@ -1,6 +1,24 @@
 import java.util.ArrayList;
 /**
- * Al: CHANGELOG. MONOPOLY 1.0.1
+ * >>>>> CHANGELOG <<<<<
+ * An & Al: MONOPOLY 0.1.0  04/13/2021
+ * 1) created the whole hierarchy of the game;
+ * 2) created Player class.
+ * 
+ * An & Al: MONOPOLY 0.2.0  04/14/2021
+ * 1) implemented the main gameplay loop;
+ * 2) created the rest of trivial classes.
+ * 
+ * MONOPOLY 0.2.1           04/15/2021
+ * Al: 
+ * 1) added getRent() computation method for Utility & Railroad;
+ * 2) improved overall performance of the gameplay loop;
+ * 3) implemented detection of Monopoly and count of owned props of the same color.
+ * An:
+ * 3) implemented mortgaging;
+ * 4) implemented canBeMortgaged() and the bankruptcy loop.
+ * 
+ * Al: MONOPOLY 0.3.0.      04/18/2021
  * 1) moved dice[2] to Player;
  * 2) created holdsDoubles() for Player class;
  * 3) added getters and setters here and there;
@@ -8,7 +26,22 @@ import java.util.ArrayList;
  * 5) cleaned up the code a bit;
  * 6) added daysInJail int in Player to force the player leave the jail after 3 days;
  * 7) fixed a bug causing the player omit GO each time a new round around the map is passed;
- * 7) modified movePlayer() such that if GO is passed, the player is granted $200.
+ * 8) modified movePlayer() such that if GO is passed, the player is granted $200.
+ * 
+ * An: MONOPOLY 0.4.0       04/19/2021
+ * 1) added basic Swing support;
+ * 2) added a tester for play window; added basic interface;
+ * 3) added logo on the starting screen; added START button.
+ * 
+ * An: MONOPOLY 0.4.1       04/20/2021
+ * 1) fixed an issue causing the content not to display until the window is resized.
+ * 
+ * Al: MONOPOLY 0.5.0       04/21/2021
+ * 1) movePlayer() now receives an int;
+ * 2) implemented the functionality of Community Chest and Chance squares;
+ * 3) movePlayer() improved further such that the renewal of coordinates depenends on getCoordinate();
+ * 4) scrapped index instance variable in Player class (was unused);
+ * 5) moved the board setup into separate static Board class to access it everywhere.
  */
 public class Monopoly 
 {
@@ -16,58 +49,15 @@ public class Monopoly
 
     private ArrayList<Player>   players = new ArrayList<>();
     private Player              activePlayer;
-    private Square[]            squares = new Square[40];
     private int                 indexOfPlayer;
+    private Board               board;
 
     public Monopoly(ArrayList<Player> players)
     {
+        this.board = new Board();
         setPlayers(players);
         indexOfPlayer = 0;          // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
                                     // Al: good idea, but let's leave it for later, if we have time 
-
-        /**
-         * Setting up the board:
-         */
-        squares[0] = new GoTaxFree(0);
-        squares[1] = new Property(1, "Mediterranean Avenue", 60, new int[]{2, 10, 30, 90, 160, 250}, 50);
-        squares[2] = new CommunityChest(2);
-        squares[3] = new Property(3, "Baltic Avenue", 60, new int[]{4, 20, 60, 180, 320, 450}, 50);
-        squares[4] = new GoTaxFree(4);
-        squares[5] = new Railroad(5, "Reading Railroad");
-        squares[6] = new Property(6, "Oriental Avenue", 100, new int[]{6, 30, 90, 270, 400, 550}, 50);
-        squares[7] = new Chance(7);
-        squares[8] = new Property(8, "Vermount Avenue", 100, new int[]{6, 30, 90, 270, 400, 550}, 50);
-        squares[9] = new Property(9, "Connecticut Avenue", 120, new int[]{8, 40, 100, 300, 450, 600}, 50);
-        squares[10] = new Jail(10);
-        squares[11] = new Property(11, "St. Charles Place", 140, new int[]{10, 50, 150, 450, 625, 750}, 100);
-        squares[12] = new Utility(12, "Electric Company"); 
-        squares[13] = new Property(13, "States Avenue", 140, new int[]{10, 50, 150, 450, 625, 750}, 100);
-        squares[14] = new Property(14, "Virginia Avenue", 160, new int[]{12, 60, 180, 500, 700, 900}, 100);
-        squares[15] = new Railroad(15, "Pennsylvania Railroad");
-        squares[16] = new Property(16, "St. James Place", 180, new int[]{14, 70, 200, 550, 750, 950}, 100);
-        squares[17] = new CommunityChest(17);
-        squares[18] = new Property(18, "Tennessee Avenue", 180, new int[]{14, 70, 200, 550, 750, 950}, 100);
-        squares[19] = new Property(19, "New York Avenue", 200, new int[]{16, 80, 220, 600, 800, 1000}, 100);
-        squares[20] = new GoTaxFree(20);
-        squares[21] = new Property(21, "Kentucky Avenue", 220, new int[]{18, 90, 250, 700, 875, 1050}, 150);
-        squares[22] = new Chance(22);
-        squares[23] = new Property(23, "Indiana Avenue", 220, new int[]{18, 90, 250, 700, 875, 1050}, 150);
-        squares[24] = new Property(24, "Illinois Avenue", 240, new int[]{20, 100, 300, 750, 925, 1100}, 150);
-        squares[25] = new Railroad(25, "B&O Railroad");
-        squares[26] = new Property(26, "Atlantic Avenue", 260, new int[]{22, 110, 330, 800, 975, 1150}, 150);
-        squares[27] = new Property(27, "Ventnor Avenue", 260, new int[]{22, 110, 330, 800, 975, 1150}, 150);
-        squares[28] = new Utility(28, "Water Works");
-        squares[29] = new Property(29, "Marvin Gardens", 280, new int[]{24, 120, 360, 850, 1025, 1200}, 150);
-        squares[30] = new GoToJail(30);
-        squares[31] = new Property(31, "Pacific Avenue", 300, new int[]{26, 130, 390, 900, 1100, 1275}, 200);
-        squares[32] = new Property(32, "North Carolina Avenue", 300, new int[]{26, 130, 390, 900, 1100, 1275}, 200);
-        squares[33] = new CommunityChest(33);
-        squares[34] = new Property(34, "Pennsylvania Avenue", 320, new int[]{28, 150, 450, 1000, 1200, 1400}, 200);
-        squares[35] = new Railroad(35, "Short Line");
-        squares[36] = new Chance(36);
-        squares[37] = new Property(37, "Park Place", 350, new int[]{35, 175, 500, 1100, 1300, 1500}, 200);
-        squares[38] = new GoTaxFree(38);
-        squares[39] = new Property(39, "Boardwalk", 400, new int[]{50, 200, 600, 1400, 1700, 2000}, 200);
     }
     
     public void startGame(){
@@ -84,17 +74,17 @@ public class Monopoly
             if (!(activePlayer.getIsPrisoned()))
                 Utility.setDice(activePlayer.throwDice());
             // Al: updated movePlayer() such that if the player's prisoned, the coords do not change.
-            activePlayer.movePlayer();
+            activePlayer.movePlayer(activePlayer.getDice());
             // Al: having the dice not thrown, the player not moved, and the coords = 10 after landing 
             // on "Go To Jail", the jail's doAction() will fire asking for more options 
-            squares[activePlayer.getCoordinate()].doAction(activePlayer);
+            board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
             if (!(activePlayer.holdsDoubles()))
                 indexOfPlayer++;
             printHeader();
             printMap();
             printFooter();
             if (players.size() == 1)
-                break;
+                break ;
         }
         System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
     }
