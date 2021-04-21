@@ -36,12 +36,15 @@ import java.util.ArrayList;
  * An: MONOPOLY 0.4.1       04/20/2021
  * 1) fixed an issue causing the content not to display until the window is resized.
  * 
- * Al: MONOPOLY 0.5.0       04/21/2021
+ * MONOPOLY 0.5.0       04/21/2021
+ * Al: 
  * 1) movePlayer() now receives an int;
  * 2) implemented the functionality of Community Chest and Chance squares;
  * 3) movePlayer() improved further such that the renewal of coordinates depenends on getCoordinate();
  * 4) scrapped index instance variable in Player class (was unused);
  * 5) moved the board setup into separate static Board class to access it everywhere.
+ * An:
+ * 6) overall improvement of interface.
  */
 public class Monopoly 
 {

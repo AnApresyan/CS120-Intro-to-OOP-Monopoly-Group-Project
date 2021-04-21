@@ -1,5 +1,7 @@
-public class Chance extends Deck {
-    public Chance (int coordinate){
+public class Chance extends Deck 
+{
+    public Chance (int coordinate)
+    {
         super(coordinate);
         setTitle("Chance");
     }
@@ -106,6 +108,17 @@ public class Chance extends Deck {
             // Al: we have to find a way to access the list of the players from the Monopoly class.
         }
         else if (chance == 15)
+        {
+            System.out.println("YOUR BUILDING AND LOAN MATURES. RECEIVE $150.");
+            activePlayer.setMoney(activePlayer.getMoney() + 150);
+        } 
+        else if (chance == 16) 
+        {
+            System.out.println("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
+            activePlayer.setMoney(activePlayer.getCoordinate() + 100);
+        }
         // IF PLAYER'S BALANCE IS NEGATIVE, START THE MORTGAGING LOOP
+        // Al: we should make the mortgage loop accessible everywhere to be able to call it in many other
+        // places.
     }
 }
