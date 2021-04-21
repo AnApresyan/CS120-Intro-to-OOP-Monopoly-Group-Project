@@ -7,7 +7,7 @@ public class Chance extends Deck
     }
     public void doAction(Player activePlayer)
     {
-        int chance;
+        // int chance;
 
         System.out.print("You're taking a chance: ");
         chance = (int)(Math.random() * 16) + 1;
@@ -121,4 +121,5 @@ public class Chance extends Deck
         // Al: we should make the mortgage loop accessible everywhere to be able to call it in many other
         // places.
     }
+
 }

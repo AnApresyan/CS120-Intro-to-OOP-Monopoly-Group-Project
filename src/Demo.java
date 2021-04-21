@@ -1,12 +1,10 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class MonopolyDemo 
+public class Demo 
 {
-    private static ArrayList<Player> players = new ArrayList<>();
-    public static ArrayList<Player> getPlayers(){
-        return players;
-    }
+
+
     public static void main(String[] args)
     {
         // Scanner input = new Scanner(System.in);

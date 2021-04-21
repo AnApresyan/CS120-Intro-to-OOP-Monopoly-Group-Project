@@ -1,6 +1,7 @@
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.*;
 
 import javax.swing.ImageIcon;
@@ -15,6 +16,7 @@ import javax.swing.SpinnerNumberModel;
 
 
 public class MainWindow extends JFrame{
+    private ArrayList<Player> players = new ArrayList<>();
     private int numberOfPlayers;
 
     public MainWindow(){
@@ -47,24 +49,24 @@ public class MainWindow extends JFrame{
                     namesLabel.setText( "Empty name. " + namesLabel.getText());
                     return;
                 }
-                for (Player player : MonopolyDemo.getPlayers()) {
+                for (Player player : players) {
                     if (name.equalsIgnoreCase(player.getName())){
                         namesLabel.setText( "There is already a player with that name. " + namesLabel.getText());
                         nameFromField.setText("");
                         return;
                     }
                 }
-                MonopolyDemo.getPlayers().add(new Player(name));
+                players.add(new Player(name));
                 numberOfPlayers--;
                 if (numberOfPlayers >= 1){  
-                    namesLabel.setText("Please enter the name of Player " + (MonopolyDemo.getPlayers().size() + 1));
+                    namesLabel.setText("Please enter the name of Player " + (players.size() + 1));
                     
                     nameFromField.setText("");
                 }
                 else{
                     setUp.setVisible(false);
                     mainMenu.setVisible(false);
-                    //startthegame
+                    //new Monopoly(players).startGame();
                 }  
             }
 
@@ -124,15 +126,7 @@ public class MainWindow extends JFrame{
         //Adding to the mainMenu
         mainMenu.add(mainLabel);
        
-       
-        // mainMenu.add(howManyPlayers);
-        // mainMenu.add(submitNumberOfPlayers);
-       
-       
-        // mainMenu.add(names);
-        // mainMenu.add(name);
-        // mainMenu.add(submitName);
-        
+        //Adding to the frame
         this.add(mainMenu, BorderLayout.NORTH);
         this.add(setUp, BorderLayout.CENTER);            //change        mainWindiw.add(setUp)
 
