@@ -18,7 +18,7 @@ public class Player
     public Player(String name)
     {
         setName(name);
-        this.coordinate = 1;
+        this.coordinate = 0;
         this.daysInJail = 1;
     }
 
