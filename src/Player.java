@@ -7,7 +7,6 @@ public class Player
     private String              name;
     private int                 money;
     private int                 coordinate;
-    private int                 index;
     private ArrayList<Buyable>  belongings = new ArrayList<>();
     private boolean             getOutOfJail;
     private int                 daysInJail;
@@ -16,10 +15,9 @@ public class Player
     
     static Scanner input = new Scanner(System.in);
 
-    public Player(String name, int index)
+    public Player(String name)
     {
         setName(name);
-        this.index = index;
         this.coordinate = 1;
         this.daysInJail = 1;
     }
@@ -39,10 +37,6 @@ public class Player
         return (this.coordinate);
     }
 
-    public int getIndex()
-    {
-        return (this.index);
-    }
 
     public int getMoney()
     {
