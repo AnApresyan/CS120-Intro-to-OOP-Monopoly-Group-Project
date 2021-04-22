@@ -14,12 +14,17 @@ public class GoTaxFree extends Square
     }
     public void doAction(Player activePlayer)
     {
-        
+        if (getCoordinate() == 4)
+        {
+            System.out.println("Do you wanna pay $200 OR 10% of your wealth?");
+            // if 1
+                activePlayer.receiveMoney(-200);
+            // if 2
+                activePlayer.setMoney((int)(activePlayer.getMoney() * 0.9));
+        }
+        else if (getCoordinate() == 38)
+        {
+            activePlayer.receiveMoney(-75);
+        }
     }
-
-    
-    // public int getReward()
-    // {
-
-    // }
 }

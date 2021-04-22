@@ -106,6 +106,7 @@ public class Player
     {
         return (this.dice[0] == this.dice[1]);
     }
+
     public void movePlayer(int move)
     {
         if (!(this.isPrisoned))
@@ -117,6 +118,95 @@ public class Player
             }
             setCoordinate(this.coordinate + move);
         }
+    }
+
+    public void     erectHouse()
+    {
+        ArrayList<Buyable>  canBeImproved = new ArrayList<>();
+        System.out.println("Please enter a property coordinate to build a house on:");
+        
+        for (Buyable p : belongings)
+        {
+            // if is prop, owned of all colors, and there's no mortgaged props of this color
+            if (p.getClass().getName().equals("Property") && this.doesOwnAllProps(p) && !(this.hasMortgagedInASet(p)))
+                canBeImproved.add(p);
+        }
+        // Al: has to be severely tested before run. Looks hella buggy to me
+
+        // >>> receiving input <<<
+        int receivedInt = 1;
+        // >>> received input <<<
+        // Al: maybe it'll be easier to do this with a click?
+        int i = 0;
+        while (i < canBeImproved.size())
+        {
+            if (canBeImproved.get(i).getCoordinate() == receivedInt)
+            {
+                if (((Property)canBeImproved.get(i)).getHouses() < 5 && this.money > ((Property)canBeImproved.get(i)).getHousePrice() && this.allowedToBuild(((Property)canBeImproved.get(i))))
+                    ((Property) canBeImproved.get(i)).buildHouse();
+                else
+                    System.out.println("Too many houses/Too little money!");
+                break ;
+            }
+        }
+    }
+
+    public void     destroyHouse()
+    {
+        ArrayList<Buyable>  canBeDegraded = new ArrayList<>();
+        System.out.println("Please enter a property coordinate to destroy a house on:");
+        
+        for (Buyable p : belongings)
+        {
+            // if is prop, owned of all colors, and there's no mortgaged props of this color
+            if (p.getClass().getName().equals("Property") && ((Property) p).getHouses() > 0)
+                canBeDegraded.add(p);
+        }
+        // Al: has to be severely tested before run. Looks hella buggy to me
+
+        // >>> receiving input <<<
+        int receivedInt = 1;
+        // >>> received input <<<
+        // Al: maybe it'll be easier to do this with a click?
+        int i = 0;
+        while (i < canBeDegraded.size())
+        {
+            if (canBeDegraded.get(i).getCoordinate() == receivedInt)
+            {
+                if (((Property)canBeDegraded.get(i)).getHouses() >= 1 && this.allowedToBuild(((Property)canBeDegraded.get(i))))
+                    ((Property) canBeDegraded.get(i)).sellHouse();
+                break ;
+            }
+        }
+    }
+
+    public boolean  hasMortgagedInASet(Buyable property)
+    {
+        int colorIndex;
+
+        colorIndex = ft_searchintinmatrix(property.getCoordinate(), Buyable.COLORS);
+        for (int i = 0; i < Buyable.COLORS[colorIndex].length; i++)
+        {
+            if (((Buyable) Board.getSquares()[Buyable.COLORS[colorIndex][i]]).isMortgaged())
+                return (true);
+        }
+        return (false);
+    }
+
+    // Al: has to be tested before connecting to Swing
+    public boolean allowedToBuild(Buyable property)
+    {
+        int colorIndex;
+        int currentHouses;
+
+        currentHouses = ((Property) property).getHouses();
+        colorIndex = ft_searchintinmatrix(property.getCoordinate(), Buyable.COLORS);
+        for (int i = 0; i < Buyable.COLORS[colorIndex].length; i++)
+        {
+            if (Math.abs(currentHouses - ((Property) Board.getSquares()[Buyable.COLORS[colorIndex][i]]).getHouses()) > 0)
+                return (false);
+        }
+        return (true);
     }
 
     public boolean doesOwnAllProps(Buyable property)
@@ -211,17 +301,21 @@ public class Player
             }
             boolean done = false;
             int coord = 0;
-            while(!done){
-                try{
+            while(!done)
+            {
+                try
+                {
                     System.out.println("Please type the coordinate of the property you want to mortgage");
                     coord = input.nextInt();
                     done = true;
-                    if (!canBeMortgaged(coord)){
+                    if (!canBeMortgaged(coord))
+                    {
                         System.out.println("Not yours or cannot be mortgaged");
                         done = false;
                     } 
                 }
-                catch(InputMismatchException e){
+                catch(InputMismatchException e)
+                {
                     input.nextLine();
                     System.out.println("Not a number, please try again");
                 }
@@ -231,10 +325,13 @@ public class Player
 
     }
 
-    public void mortgage(int coord){
-        for (Buyable belonging : belongings){
-            if (belonging.getCoordinate() == coord){
-                this.money += belonging.getPrice();
+    public void mortgage(int coord)
+    {
+        for (Buyable belonging : belongings)
+        {
+            if (belonging.getCoordinate() == coord)
+            {
+                this.money += (belonging.getPrice() / 2);
                 belonging.setIsMortgaged(true);
             }
         }
@@ -253,16 +350,20 @@ public class Player
     // }
 
 
-    public boolean canBeMortgaged(int coordinate){
-        for (Buyable belonging : belongings){
+    public boolean canBeMortgaged(int coordinate)
+    {
+        for (Buyable belonging : belongings)
+        {
             if (belonging.getCoordinate() == coordinate && canBeMortgaged(belonging))
                 return true;
         }
         return false;
     }
 
-    public boolean canBeMortgaged(Buyable belonging){
-        if (!belonging.isMortgaged()){
+    public boolean canBeMortgaged(Buyable belonging)
+    {
+        if (!belonging.isMortgaged())
+        {
             if (belonging.getClass().getName() != "Property" || (belonging.getClass().getName() != "Property" && !((Property)belonging).isImproved()))
                 return true;
         }

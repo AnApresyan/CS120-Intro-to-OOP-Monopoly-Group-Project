@@ -48,11 +48,15 @@ public class Property extends Buyable
 
     // }
 
-    public boolean isImproved(){
-        if (this.getOwner().doesOwnAllProps(this)){
+    public boolean isImproved()
+    {
+        if (this.getOwner().doesOwnAllProps(this))
+        {
             int colorIndex = Player.ft_searchintinmatrix(this.getCoordinate(), Buyable.COLORS);
-            for (int propertyCord : Buyable.COLORS[colorIndex]){
-                for(Buyable property : this.getOwner().getBelongings()){
+            for (int propertyCord : Buyable.COLORS[colorIndex])
+            {
+                for (Buyable property : this.getOwner().getBelongings())
+                {
                     if (property.getCoordinate() == propertyCord && ((Property) property).getHouses() >= 1)
                         return true;
                 }
@@ -70,16 +74,37 @@ public class Property extends Buyable
     //             this.titleDeed = p;
     //         }
     // }
-    // public String toString()
-    // {
-    //     return (toString());
-    // }
+    public String toString()
+    {
+        return (getCoordinate() + ": " + getTitle() + ". Number of houses: " + houses);
+    }
     // public void doAction(int[] dice, Player activePlayer){
 
     // }
 
-    public int getRent() {
+    public int getRent()
+    {
         return this.rents[houses];
+    }
+
+    public void buildHouse()
+    {
+        if (houses <= 4)
+        {
+            this.houses += 1;
+            this.getOwner().receiveMoney(-housePrice);
+            System.out.println("Bought a home");
+        }
+    }
+
+    public void sellHouse()
+    {
+        if (houses >= 1)
+        {
+            this.houses -= 1;
+            this.getOwner().receiveMoney(housePrice / 2);
+            System.out.println("Sold a home");
+        }
     }
 
     public int getHouses()

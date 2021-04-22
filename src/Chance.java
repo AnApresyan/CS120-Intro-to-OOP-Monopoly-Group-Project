@@ -1,4 +1,4 @@
-public class Chance extends Deck 
+public class Chance extends Square
 {
     public Chance (int coordinate)
     {
@@ -76,11 +76,25 @@ public class Chance extends Deck
         {
             System.out.println("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
             activePlayer.setCoordinate(10);
+            activePlayer.setIsPrisoned(true);
         }
         else if (chance == 10)
         {
             System.out.println("MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY: FOR EACH HOUSE PAY $25, FOR EACH HOTEL $100.");
-            // Al: have to implement housing first.
+            int loss;
+
+            loss = 0;
+            for (int i = 0; i < activePlayer.getBelongings().size(); i++)
+            {
+                if (activePlayer.getBelongings().get(i).getClass().getName().equals("Property"))
+                {
+                    if (((Property) activePlayer.getBelongings().get(i)).getHouses() <= 4)
+                        loss += ((Property) activePlayer.getBelongings().get(i)).getHouses() * 25;
+                    else if (((Property) activePlayer.getBelongings().get(i)).getHouses() == 5)
+                        loss += 100;
+                }
+            }
+            activePlayer.receiveMoney(-loss);
         }
         else if (chance == 11)
         {
@@ -103,18 +117,29 @@ public class Chance extends Deck
         }
         else if (chance == 14)
         {
+            int i;
+
             System.out.println("YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.");
-            // Al: we have to find a way to access the list of the players from the Monopoly class.
+            i = 0;
+            while (i < Monopoly.getPlayers().size())
+            {
+                if (!(activePlayer.equals(Monopoly.getPlayers().get(i))))
+                {
+                    Monopoly.getPlayers().get(i).receiveMoney(50);
+                    activePlayer.receiveMoney(-50);
+                }
+                i++;
+            }
         }
         else if (chance == 15)
         {
             System.out.println("YOUR BUILDING AND LOAN MATURES. RECEIVE $150.");
-            activePlayer.setMoney(activePlayer.getMoney() + 150);
+            activePlayer.receiveMoney(150);
         } 
         else if (chance == 16) 
         {
             System.out.println("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
-            activePlayer.setMoney(activePlayer.getCoordinate() + 100);
+            activePlayer.receiveMoney(100);
         }
         // IF PLAYER'S BALANCE IS NEGATIVE, START THE MORTGAGING LOOP
         // Al: we should make the mortgage loop accessible everywhere to be able to call it in many other

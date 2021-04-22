@@ -14,7 +14,7 @@ public abstract class Buyable extends Square
     }
     
     public boolean isMortgaged(){
-        return isMortgaged;
+        return (this.isMortgaged);
     }
     public void setIsMortgaged(boolean isMortgaged){
         this.isMortgaged = isMortgaged;
@@ -25,7 +25,7 @@ public abstract class Buyable extends Square
     } 
 
     public int getPrice(){
-        return this.price;
+        return (this.price);
     }
 
     public void setOwner(Player player){
@@ -47,4 +47,9 @@ public abstract class Buyable extends Square
     {
         return (this.owner);
     }
+
+    // public String toString()
+    // {
+    //     return ()
+    // }
 }

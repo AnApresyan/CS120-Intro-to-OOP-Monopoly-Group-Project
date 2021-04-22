@@ -12,7 +12,8 @@ public class Utility extends Buyable
         setTitle(title);
     }
 
-    public int getRent() {
+    public int getRent() 
+    {
         if (this.getOwner().ownsOfThisColor(this) == 1)
             return (diceValue * 4);
         return (diceValue * 10);

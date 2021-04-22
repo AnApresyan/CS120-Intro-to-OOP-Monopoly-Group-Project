@@ -9,7 +9,8 @@ public class Railroad extends Buyable {
         
     // }
 
-    public int getRent() {
+    public int getRent()
+    {
         return (25 * (int)Math.pow(2, this.getOwner().ownsOfThisColor(this) - 1));
     }
 
