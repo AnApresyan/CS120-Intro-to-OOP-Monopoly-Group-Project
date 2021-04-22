@@ -240,6 +240,10 @@ public class Player
         }
     }
 
+    public void receiveMoney(int mon)
+    {
+        this.money += mon;
+    }
     // public boolean isYourProperty(int coordinate){
     //     for (Buyable belonging : belongings){
     //         if (belonging.getCoordinate() == coordinate)

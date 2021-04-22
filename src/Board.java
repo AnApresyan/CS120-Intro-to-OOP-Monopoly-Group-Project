@@ -1,6 +1,6 @@
 public class Board
 {
-    private Square[] squares = new Square[40];
+    private static Square[] squares = new Square[40];
 
     public  Board()
     {
@@ -49,7 +49,7 @@ public class Board
         squares[39] = new Property(39, "Boardwalk", 400, new int[]{50, 200, 600, 1400, 1700, 2000}, 200);
     }
 
-    public Square[]  getSquares()
+    public static Square[]  getSquares()
     {
         return (squares);
     }

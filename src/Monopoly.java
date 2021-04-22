@@ -36,7 +36,7 @@ import java.util.ArrayList;
  * An: MONOPOLY 0.4.1       04/20/2021
  * 1) fixed an issue causing the content not to display until the window is resized.
  * 
- * MONOPOLY 0.5.0       04/21/2021
+ * MONOPOLY 0.5.0           04/21/2021
  * Al: 
  * 1) movePlayer() now receives an int;
  * 2) implemented the functionality of Community Chest and Chance squares;
@@ -45,19 +45,27 @@ import java.util.ArrayList;
  * 5) moved the board setup into separate static Board class to access it everywhere.
  * An:
  * 6) overall improvement of interface.
+ * 
+ * MONOPOLY 0.6.0           04/22/2021
+ * An:
+ * 1) added the basic grid for interface;
+ * 2) created a visual representation of the playboard;
+ * Al:
+ * 3) added functionality of Community Chest;
+ * 4) made the board static to be able to access it everywhere;
+ * 5) made the players static to be able to access it everywhere;
+ * 6) started working on housing mechanics.
  */
 public class Monopoly 
 {
     public static final int    JAIL_FINE = 50;
 
-    private ArrayList<Player>   players = new ArrayList<>();
-    private Player              activePlayer;
-    private int                 indexOfPlayer;
-    private Board               board;
+    private static ArrayList<Player>    players = new ArrayList<>();
+    private Player                      activePlayer;
+    private int                         indexOfPlayer;
 
     public Monopoly(ArrayList<Player> players)
     {
-        this.board = new Board();
         setPlayers(players);
         indexOfPlayer = 0;          // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
                                     // Al: good idea, but let's leave it for later, if we have time 
@@ -80,7 +88,7 @@ public class Monopoly
             activePlayer.movePlayer(activePlayer.getDice());
             // Al: having the dice not thrown, the player not moved, and the coords = 10 after landing 
             // on "Go To Jail", the jail's doAction() will fire asking for more options 
-            board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
+            Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
             if (!(activePlayer.holdsDoubles()))
                 indexOfPlayer++;
             printHeader();
@@ -107,8 +115,13 @@ public class Monopoly
 
     }
 
-    public void setPlayers(ArrayList<Player> players)
+    public void setPlayers(ArrayList<Player> newplayers)
     {
-        this.players = players;             
+        players = newplayers;             
+    }
+
+    public static ArrayList<Player> getPlayers()
+    {
+        return (players);
     }
 }
