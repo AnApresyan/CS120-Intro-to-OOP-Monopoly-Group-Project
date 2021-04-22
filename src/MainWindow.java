@@ -2,6 +2,7 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.Flow;
 import java.awt.*;
 
 import javax.swing.ImageIcon;
@@ -15,9 +16,11 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
 
+
 public class MainWindow extends JFrame{
     private ArrayList<Player> players = new ArrayList<>();
     private int numberOfPlayers;
+    JPanel board = null;
 
     public MainWindow(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,6 +70,9 @@ public class MainWindow extends JFrame{
                     setUp.setVisible(false);
                     mainMenu.setVisible(false);
                     //new Monopoly(players).startGame();
+
+                    setTheFlow();
+
                 }  
             }
 
@@ -135,6 +141,33 @@ public class MainWindow extends JFrame{
         
         
     }
+
+    public void setTheFlow(){
+        this.setLayout(new FlowLayout());
+        this.setSize(new Dimension(1000, 800));
+        board = new JPanel();
+        board.setLayout(new GridLayout(11, 11));
+        board.setPreferredSize(new Dimension(500, 500));
+        for (int i = 0; i < 11; i++){
+            for (int j = 0; j < 11; j++){
+                if (i == 0 || j == 0 || i == 10 || j == 10){
+                    JButton button = new JButton(i + " " + j);
+                    if (i == 0 || i == 10)
+                        button.setSize(new Dimension(100, 100));
+                    else
+                        button.setSize(new Dimension((board.getWidth())/11, board.getHeight()/11));
+                    board.add(button);
+                }
+                else{
+                    JLabel label = new JLabel(" ");
+                    label.setSize(new Dimension(10, 10));
+                    board.add(label);
+                }
+            }
+        }
+        this.add(board);
+    }
+
 
     
 }
