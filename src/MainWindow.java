@@ -2,9 +2,10 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.concurrent.Flow;
+//import java.util.concurrent.Flow;
 import java.awt.*;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,17 +18,34 @@ import javax.swing.SpinnerNumberModel;
 
 
 
-public class MainWindow extends JFrame{
-    private ArrayList<Player> players = new ArrayList<>();
+public class MainWindow extends JFrame implements ActionListener{
+    private ArrayList<Player> players = new ArrayList<>();              //need to make this local
     private int numberOfPlayers;
     JPanel board = null;
+    JPanel info = null;
+    JPanel infoTop = null;
+    JPanel infoCenter = null;
+    JPanel infoBottom = null;
+    JButton[] buttons = new JButton[40];
+    Monopoly game;
 
     public MainWindow(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 500);
         this.setLayout(new BorderLayout());
         
+        //setting up
+        this.board = new JPanel();
+        this.info = new JPanel();
+        this.infoTop = new JPanel();
+        this.infoCenter = new JPanel();
+        this.infoBottom = new JPanel();
     
+        for (int i = 0; i < 40; i++){
+            buttons[i] = new JButton();
+            buttons[i].addActionListener(this);
+        }
+
         //The images
         ImageIcon image = new ImageIcon("./images/logo2.png");
         
@@ -69,7 +87,7 @@ public class MainWindow extends JFrame{
                 else{
                     setUp.setVisible(false);
                     mainMenu.setVisible(false);
-                    //new Monopoly(players).startGame();
+                    game = new Monopoly(players);
 
                     setTheFlow();
 
@@ -142,30 +160,77 @@ public class MainWindow extends JFrame{
         
     }
 
+
+    //the board and the info
     public void setTheFlow(){
         this.setLayout(new FlowLayout());
-        this.setSize(new Dimension(1000, 800));
-        board = new JPanel();
+        this.setSize(new Dimension(1800, 1000));
+
+        board.setLayout(new BorderLayout());
+
+
         board.setLayout(new GridLayout(11, 11));
-        board.setPreferredSize(new Dimension(500, 500));
-        for (int i = 0; i < 11; i++){
-            for (int j = 0; j < 11; j++){
-                if (i == 0 || j == 0 || i == 10 || j == 10){
-                    JButton button = new JButton(i + " " + j);
-                    if (i == 0 || i == 10)
-                        button.setSize(new Dimension(100, 100));
-                    else
-                        button.setSize(new Dimension((board.getWidth())/11, board.getHeight()/11));
-                    board.add(button);
-                }
-                else{
-                    JLabel label = new JLabel(" ");
-                    label.setSize(new Dimension(10, 10));
-                    board.add(label);
-                }
+        board.setPreferredSize(new Dimension(900, 900));
+
+
+        for (int i = 10; i >= 0; i--){
+            for (int j = 10; j >= 0; j--){
+                if (i == 0 && j != 10)
+                    board.add(buttons[j]);
+                else if (i != 10 && j == 10)
+                    board.add(buttons[i + j]);
+                else if (i == 10 && j != 0)
+                    board.add(buttons[20 + (10-j)]);
+                else if (i != 0 && j == 0)
+                    board.add(buttons[30 + (10-i)]);
+                else
+                    board.add(new JLabel(" "));
             }
         }
+
+
+        info.setLayout(new BorderLayout());
+
+        infoTop.setSize(new Dimension(300, 900));
+        infoCenter.setSize(new Dimension(300, 900));
+        infoBottom.setSize(new Dimension(300, 900));
+
+
+        //infoTop
+            for (int i = 0; i < Monopoly.getPlayers().size(); i++){
+                infoTop.add(new JLabel(Monopoly.getPlayers().get(i).toString()));
+            }
+
+        //JLabel playersInfo = new JLabel(game.infoActivePlayer());
+        
+        infoCenter.add(new JLabel("CENTER")); 
+
+        infoBottom.add(new JLabel("BOTTOM")); 
+
+
+
+
+
+        //adding to info
+        info.add(infoTop, BorderLayout.NORTH);
+        info.add(infoCenter, BorderLayout.CENTER);
+        info.add(infoBottom, BorderLayout.SOUTH);
+
+        //adding to the frame
         this.add(board);
+        this.add(info);
+
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        
+        for (int i = 0; i < 40; i++){
+            if (e.getSource() == buttons[i]){
+                System.out.println(i);
+                System.out.println(Board.getSquares()[i].toString());
+                break;
+            }
+        }
     }
 
 

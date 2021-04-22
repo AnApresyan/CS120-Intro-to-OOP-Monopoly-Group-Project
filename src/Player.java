@@ -20,6 +20,7 @@ public class Player
         setName(name);
         this.coordinate = 0;
         this.daysInJail = 1;
+        this.money = 1500;
     }
 
     public ArrayList<Buyable> getBelongings()
@@ -380,6 +381,11 @@ public class Player
             Player second = (Player) obj;
             return this.name.equalsIgnoreCase(second.name);     //won't allow two players to have the same name, checked by SameNameException //// cool!
         }
+    }
+
+
+    public String toString(){
+        return "Player: " + this.name + "   Money: " + this.money + "   Coordinate: " + this.coordinate;
     }
 
 }
