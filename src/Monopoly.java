@@ -66,11 +66,17 @@ public class Monopoly
 
     public Monopoly(ArrayList<Player> players)
     {
+        new Board();
         setPlayers(players);
-        indexOfPlayer = 0;          // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
-                                    // Al: good idea, but let's leave it for later, if we have time 
+        indexOfPlayer = 0; 
+        this.activePlayer = players.get(0);         // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
+                                                    // Al: good idea, but let's leave it for later, if we have time 
     }
     
+    // public String infoActivePlayer(){
+    //     return activePlayer.toString();
+    // }
+
     public void startGame(){
         printHeader();
         printMap();
