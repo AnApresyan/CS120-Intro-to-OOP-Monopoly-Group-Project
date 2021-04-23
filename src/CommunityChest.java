@@ -1,15 +1,19 @@
 public class CommunityChest extends Square
 {
-    public CommunityChest(int square) {
+    public CommunityChest(int square)
+    {
         super(square);
         setTitle("Community Chest");
     }
+
+    // TESTED by Al
     public void doAction(Player activePlayer)
     {
         int chance;
 
         System.out.print("You're opening the Community Chance: ");
-        chance = (int)(Math.random() * 16) + 1;
+        // chance = (int)(Math.random() * 16) + 1;
+        chance = 7;
         if (chance == 1)
         {
             System.out.println("ADVANCE TO GO (COLLECT $200).");
@@ -116,8 +120,6 @@ public class CommunityChest extends Square
             System.out.println("YOU INHERIT $100.");
             activePlayer.receiveMoney(100);
         }
-        // IF PLAYER'S BALANCE IS NEGATIVE, START THE MORTGAGING LOOP
-        // Al: we should make the mortgage loop accessible everywhere to be able to call it in many other
-        // places.
+        activePlayer.enterMortgageLoop(null);
     }
 }

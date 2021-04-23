@@ -7,7 +7,7 @@ public class Jail extends Square
     }
     public void doAction(Player activePlayer)
     {
-        if (activePlayer.getIsPrisoned())
+        if (activePlayer.isPrisoned())
         {
             // forcing the player to leave 
             if (activePlayer.getDaysInJail() > 3)

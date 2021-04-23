@@ -1,16 +1,18 @@
 import java.util.ArrayList;
 /**
  * >>>>> CHANGELOG <<<<<
- * An & Al: MONOPOLY 0.1.0  04/13/2021
+ * MONOPOLY 0.1.0           04/13/2021
+ * An & Al:
  * 1) created the whole hierarchy of the game;
  * 2) created Player class.
  * 
- * An & Al: MONOPOLY 0.2.0  04/14/2021
+ * MONOPOLY 0.2.0           04/14/2021
+ * An & Al:
  * 1) implemented the main gameplay loop;
  * 2) created the rest of trivial classes.
  * 
  * MONOPOLY 0.2.1           04/15/2021
- * Al: 
+ * Al:
  * 1) added getRent() computation method for Utility & Railroad;
  * 2) improved overall performance of the gameplay loop;
  * 3) implemented detection of Monopoly and count of owned props of the same color.
@@ -18,7 +20,8 @@ import java.util.ArrayList;
  * 3) implemented mortgaging;
  * 4) implemented canBeMortgaged() and the bankruptcy loop.
  * 
- * Al: MONOPOLY 0.3.0.      04/18/2021
+ * MONOPOLY 0.3.0.          04/18/2021
+ * Al:
  * 1) moved dice[2] to Player;
  * 2) created holdsDoubles() for Player class;
  * 3) added getters and setters here and there;
@@ -28,12 +31,14 @@ import java.util.ArrayList;
  * 7) fixed a bug causing the player omit GO each time a new round around the map is passed;
  * 8) modified movePlayer() such that if GO is passed, the player is granted $200.
  * 
- * An: MONOPOLY 0.4.0       04/19/2021
+ * MONOPOLY 0.4.0           04/19/2021
+ * An:
  * 1) added basic Swing support;
  * 2) added a tester for play window; added basic interface;
  * 3) added logo on the starting screen; added START button.
  * 
- * An: MONOPOLY 0.4.1       04/20/2021
+ * MONOPOLY 0.4.1           04/20/2021
+ * An:
  * 1) fixed an issue causing the content not to display until the window is resized.
  * 
  * MONOPOLY 0.5.0           04/21/2021
@@ -50,11 +55,26 @@ import java.util.ArrayList;
  * An:
  * 1) added the basic grid for interface;
  * 2) created a visual representation of the playboard;
+ * 3) created buttons that correspond to each square;
+ * 4) created basic layout of the second infobox;
+ * 5) overall polishing of the interface;
  * Al:
- * 3) added functionality of Community Chest;
- * 4) made the board static to be able to access it everywhere;
- * 5) made the players static to be able to access it everywhere;
- * 6) started working on housing mechanics.
+ * 6) added functionality of the Community Chest;
+ * 7) made the board static to be able to access it everywhere;
+ * 8) made the players static to be able to access them everywhere;
+ * 9) implemented housing mechanics (RAW).
+ * 
+ * MONOPOLY 0.7.0           04/23/2021
+ * Al:
+ * 1) commenced a major, comprehensive testing of all existing methods;
+ * 2) enterMortgageLoop() is now a separate method;
+ * 3) rent of unimproved monopolized properties is now doubled;
+ * 4) fixed an issue causing one of the inner mortgage loops to run endlessly;
+ * 5) implemented removePlayer() method, with passing props when losing;
+ * 6) added a price of $200 to Railroad class members;
+ * 7) Chance and Community Chest now properly trigger the mortgage loop;
+ * 8) mortgage loop now offers an option to sell houses;
+ * 9) added Utilities' and Railroads' coordinates to the COLORS array;
  */
 public class Monopoly 
 {
@@ -88,7 +108,7 @@ public class Monopoly
             this.activePlayer = players.get(indexOfPlayer);
             // Al: added a check on throwing the dice to move for if the player's prisoned.
             // if they are, then the dice will not be thrown, and the player won't move.
-            if (!(activePlayer.getIsPrisoned()))
+            if (!(activePlayer.isPrisoned()))
                 Utility.setDice(activePlayer.throwDice());
             // Al: updated movePlayer() such that if the player's prisoned, the coords do not change.
             activePlayer.movePlayer(activePlayer.getDice());

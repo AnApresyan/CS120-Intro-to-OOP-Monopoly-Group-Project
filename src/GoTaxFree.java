@@ -1,6 +1,6 @@
-public class GoTaxFree extends Square
+public class GOTaxFree extends Square
 {
-    public GoTaxFree(int coordinate) 
+    public GOTaxFree(int coordinate) 
     {
         super(coordinate);
         if (coordinate == 0)
@@ -20,7 +20,7 @@ public class GoTaxFree extends Square
             // if 1
                 activePlayer.receiveMoney(-200);
             // if 2
-                activePlayer.setMoney((int)(activePlayer.getMoney() * 0.9));
+                // activePlayer.setMoney((int)(activePlayer.getMoney() * 0.9));
         }
         else if (getCoordinate() == 38)
         {

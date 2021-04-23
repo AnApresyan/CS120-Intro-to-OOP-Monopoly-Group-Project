@@ -7,11 +7,11 @@ public class Board
         /**
          * Setting up the board:
          */
-        squares[0] = new GoTaxFree(0);
+        squares[0] = new GOTaxFree(0);
         squares[1] = new Property(1, "Mediterranean Avenue", 60, new int[]{2, 10, 30, 90, 160, 250}, 50);
         squares[2] = new CommunityChest(2);
         squares[3] = new Property(3, "Baltic Avenue", 60, new int[]{4, 20, 60, 180, 320, 450}, 50);
-        squares[4] = new GoTaxFree(4);
+        squares[4] = new GOTaxFree(4);
         squares[5] = new Railroad(5, "Reading Railroad");
         squares[6] = new Property(6, "Oriental Avenue", 100, new int[]{6, 30, 90, 270, 400, 550}, 50);
         squares[7] = new Chance(7);
@@ -27,7 +27,7 @@ public class Board
         squares[17] = new CommunityChest(17);
         squares[18] = new Property(18, "Tennessee Avenue", 180, new int[]{14, 70, 200, 550, 750, 950}, 100);
         squares[19] = new Property(19, "New York Avenue", 200, new int[]{16, 80, 220, 600, 800, 1000}, 100);
-        squares[20] = new GoTaxFree(20);
+        squares[20] = new GOTaxFree(20);
         squares[21] = new Property(21, "Kentucky Avenue", 220, new int[]{18, 90, 250, 700, 875, 1050}, 150);
         squares[22] = new Chance(22);
         squares[23] = new Property(23, "Indiana Avenue", 220, new int[]{18, 90, 250, 700, 875, 1050}, 150);
@@ -45,7 +45,7 @@ public class Board
         squares[35] = new Railroad(35, "Short Line");
         squares[36] = new Chance(36);
         squares[37] = new Property(37, "Park Place", 350, new int[]{35, 175, 500, 1100, 1300, 1500}, 200);
-        squares[38] = new GoTaxFree(38);
+        squares[38] = new GOTaxFree(38);
         squares[39] = new Property(39, "Boardwalk", 400, new int[]{50, 200, 600, 1400, 1700, 2000}, 200);
     }
 

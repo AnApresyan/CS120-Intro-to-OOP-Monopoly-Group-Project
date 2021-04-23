@@ -8,27 +8,29 @@ public abstract class Square
         setCoordinate(coordinate);
     }
 
-    public void setCoordinate(int coordinate){
+    public abstract void doAction(Player activePlayer);
+    
+    public void setCoordinate(int coordinate)
+    {
         this.coordinate = coordinate;
     }  
-    public int getCoordinate(){
-        return this.coordinate;
+
+    public int getCoordinate()
+    {
+        return (this.coordinate);
     }
 
     public void setTitle(String title){
         this.title = title;
     }
 
-    public String getTitle(){
-        return this.title;
+    public String getTitle()
+    {
+        return (this.title);
     }
 
-    public abstract void doAction(Player activePlayer);
-
-    public String toString(){
-        return "Title: " + this.title + ", coordinate: " + this.coordinate;
+    public String toString()
+    {
+        return ("Title: " + this.title + ", coordinate: " + this.coordinate);
     }
-    
-
-    
 } 

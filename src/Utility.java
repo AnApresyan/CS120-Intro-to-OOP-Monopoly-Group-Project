@@ -6,9 +6,9 @@ public class Utility extends Buyable
     {
         super(coordinate);
         if (coordinate % 5 == 0)
-            this.setPrice(200);
+            setPrice(200);
         else
-            this.setPrice(100);
+            setPrice(100);
         setTitle(title);
     }
 
@@ -19,8 +19,14 @@ public class Utility extends Buyable
         return (diceValue * 10);
     }
 
-    public static void setDice(int dice)
+    public static int setDice(int dice)
     {
         diceValue = dice;
+        return (diceValue);
+    }
+
+    public String toString()
+    {
+        return (getCoordinate() + ": " + getTitle() + ". Mortgaged: " + isMortgaged() + ". Owner: (" + getOwner() + ")");
     }
 }

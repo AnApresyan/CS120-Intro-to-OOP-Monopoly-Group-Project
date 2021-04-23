@@ -5,6 +5,8 @@ public class Chance extends Square
         super(coordinate);
         setTitle("Chance");
     }
+
+    // TESTED by Al
     public void doAction(Player activePlayer)
     {
         int chance;
@@ -40,7 +42,7 @@ public class Chance extends Square
                 Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
             else
             {
-                activePlayer.receiveMoney(-(activePlayer.throwDice() * 10));
+                activePlayer.receiveMoney(-(Utility.setDice(activePlayer.throwDice()) * 10));
                 ((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner().receiveMoney((activePlayer.getDice() * 10));
             }
         }
@@ -71,6 +73,7 @@ public class Chance extends Square
         {
             System.out.println("GO BACK 3 SPACES.");
             activePlayer.setCoordinate(activePlayer.getCoordinate() - 3);
+            Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
         else if (chance == 9)
         {
@@ -99,7 +102,7 @@ public class Chance extends Square
         else if (chance == 11)
         {
             System.out.println("PAY POOR TAX OF $15.");
-            activePlayer.setMoney(activePlayer.getMoney() - 15);
+            activePlayer.receiveMoney(-15);
         }
         else if (chance == 12)
         {
@@ -141,9 +144,7 @@ public class Chance extends Square
             System.out.println("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
             activePlayer.receiveMoney(100);
         }
-        // IF PLAYER'S BALANCE IS NEGATIVE, START THE MORTGAGING LOOP
-        // Al: we should make the mortgage loop accessible everywhere to be able to call it in many other
-        // places.
+        activePlayer.enterMortgageLoop(null);
     }
 
 }

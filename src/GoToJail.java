@@ -3,7 +3,9 @@ public class GoToJail extends Square {
         super(coordinate);
         setTitle("Go To Jail");
     }
-    public void doAction(Player activePlayer){
+    public void doAction(Player activePlayer)
+    {
+        System.out.println("Haha! You go to jail right now!");
         activePlayer.setIsPrisoned(true);
         activePlayer.setCoordinate(10);
     }
