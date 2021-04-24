@@ -33,8 +33,10 @@ public class Property extends Buyable
 
     public int getRent()
     {
-        if (houses == 0 & getOwner().doesOwnAllProps(this))
+        if (this.getOwner() != null){
+            if (houses == 0 & getOwner().doesOwnAllProps(this))
             return (2 * rents[0]);
+        }
         return (this.rents[houses]);
     }
 

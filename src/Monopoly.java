@@ -75,6 +75,13 @@ import java.util.ArrayList;
  * 7) Chance and Community Chest now properly trigger the mortgage loop;
  * 8) mortgage loop now offers an option to sell houses;
  * 9) added Utilities' and Railroads' coordinates to the COLORS array;
+ * An:
+ * 1) Completely changed the board structure:D ;
+ * 2) Added some colors to the board;
+ * 3) Added the logic for the information of titleDeeds when clicked
+ * 4) Changed getRent() in Property, Utility, and Railroad not to throw null pointer Exception
+ * 5) Not to forget: need to change the titleDeed layout, do the getRent() methods need to return 0 if the squares do not have Owner (Railroad, Utility)
+ * P.S. I do not like writing, but it doesn't mean that I do not do work:D
  */
 public class Monopoly 
 {
