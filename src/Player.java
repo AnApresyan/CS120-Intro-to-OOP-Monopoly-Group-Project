@@ -26,6 +26,7 @@ public class Player
     {
         this.dice[0] = (int)(Math.random() * 6) + 1;
         this.dice[1] = (int)(Math.random() * 6) + 1;
+        System.out.println("Dice value: " + this.dice[0] + this.dice[1]);       //for testing purposes
         return (this.dice[0] + this.dice[1]);
     }
 

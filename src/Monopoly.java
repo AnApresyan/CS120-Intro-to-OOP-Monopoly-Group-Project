@@ -88,7 +88,7 @@ public class Monopoly
     public static final int    JAIL_FINE = 50;
 
     private static ArrayList<Player>    players = new ArrayList<>();
-    private Player                      activePlayer;
+    public Player                      activePlayer;               //public for testing
     private int                         indexOfPlayer;
 
     public Monopoly(ArrayList<Player> players)
@@ -105,14 +105,14 @@ public class Monopoly
     // }
 
     public void startGame(){
-        printHeader();
-        printMap();
-        printFooter();
-        while (true)
-        {
-            if (indexOfPlayer == players.size())
-                this.indexOfPlayer = 0;
-            this.activePlayer = players.get(indexOfPlayer);
+        // printHeader();
+        // printMap();
+        // printFooter();
+        // while (true)
+        // {
+            // if (indexOfPlayer == players.size())
+            //     this.indexOfPlayer = 0;
+            // this.activePlayer = players.get(indexOfPlayer);
             // Al: added a check on throwing the dice to move for if the player's prisoned.
             // if they are, then the dice will not be thrown, and the player won't move.
             if (!(activePlayer.isPrisoned()))
@@ -122,16 +122,17 @@ public class Monopoly
             // Al: having the dice not thrown, the player not moved, and the coords = 10 after landing 
             // on "Go To Jail", the jail's doAction() will fire asking for more options 
             Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-            if (!(activePlayer.holdsDoubles()))
-                indexOfPlayer++;
-            printHeader();
-            printMap();
-            printFooter();
+            // if (!(activePlayer.holdsDoubles()))
+            //     indexOfPlayer++;
+            // printHeader();
+            // printMap();
+            // printFooter();
             if (players.size() == 1)
-                break ;
-        }
-        System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
-    }
+                System.out.println("Game Over");
+                //break;
+    //     }
+    //     System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
+     }
 
     private void printHeader()
     {
@@ -156,5 +157,15 @@ public class Monopoly
     public static ArrayList<Player> getPlayers()
     {
         return (players);
+    }
+
+    public boolean ifPlayerHoldsDoubles(){
+        return this.activePlayer.holdsDoubles();
+    }
+    public void changePlayer(){
+        indexOfPlayer++;
+        if (indexOfPlayer == players.size())
+                this.indexOfPlayer = 0;
+        this.activePlayer = players.get(indexOfPlayer);
     }
 }

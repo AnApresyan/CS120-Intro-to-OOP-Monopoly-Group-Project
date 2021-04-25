@@ -1,6 +1,7 @@
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 //import java.util.concurrent.Flow;
 import java.awt.*;
@@ -22,6 +23,7 @@ import javax.swing.border.TitledBorder;
 
 
 
+
 public class MainWindow extends JFrame implements ActionListener{
     private ArrayList<Player> players = new ArrayList<>();              //need to make this local
     private int numberOfPlayers;
@@ -38,12 +40,21 @@ public class MainWindow extends JFrame implements ActionListener{
     JPanel center;
     TitleDeeds titleDeed;
 
+    private int numOfNames;
 
     //info components
     JPanel info;
     JPanel infoTop;
     JPanel infoCenter;
     JPanel infoBottom;
+
+    //infoTop
+    JLabel[] playerInfo;
+
+    //infoBottom buttons
+    JButton throwDice;
+    JButton done;
+     
 
     //the actual game (gonna call methods like throwDice() and other stuff from here)
     Monopoly game;
@@ -76,6 +87,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         private void setEverything(int i){
+            setEmpty();
             setTilteOfDeed(Board.getSquares()[i].getTitle());
             if(Board.getSquares()[i] instanceof Buyable){
                 setPriceOfDeed(((Buyable)Board.getSquares()[i]).getPrice());
@@ -84,13 +96,14 @@ public class MainWindow extends JFrame implements ActionListener{
                     setOwnerNameOfDeed(((Buyable)Board.getSquares()[i]).getOwner().getName());
                 
             }
-            else{
-                this.priceOfDeed.setText("");
-                this.ownerNameOfDeed.setText("");
-                this.rentOfDeed.setText("");
-            }
-        }
 
+
+        }
+        private void setEmpty(){
+            this.priceOfDeed.setText("");
+            this.ownerNameOfDeed.setText("");
+            this.rentOfDeed.setText("");
+        }
         private void setTilteOfDeed(String title){
             this.titleOfDeed.setText(title);
         }
@@ -136,6 +149,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 else if (direction == 4)
                     g.fillRect(0, 0, this.getWidth()/4, this.getHeight());
             }
+            
         }
     }   
     public MainWindow(){
@@ -150,6 +164,7 @@ public class MainWindow extends JFrame implements ActionListener{
         this.infoTop = new JPanel();
         this.infoCenter = new JPanel();
         this.infoBottom = new JPanel();
+        numOfNames = 1;
         
     
 
@@ -185,17 +200,17 @@ public class MainWindow extends JFrame implements ActionListener{
                     }
                 }
                 players.add(new Player(name));
-                numberOfPlayers--;
-                if (numberOfPlayers >= 1){  
+                /*numberOfPlayers--;*/
+                if (numOfNames < numberOfPlayers){  
                     namesLabel.setText("Please enter the name of Player " + (players.size() + 1));
                     
                     nameFromField.setText("");
+                    numOfNames++;
                 }
                 else{
                     setUp.setVisible(false);
                     mainMenu.setVisible(false);
                     game = new Monopoly(players);
-
                     setTheFlow();
 
                 }  
@@ -322,6 +337,8 @@ public class MainWindow extends JFrame implements ActionListener{
 
     //the board and the info
     private void setTheFlow(){
+        this.setSize(new Dimension(1200, 750));
+
         Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
         this.setButtons();
         for (int i = 0; i < 40; i++){
@@ -401,16 +418,22 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
         //infoTop
-            for (int i = 0; i < Monopoly.getPlayers().size(); i++){
-                JLabel playerInfo = new JLabel(Monopoly.getPlayers().get(i).toString());
-                playerInfo.setFont(new Font("Serif", Font.ITALIC, 18));
-                infoTop.add(playerInfo);
-            }
+        playerInfo = new JLabel[numberOfPlayers];
+        for (int i = 0; i < numberOfPlayers; i++){
+            playerInfo[i] = new JLabel();
+            playerInfo[i].setFont(new Font("Serif", Font.ITALIC, 18));
+            infoTop.add(playerInfo[i]);
+        }
+
+        setUpInfoTop();
+        //for(int i = 0; i < numberOfPlayers; i++)
+            
 
         //JLabel playersInfo = new JLabel(game.infoActivePlayer());
         
         //infoCenter
         //infoCenter.add(titleDeed);
+        setUpInfoBottom();
         infoBottom.add(new JLabel("BOTTOM")); 
         
 
@@ -420,6 +443,45 @@ public class MainWindow extends JFrame implements ActionListener{
         info.add(infoBottom, BorderLayout.SOUTH);
     }
 
+    private void setUpInfoTop(){
+        for (int i = 0; i < numberOfPlayers; i++){
+            playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());
+        }
+    }
+
+    private void setUpInfoBottom(){
+        infoBottom.setLayout(new GridLayout());
+        this.throwDice = new JButton("Throw the dice");
+        this.done = new JButton("Done");
+        throwDice.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.startGame();
+                if (!game.ifPlayerHoldsDoubles()){
+                    throwDice.setEnabled(false);
+                    done.setEnabled(true);
+                }
+                
+            }
+            
+        });
+
+        done.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.changePlayer();
+                done.setEnabled(false);
+                throwDice.setEnabled(true);
+                setUpInfoTop();
+                System.out.println(game.activePlayer.getName());
+            }
+            
+        });
+        infoBottom.add(throwDice);
+        infoBottom.add(done);
+
+    }
 
     private void setUpTop(){                                        //all of these setUps can be compressed to one method probably
         top.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -457,6 +519,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
         for (int i = 19; i > 10; i--){
             buttons[i].setMaximumSize(new Dimension(90, 57));
+           
             left.add(buttons[i]);
         }
     }
@@ -485,7 +548,9 @@ public class MainWindow extends JFrame implements ActionListener{
                 // repaint();
                 
                 // this.titleDeed.add(new JLabel("hello")); 
+ 
                 titleDeed.setEverything(i);
+                
                 // if (Board.getSquares()[i].getClass().getName().equals("Property")){
                 //    this.titleDeed.add(new JLabel(((Property) Board.getSquares()[i]).getHousePrice() + ""));
                 // }
