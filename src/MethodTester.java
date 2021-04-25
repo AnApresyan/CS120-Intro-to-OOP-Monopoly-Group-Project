@@ -44,6 +44,30 @@ public class MethodTester
         System.out.println("Alex's coord: " + Alexander.getCoordinate());
         System.out.println("Alex's isPrisoned: " + Alexander.isPrisoned());
 
+        if (!(Alexander.isPrisoned()))
+            Utility.setDice(Alexander.throwDice());
+
+        Alexander.movePlayer(Alexander.getDice());
+        Board.getSquares()[Alexander.getCoordinate()].doAction(Alexander);
+        System.out.println("Doubles: " + Alexander.holdsDoubles() + " days in jail: " + Alexander.getDaysInJail());
+
+        if (!(Alexander.isPrisoned()))
+        Utility.setDice(Alexander.throwDice());
+
+        Alexander.movePlayer(Alexander.getDice());
+        Board.getSquares()[Alexander.getCoordinate()].doAction(Alexander);
+        System.out.println("Doubles: " + Alexander.holdsDoubles() + " days in jail: " + Alexander.getDaysInJail());
+        System.out.println("Alex's coord: " + Alexander.getCoordinate());
+
+        Alexander.movePlayer(Alexander.getDice());
+        Board.getSquares()[Alexander.getCoordinate()].doAction(Alexander);
+        System.out.println("Doubles: " + Alexander.holdsDoubles() + " days in jail: " + Alexander.getDaysInJail());
+        System.out.println("Alex's coord: " + Alexander.getCoordinate());
+
+        Alexander.movePlayer(Alexander.getDice());
+        Board.getSquares()[Alexander.getCoordinate()].doAction(Alexander);
+        System.out.println("Doubles: " + Alexander.holdsDoubles() + " days in jail: " + Alexander.getDaysInJail());
+        System.out.println("Alex's coord: " + Alexander.getCoordinate());
         // for (int i = 0; i < Alexander.getBelongings().size(); i++)
         // {
         //     System.out.println(Alexander.getBelongings().get(i));

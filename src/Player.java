@@ -10,6 +10,7 @@ public class Player
     private boolean             getOutOfJail;
     private int                 daysInJail;
     private boolean             isPrisoned;
+    private int                 doublesInARow;
     private int[]               dice = new int[2];
     
     static Scanner input = new Scanner(System.in);
@@ -26,7 +27,11 @@ public class Player
     {
         this.dice[0] = (int)(Math.random() * 6) + 1;
         this.dice[1] = (int)(Math.random() * 6) + 1;
-        System.out.println("Dice value: " + this.dice[0] + this.dice[1]);       //for testing purposes
+
+        if (holdsDoubles())
+            this.doublesInARow++;
+        else
+            this.doublesInARow = 0;
         return (this.dice[0] + this.dice[1]);
     }
 
@@ -214,7 +219,7 @@ public class Player
                 else if (response.equals("NO"))
                 {
                     System.out.println("Auction commenced.");
-                    // do auction
+                    property.initializeAuction(this);
                     // break ;
                 }
             // }
@@ -222,7 +227,7 @@ public class Player
         else
         {
             System.out.println("Auction commenced.");
-            // do auction
+            property.initializeAuction(this);
         }
     };
 
@@ -254,13 +259,16 @@ public class Player
             else
             {
                 System.out.println("Unfortunately, " + this.name + ", you lost.");
-                if (!(owner == null))
+                
+                for (Buyable b : belongings)
                 {
-                    for (Buyable b : belongings)
+                    if (!(owner == null))
                     {
                         owner.belongings.add(b);
                         b.setOwner(owner);
                     }
+                    else
+                        b.setOwner(null);
                 }
                 removePlayer(this);
                 break ;
@@ -284,6 +292,111 @@ public class Player
         }
     }
 
+    // Al: has to undergo major testing: not safe for use!
+    public void initializeTrade()
+    {
+        // Al: also need to implement selling of getouttajail card
+        System.out.println("Please select a player to trade with: ");
+        for (Player p : Monopoly.getPlayers())
+            if (!(this.equals(p)))
+                System.out.println(p);
+        // >>> receiving input <<<
+        int playerIndex = 0;
+        // >>> Player to trade with received <<<
+        Player              another = Monopoly.getPlayers().get(playerIndex);
+
+        ArrayList<Buyable>  myProps = new ArrayList<>(this.getBelongings());
+        ArrayList<Buyable>  theirProps = new ArrayList<>(another.getBelongings());
+
+        ArrayList<Buyable>  propsToGet = new ArrayList<>();
+        ArrayList<Buyable>  propsToOffer = new ArrayList<>();
+        int                 moneyToGet = 0;
+        int                 moneyToOffer = 0;
+        while (true)
+        {
+            System.out.println("Please choose a belonging to add to the list of THEIR props to get:");
+            for (Buyable b : theirProps)
+                System.out.println(b);
+            // >>> receiving input <<<
+            int index = 0;
+            // >>> received input <<<
+
+            // add to one, remove from the other
+            propsToGet.add(theirProps.get(index));
+            theirProps.remove(index);
+
+            System.out.println("done? YES/NO");
+            // if yes, break 
+            if (true)
+                break ;
+        }
+        System.out.println("Do you want to request money? YES/NO");
+        // >>> receiving input <<<
+        boolean requestMoney = false;
+        // >>> received input <<<
+        if (requestMoney)
+        {
+            // >>> receiving input <<<
+            moneyToGet = 122313;
+            // >>> received input <<<
+        }
+        else
+            moneyToGet = 0;
+        System.out.println("Time to discuss your end of the bargain.");
+        while (true)
+        {
+            System.out.println("Please choose a belonging to add to the list of YOUR props to offer:");
+            for (Buyable b : myProps)
+                System.out.println(b);
+            // >>> receiving input <<<
+            int index = 0;
+            // >>> received input <<<
+
+            // add to one, remove from the other
+            propsToOffer.add(myProps.get(index));
+            myProps.remove(index);
+
+            System.out.println("done? YES/NO");
+            // if yes, break 
+            if (true)
+                break ;
+        }
+        System.out.println("Do you want to give away money? YES/NO");
+        // >>> receiving input <<<
+        boolean offeredMoney = false;
+        // >>> received input <<<
+        if (offeredMoney)
+        {
+            // >>> receiving input <<<
+            moneyToOffer = 122313;
+            // >>> received input <<<
+        }
+        else
+            moneyToOffer = 0;
+        // a POP-UP window asking the other player to accept/decline the offer:
+        boolean response = true;
+        // >>> receiving input <<<
+        if (response)
+        {
+            another.receiveMoney(moneyToOffer);
+            another.receiveMoney(-moneyToGet);
+            this.receiveMoney(-moneyToOffer);
+            this.receiveMoney(moneyToGet);
+
+            for (Buyable e : propsToGet)
+            {
+                e.setOwner(this);
+                another.getBelongings().remove(e);
+                this.getBelongings().add(e);
+            }
+            for (Buyable e : propsToOffer)
+            {
+                e.setOwner(another);
+                another.getBelongings().add(e);
+                this.getBelongings().remove(e);
+            }
+        }
+    }
     // TESTED by Al
     public void removePlayer(Player player)
     {
@@ -408,6 +521,11 @@ public class Player
     {
         return (this.getOutOfJail);
     }
+
+    public int      getDoublesInARow()
+    {
+        return (this.doublesInARow);
+    }
     
     public int getDaysInJail()
     {
@@ -449,6 +567,11 @@ public class Player
     public void setDaysInJail(int daysInJail)
     {
         this.daysInJail = daysInJail;
+    }
+
+    public void setDoublesInARow(int doublesInARow)
+    {
+        this.doublesInARow = doublesInARow;
     }
 
     public String toString(){
