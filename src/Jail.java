@@ -12,12 +12,19 @@ public class Jail extends Square
             // forcing the player to leave 
             if (activePlayer.getDaysInJail() > 3)
             {
-                System.out.println("You have to pay the fee now!");
-                activePlayer.setMoney(activePlayer.getMoney() - Monopoly.JAIL_FINE);
+                System.out.println("You have to pay the fine now!");
+                activePlayer.receiveMoney(-50);
                 activePlayer.setIsPrisoned(false);
                 activePlayer.setDaysInJail(1);
                 System.out.println("You paid the fine and are free to go.");
-                // Al: here we have to prevent the passing of the turn to the next player.
+
+                Utility.setDice(activePlayer.throwDice());
+                if (activePlayer.holdsDoubles())
+                    activePlayer.setDoublesInARow(activePlayer.getDoublesInARow() + 1);
+                else
+                    activePlayer.setDoublesInARow(0);
+                activePlayer.movePlayer(activePlayer.getDice());
+                Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
                 return ;
             }
             // using the getouttajail card
@@ -34,25 +41,39 @@ public class Jail extends Square
                     activePlayer.setIsPrisoned(false);
                     activePlayer.setDaysInJail(1);
                     System.out.println("You used up your 'Get out of Jail for Free' card.");
-                    // Al: here we have to prevent the passing of the turn to the next player.
+                    // Al: the player can be deprived of the ability to roll doubles twice in a row and get an additional move
+                    Utility.setDice(activePlayer.throwDice());
+                    if (activePlayer.holdsDoubles())
+                        activePlayer.setDoublesInARow(activePlayer.getDoublesInARow() + 1);
+                    else
+                        activePlayer.setDoublesInARow(0);
+                    activePlayer.movePlayer(activePlayer.getDice());
+                    Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
                     return ;
                 }
             }
             // paying the fee VOLUNTARILY 
-            if (activePlayer.getMoney() >= Monopoly.JAIL_FINE && (activePlayer.getDaysInJail() == 1 || activePlayer.getDaysInJail() == 2))
+            if (activePlayer.getMoney() >= 50 && (activePlayer.getDaysInJail() == 1 || activePlayer.getDaysInJail() == 2))
             {
                 boolean answer;
-                System.out.println("Do you wanna pay the fine of $" + Monopoly.JAIL_FINE + "? YES/NO");
+                System.out.println("Do you wanna pay $50 to get free? YES/NO");
                 // the YES/NO window pops up!
                 answer = false;
                 // the YES/NO window terminates after receiving the response
                 if (answer)
                 {
-                    activePlayer.setMoney(activePlayer.getMoney() - Monopoly.JAIL_FINE);
+                    activePlayer.receiveMoney(-50);;
                     activePlayer.setIsPrisoned(false);
                     activePlayer.setDaysInJail(1);
                     System.out.println("You paid the fine and are free to go.");
-                    // Al: here we have to prevent the passing of the turn to the next player.
+                    // Al: the player can be deprived of the ability to roll doubles twice in a row and get an additional move
+                    Utility.setDice(activePlayer.throwDice());
+                    if (activePlayer.holdsDoubles())
+                        activePlayer.setDoublesInARow(activePlayer.getDoublesInARow() + 1);
+                    else
+                        activePlayer.setDoublesInARow(0);
+                    activePlayer.movePlayer(activePlayer.getDice());
+                    Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
                     return ;
                 }
             }
@@ -64,9 +85,8 @@ public class Jail extends Square
                 activePlayer.setIsPrisoned(false);
                 activePlayer.setDaysInJail(1);
                 System.out.println("You rolled doubles and are free to go.");
-                // Al: here we have to prevent the passing of the turn to the next player.
-                // ALSO, we have to preserve the dice value by not letting the player
-                // throw the dices again! omg this is nuts
+                activePlayer.movePlayer(activePlayer.getDice());
+                Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
                 return ;
             }
             System.out.println("You failed to roll doubles. See you on the next turn!");

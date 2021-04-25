@@ -75,18 +75,34 @@ import java.util.ArrayList;
  * 7) Chance and Community Chest now properly trigger the mortgage loop;
  * 8) mortgage loop now offers an option to sell houses;
  * 9) added Utilities' and Railroads' coordinates to the COLORS array;
+ * CLASSES TESTED: Board, Buyable, Chance, Chest, GOTaxFree, GoToJail, Railroad, Utility, Square
+ * CLASSES PENGING TESTING: Jail, Property (housing features)
  * An:
- * 1) Completely changed the board structure:D ;
- * 2) Added some colors to the board;
- * 3) Added the logic for the information of titleDeeds when clicked
- * 4) Changed getRent() in Property, Utility, and Railroad not to throw null pointer Exception
- * 5) Not to forget: need to change the titleDeed layout, do the getRent() methods need to return 0 if the squares do not have Owner (Railroad, Utility)
- * P.S. I do not like writing, but it doesn't mean that I do not do work:D
+ * 10) Completely changed the board structure:D ;       // Al: haha it must've happened some day...
+ * 11) Added some colors to the board;
+ * 12) Added the logic for the information of titleDeeds when clicked
+ * 13) Changed getRent() in Property, Utility, and Railroad not to throw null pointer Exception
+ * 14) Not to forget: need to change the titleDeed layout, do the getRent() methods need to return 0 if the squares do not have Owner (Railroad, Utility)
+ * P.S. I do not like writing, but it doesn't mean that I do not do work:D  // Al: yes dear i noticed xdddd no worries, everyone knows you do 10 times more you write about
+ * 
+ *                          04/24/2021: Alexander & Anahit had to take a break to rest and do some Calculus...
+ * 
+ * MONOPOLY 0.8.0           04/25/2021
+ * Al:
+ * 1) testing of methods completely finished. the logic is ready to be connected with visuals;
+ * 2) improved the double-rolling mechanics: new static instance variable in Monopoly class was created;
+ * 3) rolling doubles 3 times in a row now results in imprisonment;
+ * 4) implemented trading (RAW);
+ * 5) implemented auction (RAW);
+ * 6) fixed an issue causing a removed player's properties to remain owned by them when failing to break 
+ * out of the mortgageLoop by taking a Chance/Chest card;
+ * An:
+ * 7) added buttons THROW_DICE and DONE, and tied them to corresponding methods;
+ * 8) made the info header refresh each time DONE is pressed;
+ * 9) overall improvement of the UI.
  */
 public class Monopoly 
 {
-    public static final int    JAIL_FINE = 50;
-
     private static ArrayList<Player>    players = new ArrayList<>();
     private Player                      activePlayer;
     private int                         indexOfPlayer;
@@ -95,14 +111,10 @@ public class Monopoly
     {
         new Board();
         setPlayers(players);
-        indexOfPlayer = 0; 
+        indexOfPlayer = 0;
         this.activePlayer = players.get(0);         // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
                                                     // Al: good idea, but let's leave it for later, if we have time 
     }
-    
-    // public String infoActivePlayer(){
-    //     return activePlayer.toString();
-    // }
 
     public void startGame(){
         printHeader();
@@ -122,8 +134,17 @@ public class Monopoly
             // Al: having the dice not thrown, the player not moved, and the coords = 10 after landing 
             // on "Go To Jail", the jail's doAction() will fire asking for more options 
             Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-            if (!(activePlayer.holdsDoubles()))
+            if (activePlayer.getDoublesInARow() == 3)
+            {
+                activePlayer.setIsPrisoned(true);
+                activePlayer.setCoordinate(10);
+                activePlayer.setDoublesInARow(0);
+            }
+            if (activePlayer.getDoublesInARow() == 0)
+            {
                 indexOfPlayer++;
+                activePlayer.setDoublesInARow(0);
+            }
             printHeader();
             printMap();
             printFooter();
@@ -133,22 +154,22 @@ public class Monopoly
         System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
     }
 
-    private void printHeader()
+    private void                    printHeader()
     {
 
     }
 
-    private void printMap()
+    private void                    printMap()
     {
 
     }
 
-    private void printFooter()
+    private void                    printFooter()
     {
 
     }
 
-    public void setPlayers(ArrayList<Player> newplayers)
+    public void                     setPlayers(ArrayList<Player> newplayers)
     {
         players = newplayers;             
     }
