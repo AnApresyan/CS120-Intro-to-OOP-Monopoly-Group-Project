@@ -32,6 +32,9 @@ public class Player
             this.doublesInARow++;
         else
             this.doublesInARow = 0;
+        
+        System.out.print("Dice roll: ");
+        System.out.println(this.dice[0] + this.dice[1]);        //for testing
         return (this.dice[0] + this.dice[1]);
     }
 

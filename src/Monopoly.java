@@ -133,7 +133,7 @@ public class Monopoly
             activePlayer.movePlayer(activePlayer.getDice());
             // Al: having the dice not thrown, the player not moved, and the coords = 10 after landing 
             // on "Go To Jail", the jail's doAction() will fire asking for more options 
-            Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
+            //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
             // if (!(activePlayer.holdsDoubles()))
             //     indexOfPlayer++;
             // printHeader();
@@ -145,14 +145,7 @@ public class Monopoly
                 activePlayer.setCoordinate(10);
                 activePlayer.setDoublesInARow(0);
             }
-            if (activePlayer.getDoublesInARow() == 0)
-            {
-                indexOfPlayer++;
-                activePlayer.setDoublesInARow(0);
-            }
-            printHeader();
-            printMap();
-            printFooter();
+            
             if (players.size() == 1)
                 System.out.println("Game Over");
                 //break;
@@ -160,22 +153,8 @@ public class Monopoly
     //     System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
      }
 
-    private void                    printHeader()
-    {
 
-    }
-
-    private void                    printMap()
-    {
-
-    }
-
-    private void                    printFooter()
-    {
-
-    }
-
-    public void                     setPlayers(ArrayList<Player> newplayers)
+    public void setPlayers(ArrayList<Player> newplayers)
     {
         players = newplayers;             
     }
@@ -189,9 +168,17 @@ public class Monopoly
         return this.activePlayer.holdsDoubles();
     }
     public void changePlayer(){
-        indexOfPlayer++;
+        if (activePlayer.getDoublesInARow() == 0){
+            indexOfPlayer++;
+            activePlayer.setDoublesInARow(0);
+        }
         if (indexOfPlayer == players.size())
-                this.indexOfPlayer = 0;
+            this.indexOfPlayer = 0;
+        System.out.println("The index of player: " + indexOfPlayer);            //for testing
         this.activePlayer = players.get(indexOfPlayer);
+    }
+
+    public int getActivePlayerCoordinate(){
+        return activePlayer.getCoordinate();
     }
 }

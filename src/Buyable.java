@@ -5,6 +5,7 @@ public abstract class Buyable extends Square
     private Player      owner;
     private int         price;
     private boolean     isMortgaged;
+    private boolean     wantsToBuy;
 
     public static final int[][] COLORS = {{1, 3}, {5, 15, 25, 35}, {12, 28}, {6, 8, 9}, {11, 13, 14}, {16, 18, 19}, {21, 23, 24}, {26, 27, 29}, {31, 32, 34}, {37, 39}};
     
@@ -21,7 +22,9 @@ public abstract class Buyable extends Square
         if (this.owner == null)
         {
             System.out.println("You landed on an unowned land!");
-            activePlayer.buyProperty(this);
+            if (wantsToBuy)
+                activePlayer.buyProperty(this);
+            
         }
         else
         {
@@ -58,6 +61,8 @@ public abstract class Buyable extends Square
                 System.out.println(activeBidder.getName() + ", please select a value between " + lowEnd + " and " + highEnd + " to bid.");
                 // >>> receiving input <<<
                 choice = 100;
+                //or give up
+                
                 // >>> received input <<<
                 lowEnd = choice;
                 index++;
@@ -101,5 +106,8 @@ public abstract class Buyable extends Square
     public Player getOwner()
     {
         return (this.owner);
+    }
+    public void setWantsToBuy(boolean wantsToBuy){
+        this.wantsToBuy = wantsToBuy;
     }
 }

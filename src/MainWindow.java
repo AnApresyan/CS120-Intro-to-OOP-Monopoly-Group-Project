@@ -1,27 +1,9 @@
-import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.awt.event.*;
 //import java.util.concurrent.Flow;
 import java.awt.*;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-
-
+import javax.swing.*;
+import javax.swing.border.*;
 
 
 public class MainWindow extends JFrame implements ActionListener{
@@ -29,35 +11,40 @@ public class MainWindow extends JFrame implements ActionListener{
     private int numberOfPlayers;
     
     private CustomButton[] buttons = new CustomButton[40];
-    JPanel boardContainer;
+    private JPanel boardContainer;
 
     //board components
-    JPanel board;
-    JPanel top;
-    JPanel left;
-    JPanel right;
-    JPanel bottom;
-    JPanel center;
-    TitleDeeds titleDeed;
+    private JPanel board;
+    private JPanel top;
+    private JPanel left;
+    private JPanel right;
+    private JPanel bottom;
+    private JPanel center;
+    private TitleDeeds titleDeed;
 
     private int numOfNames;
 
     //info components
-    JPanel info;
-    JPanel infoTop;
-    JPanel infoCenter;
-    JPanel infoBottom;
+    private JPanel info;
+    private JPanel infoTop;
+    private JPanel infoCenter;
+    private JPanel infoBottom;
 
     //infoTop
-    JLabel[] playerInfo;
+    private JLabel[] playerInfo;
+
+    //infoCenter
+    ForBuyable forBuyable;
+    JPanel commands;
+    CustomCards card;
 
     //infoBottom buttons
-    JButton throwDice;
-    JButton done;
+    private JButton throwDice;
+    private JButton done;
      
 
     //the actual game (gonna call methods like throwDice() and other stuff from here)
-    Monopoly game;
+    private Monopoly game;
 
     private class TitleDeeds extends JPanel{
         private JLabel titleOfDeed;
@@ -152,6 +139,127 @@ public class MainWindow extends JFrame implements ActionListener{
             
         }
     }   
+    
+    private class ForBuyable extends JPanel implements ActionListener{
+        private JButton yesButton;
+        private JButton noButton;
+        private JLabel instructions;
+        private JPanel buttonPanel;
+
+        private ForBuyable(){
+            this.setLayout(new GridLayout(3, 1));
+            //this.setSize(new Dimension(100, 150));
+            buttonPanel = new JPanel();
+            buttonPanel.setLayout(new FlowLayout());
+
+            yesButton = new JButton("Yes");
+            noButton = new JButton("No");
+            instructions = new JLabel();
+
+            yesButton.setBackground(new Color(255, 255, 255));
+            noButton.setBackground(new Color(255, 255, 255));
+            yesButton.addActionListener(this);
+            noButton.addActionListener(this);
+
+
+            
+            buttonPanel.add(yesButton);
+            buttonPanel.add(noButton);
+            this.add(instructions);
+            this.add(buttonPanel);
+        }
+
+        
+        private void setThePanel(){
+            this.instructions.setVisible(true);
+            this.instructions.setText("");;
+            if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() != null){
+                this.buttonPanel.setVisible(false);
+                this.instructions.setText("You pay $" + ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getRent() + " rent.");
+            }
+            else{
+                this.instructions.setText("You landed on an unowned property. \n Do you want to buy it?");
+                this.buttonPanel.setVisible(true);
+            }
+        }
+
+        private void setAllVisible(boolean visibility){
+            this.buttonPanel.setVisible(visibility);
+            this.instructions.setVisible(visibility);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == yesButton){
+                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(true);
+            }
+
+            else if (e.getSource() == noButton){
+                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(false);
+                ///need to open the auction part
+            }
+
+            ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
+            titleDeed.setEverything(game.getActivePlayerCoordinate());
+            setUpInfoTop();
+            setVisible(false);
+            
+        }
+
+            
+    }
+    
+    private class CustomCards extends JPanel{
+        private JLabel message;
+        private JButton ok;
+        private CustomCards(){
+            this.setSize(new Dimension(100, 100));
+            this.setLayout(new BorderLayout());
+            this.message = new JLabel();
+            this.ok = new JButton("OK");
+            ok.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int previousCoordinate = game.getActivePlayerCoordinate();
+                    Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                    setVisible(false);
+                    if (Board.getSquares()[previousCoordinate].getClass().getName().equals("Chance")){
+                        if (((Chance)Board.getSquares()[previousCoordinate]).ifcallDoAction())
+                            setUpInfoCenter();
+                    }
+                    titleDeed.setEverything(game.getActivePlayerCoordinate());
+                    setUpInfoTop();
+                }
+
+            });
+            ok.setSize(new Dimension(30, 20));
+            this.add(message, BorderLayout.CENTER);
+            this.add(ok, BorderLayout.SOUTH);
+            
+        }
+
+        private void setMessage(String message){ 
+            this.message.setText(message);
+            System.out.println("The message : " + this.message.getText());
+
+        }
+    }
+    
+    
+    /*private class infoProperty extends JPanel{
+
+    }
+
+    private class infoJail extends JPanel{
+
+    }
+
+    private class infoChanceCommunityChest extends JPanel{
+
+    }*/
+
+    
+
     public MainWindow(){
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -169,7 +277,9 @@ public class MainWindow extends JFrame implements ActionListener{
     
 
         //The images
-        ImageIcon image = new ImageIcon("./images/logo2.png");
+        //ImageIcon image = new ImageIcon("./images/logo2.png");
+        ImageIcon image = new ImageIcon("CS120A_Group_Project_Monopoly/images/logo2.png");
+        
         
         //The main panel
         JPanel mainMenu = new JPanel();
@@ -284,18 +394,6 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
 
-    //helper methods (not to have everything packed in the constructor)
-
-    // private void setDefaultTitleDeed(){
-    //     this.titleDeed.setPreferredSize(new Dimension(300, 500));
-    //     this.titleDeed.setBorder(BorderFactory.createLineBorder(Color.black));
-    //     // this.title = new JLabel();
-    //     // title.setText("Of aman esim e");
-    //     //titleDeed.add(title);
-    //     this.titleDeed.setLayout(new GridLayout(10, 1));
-    //     //this.titleDeed.add(new JLabel(Board.getSquares()[0].getTitle()));
-    // }
-
     private void setButtons(){
         for (int i = 0; i < 40; i++){                   //need to change this back, they do not need direction for now
             if (i > 0 && i < 10)
@@ -332,7 +430,6 @@ public class MainWindow extends JFrame implements ActionListener{
         }
         
     }
-
 
 
     //the board and the info
@@ -395,9 +492,19 @@ public class MainWindow extends JFrame implements ActionListener{
 
     }
 
+
     private void setUpInfo(){
 
         this.titleDeed = new TitleDeeds(0);
+
+        //the components of commands
+        this.commands = new JPanel();
+        commands.setLayout(new FlowLayout());
+        this.card = new CustomCards();
+        this.forBuyable = new ForBuyable();
+
+        this.card.setVisible(false);
+        this.forBuyable.setVisible(false);
         //System.out.println(Board.getSquares()[0].getTitle());
        // titleDeed.setTilteOfDeed(Board.getSquares()[0].getTitle());
         
@@ -411,8 +518,15 @@ public class MainWindow extends JFrame implements ActionListener{
         infoCenter.setLayout(new BorderLayout());           //maybe another layout
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
 
-        //titleDeed.add(new JLabel("Off"));
+        
+        
+        //adding to commands;
+        commands.add(forBuyable);
+        commands.add(card);
+        //infocenter.add commands and titleDeed;
         infoCenter.add(titleDeed, BorderLayout.WEST);
+        infoCenter.add(commands, BorderLayout.CENTER);
+        
 
         infoBottom.setSize(new Dimension(300, 600));
 
@@ -421,7 +535,7 @@ public class MainWindow extends JFrame implements ActionListener{
         playerInfo = new JLabel[numberOfPlayers];
         for (int i = 0; i < numberOfPlayers; i++){
             playerInfo[i] = new JLabel();
-            playerInfo[i].setFont(new Font("Serif", Font.ITALIC, 18));
+            //playerInfo[i].setFont(new Font("Serif", Font.ITALIC, 18));
             infoTop.add(playerInfo[i]);
         }
 
@@ -434,19 +548,55 @@ public class MainWindow extends JFrame implements ActionListener{
         //infoCenter
         //infoCenter.add(titleDeed);
         setUpInfoBottom();
-        infoBottom.add(new JLabel("BOTTOM")); 
+        //infoBottom.add(new JLabel("BOTTOM")); 
         
 
         //adding to info
+        
         info.add(infoTop, BorderLayout.NORTH);
         info.add(infoCenter, BorderLayout.CENTER);
         info.add(infoBottom, BorderLayout.SOUTH);
     }
 
+
+
     private void setUpInfoTop(){
         for (int i = 0; i < numberOfPlayers; i++){
+            
             playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());
+            if (Monopoly.getPlayers().get(i).equals(game.activePlayer))
+                playerInfo[i].setFont(new Font("Serif", Font.BOLD, 18));
+            else{
+                playerInfo[i].setFont(new Font("Serif", Font.ROMAN_BASELINE, 18));
+
+            }
         }
+    }
+
+
+    private void setUpInfoCenter(){
+        
+        titleDeed.setEverything(game.getActivePlayerCoordinate());
+
+        if(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable){
+            this.forBuyable.setThePanel();
+            this.forBuyable.setVisible(true);
+            titleDeed.setEverything(game.getActivePlayerCoordinate());
+
+        }
+        else if (Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck){
+            // System.out.println("Chance card needs to be visible");
+            card.setVisible(true);
+            ((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).randomCardGenerator();
+            System.out.println("ActivePlayerCoordinate: " + game.getActivePlayerCoordinate());
+            System.out.println("The message : " + ((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+
+            this.card.setMessage(((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            
+            //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+            card.setVisible(true);
+        }
+        setUpInfoTop();
     }
 
     private void setUpInfoBottom(){
@@ -457,10 +607,12 @@ public class MainWindow extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
                 game.startGame();
-                if (!game.ifPlayerHoldsDoubles()){
+                setUpInfoCenter();
+                if (!game.ifPlayerHoldsDoubles()){          //moved to After doAction is complete
                     throwDice.setEnabled(false);
                     done.setEnabled(true);
                 }
+                setUpInfoTop();
                 
             }
             
@@ -472,9 +624,12 @@ public class MainWindow extends JFrame implements ActionListener{
             public void actionPerformed(ActionEvent e) {
                 game.changePlayer();
                 done.setEnabled(false);
-                throwDice.setEnabled(true);
                 setUpInfoTop();
-                System.out.println(game.activePlayer.getName());
+                throwDice.setEnabled(true);
+                forBuyable.setVisible(false);
+                card.setVisible(false);
+                //commands.setVisible(false);
+                //System.out.println(game.activePlayer.getName());
             }
             
         });
@@ -483,6 +638,8 @@ public class MainWindow extends JFrame implements ActionListener{
 
     }
 
+
+    //board
     private void setUpTop(){                                        //all of these setUps can be compressed to one method probably
         top.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
@@ -543,7 +700,7 @@ public class MainWindow extends JFrame implements ActionListener{
             if (e.getSource() == buttons[i]){
                 //System.out.println(Board.getSquares()[i].toString());
                 //this.titleDeed.setLayout(new GridLayout(10, 1));
-                System.out.println(i);
+                System.out.println("Square coordinate: " + i);
                 // this.titleDeed.removeAll();
                 // repaint();
                 
