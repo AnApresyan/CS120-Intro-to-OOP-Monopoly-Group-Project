@@ -129,7 +129,7 @@ import java.util.ArrayList;
 public class Monopoly 
 {
     private static ArrayList<Player>    players = new ArrayList<>();
-    public Player                      activePlayer;               //public for testing
+    public Player                       activePlayer;               //public for testing
     private int                         indexOfPlayer;
 
     public Monopoly(ArrayList<Player> players)

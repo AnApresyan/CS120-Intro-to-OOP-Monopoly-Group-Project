@@ -255,7 +255,7 @@ public class Player
         else
         {
             System.out.println("Auction commenced.");
-            property.initializeAuction(this);
+            //property.initializeAuction(this);
         }
     };
 

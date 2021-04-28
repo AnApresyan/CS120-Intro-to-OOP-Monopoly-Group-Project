@@ -290,21 +290,42 @@ public class MainWindow extends JFrame implements ActionListener{
                 ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(2);
             this.setVisible(false);
             Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+            setUpInfoTop();
         }
     }
     
-    /*private class infoProperty extends JPanel{
-
-    }
 
     private class infoJail extends JPanel{
+        JLabel message;
+        JPanel buttons;
+        JButton pay;
+        JButton useTheCard;
 
+        private infoJail(){
+            this.setLayout(new GridLayout(2, 1));
+            this.message = new JLabel();
+            this.buttons = new JPanel();
+            this.pay = new JButton();
+            this.useTheCard = new JButton();
+
+            buttons.add(pay);
+            buttons.add(useTheCard);
+
+            this.add(message);
+            this.add(buttons);
+        }
+
+        private void setThePanel(){
+            this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
+            // if ()
+            if (game.activePlayer.getGetOutOfJail())
+                this.useTheCard.setEnabled(true);
+            else
+                this.useTheCard.setEnabled(false);
+
+            
+        }
     }
-
-    private class infoChanceCommunityChest extends JPanel{
-
-    }*/
-
     
 
     public MainWindow(){
@@ -627,7 +648,10 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     private void setUpInfoCenter(){
-        
+        infoForBuyable.setVisible(false);
+        card.setVisible(false);
+        infoGoTaxFree.setVisible(false);
+
         titleDeed.setEverything(game.getActivePlayerCoordinate());
 
         if(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable){

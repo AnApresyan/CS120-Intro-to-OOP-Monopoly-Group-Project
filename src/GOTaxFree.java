@@ -12,6 +12,8 @@ public class GOTaxFree extends Square
             setTitle("Free Parking");
         else if (coordinate == 38)
             setTitle("Luxury Tax");
+        else if (coordinate == 30)
+            setTitle("GO To Jail");
         choice = 0;
     }
     public void doAction(Player activePlayer)
@@ -28,6 +30,10 @@ public class GOTaxFree extends Square
         {
             activePlayer.receiveMoney(-75);
         }
+        else if (getCoordinate() == 30){
+            activePlayer.setIsPrisoned(true);
+            activePlayer.setCoordinate(10);
+        }
     }
     @Override
     public String getMessage() {
@@ -40,6 +46,8 @@ public class GOTaxFree extends Square
                 return "Just have a rest";
             case 38:
                 return "You have to pay 75$ as a luxury tax";
+            case 30:
+                return "Haha! You go to jail right now!";
         }
         return "";
     }
