@@ -1,4 +1,5 @@
-public interface Deck {
-    
-    void randomCardGenerator();
+public abstract class Deck extends Square
+{
+    // void    shuffleDeck();
+    // void    drawCard();
 }

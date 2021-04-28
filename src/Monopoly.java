@@ -100,6 +100,31 @@ import java.util.ArrayList;
  * 7) added buttons THROW_DICE and DONE, and tied them to corresponding methods;
  * 8) made the info header refresh each time DONE is pressed;
  * 9) overall improvement of the UI.
+ * 
+ * MONOPOLY 0.9.0           04/26/2021
+ * Al:
+ * 1) added dummy images for sprites;
+ * An:
+ * 2) fixed an issue causing a player's name to be displayed in each title deed card as the owner after a
+ * property is bought for the first time;
+ * 3) fixed an issue causing the player's turn not to end;
+ * 4) fixed an issue causing the balance and coordinate refresh only after DONE is pressed;
+ * 5) properly connected Buyable to the interface. the program now correctly handles YES and NO input through
+ * the corresponding buttons;
+ * 6) properly connected Chance&Chest to the interface with corresponding message pop-ups.
+ * 
+ * MONOPOLY 1.0.0           04/27/2021
+ * An:
+ * 1) created an enum for cards in Chance&Chest holding messages to easily display them;
+ * 2) added a getMessage() to collect the card desriptions in the Square class;
+ * 3) overall improvement of interface connection.
+ * 
+ * MONOPOLY 1.0.1           04/28/2021
+ * Al:
+ * 1) implemented liftMortgage() in the Player class;
+ * 2) lower-cased the card messages so that Anahit doesn't get annoyed by capsed letters;
+ * An:
+ * 3) merged GoToJail class with GOTaxFree class;
  */
 public class Monopoly 
 {

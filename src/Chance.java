@@ -3,11 +3,11 @@ import java.util.Random;
 public class Chance extends Square implements Deck
 {
     private enum CardMessages{
-        CARD0 ("ADVANCE TO GO (COLLECT $200)."),
-        CARD1 ("ADVANCE TO ILLINOIS AVE."),
-        CARD2 ("ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200."),
-        CARD3 ("ADVANCE TO THE NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM THE BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES THE AMOUNT THROWN."),
-        CARD4 ("ADVANCE TO THE NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM THE BANK. IF OWNED, PAY OWNER TWICE THE RETAIL TO WHICH THEY ARE OTHERWISE ENTITLED."),
+        CARD0 ("Advance to GO (Collect $200)."),
+        CARD1 ("Advance to Illinois Ave."),
+        CARD2 ("Advance to St. Charles Place. If you pass GO, collect $200."),
+        CARD3 ("Advance to the nearest utility. If unowned, you may buy it from the bank. If owned, throw dice and pay owner a total 10 times the amount thrown."),
+        CARD4 ("Advance to the nearest railroad. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED."),
         CARD5 ("BANK PAYS YOU DIVIDEND OF $50."),
         CARD6 ("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD."),
         CARD7 ("GO BACK 3 SPACES."),
@@ -15,8 +15,8 @@ public class Chance extends Square implements Deck
         CARD9 ("MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY: FOR EACH HOUSE PAY $25, FOR EACH HOTEL $100."),
         CARD10 ("PAY POOR TAX OF $15."),
         CARD11 ("TAKE A TRIP TO READING RAILROAD. IF YOU PASS GO, COLLECT $200."),
-        CARD12 ("TAKE A WALK ON THE BOARDWALK. ADVANCE TOKEN TO BOARDWALK."),
-        CARD13 ("YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50."),
+        CARD12 ("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK."),
+        CARD13 ("YOU HAVE BEEN ELECTED CHAIRMAN OF the BOARD. PAY EACH PLAYER $50."),
         CARD14 ("YOUR BUILDING AND LOAN MATURES. RECEIVE $150."),
         CARD15 ("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
 
@@ -88,8 +88,8 @@ public class Chance extends Square implements Deck
         }
         else if (chance == 3)
         {
-            //System.out.println("ADVANCE TO THE NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM THE BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES THE AMOUNT THROWN.");
-            //setMessage("ADVANCE TO THE NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM THE BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES THE AMOUNT THROWN.");
+            //System.out.println("ADVANCE TO the NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES the AMOUNT THROWN.");
+            //setMessage("ADVANCE TO the NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES the AMOUNT THROWN.");
             
             while (activePlayer.getCoordinate() != 12 && activePlayer.getCoordinate() != 28)
                 activePlayer.movePlayer(1);
@@ -104,8 +104,8 @@ public class Chance extends Square implements Deck
         }
         else if (chance == 4)
         {
-            //System.out.println("ADVANCE TO THE NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM THE BANK. IF OWNED, PAY OWNER TWICE THE RETAIL TO WHICH THEY ARE OTHERWISE ENTITLED.");
-            //setMessage("ADVANCE TO THE NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM THE BANK. IF OWNED, PAY OWNER TWICE THE RETAIL TO WHICH THEY ARE OTHERWISE ENTITLED.");
+            //System.out.println("ADVANCE TO the NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED.");
+            //setMessage("ADVANCE TO the NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED.");
             while (activePlayer.getCoordinate() != 5 && activePlayer.getCoordinate() != 15 && activePlayer.getCoordinate() != 25 && activePlayer.getCoordinate() != 35)
                 activePlayer.movePlayer(1);
             if (((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null){
@@ -183,8 +183,8 @@ public class Chance extends Square implements Deck
         }
         else if (chance == 12)
         {
-            //System.out.println("TAKE A WALK ON THE BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
-            //setMessage("TAKE A WALK ON THE BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
+            //System.out.println("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
+            //setMessage("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
             while (activePlayer.getCoordinate() != 39)
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
@@ -193,8 +193,8 @@ public class Chance extends Square implements Deck
         {
             int i;
 
-            //System.out.println("YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.");
-            //setMessage("YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.");
+            //System.out.println("YOU HAVE BEEN ELECTED CHAIRMAN OF the BOARD. PAY EACH PLAYER $50.");
+            //setMessage("YOU HAVE BEEN ELECTED CHAIRMAN OF the BOARD. PAY EACH PLAYER $50.");
             i = 0;
             while (i < Monopoly.getPlayers().size())
             {

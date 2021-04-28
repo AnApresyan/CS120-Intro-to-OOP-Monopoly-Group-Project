@@ -56,6 +56,31 @@ public class Player
         }
     }
 
+    public void     liftMortgage()
+    {
+        // Al: An, the corresponding button should be enabled only when there's a mortgaged prop in their 
+        // belongings. please take care of that condition
+            System.out.println("Please select a property to lift mortgage from:");
+
+            for (Buyable b : belongings)
+            {
+                if (b.isMortgaged())
+                {
+                    System.out.println(b);
+                }
+            }
+
+            // >>> receiving input <<<
+            int receivedInt = 1;
+            // >>> received input
+            for (Buyable b : belongings)
+            {
+                if (b.getCoordinate() == receivedInt)
+                    b.setIsMortgaged(false);
+                receiveMoney((int)(-(b.getPrice() / 2) * 1.1));
+            }
+    }
+
     public void     erectHouse()
     {
         ArrayList<Buyable>  canBeImproved = new ArrayList<>();
