@@ -93,5 +93,10 @@ public class Jail extends Square
             activePlayer.setDaysInJail(activePlayer.getDaysInJail() + 1);
         }
     }
+    @Override
+    public String getMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

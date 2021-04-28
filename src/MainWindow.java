@@ -11,7 +11,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private int numberOfPlayers;
     
     private CustomButton[] buttons = new CustomButton[40];
-    private JPanel boardContainer;
+    private JLayeredPane boardContainer;    //was JPanel
 
     //board components
     private JPanel board;
@@ -172,15 +172,11 @@ public class MainWindow extends JFrame implements ActionListener{
         
         private void setThePanel(){
             this.instructions.setVisible(true);
-            this.instructions.setText("");;
-            if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() != null){
+            this.instructions.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() != null)
                 this.buttonPanel.setVisible(false);
-                this.instructions.setText("You pay $" + ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getRent() + " rent.");
-            }
-            else{
-                this.instructions.setText("You landed on an unowned property. \n Do you want to buy it?");
+            else
                 this.buttonPanel.setVisible(true);
-            }
         }
 
         private void setAllVisible(boolean visibility){
@@ -445,7 +441,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         this.setLayout(new BorderLayout());
-        boardContainer = new JPanel();
+        boardContainer = new JLayeredPane();//JPanel();
         boardContainer.setLayout(new FlowLayout());
 
         board = new JPanel();
@@ -479,7 +475,8 @@ public class MainWindow extends JFrame implements ActionListener{
         board.add(right,BorderLayout.EAST);
         board.add(bottom,BorderLayout.SOUTH);
         board.add(center,BorderLayout.CENTER);
-
+    
+        
         boardContainer.add(board);
         
 
@@ -589,13 +586,20 @@ public class MainWindow extends JFrame implements ActionListener{
             card.setVisible(true);
             ((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).randomCardGenerator();
             System.out.println("ActivePlayerCoordinate: " + game.getActivePlayerCoordinate());
-            System.out.println("The message : " + ((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            System.out.println("The message : " + (Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
 
-            this.card.setMessage(((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            this.card.setMessage((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
             
             //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
             card.setVisible(true);
         }
+
+        // else if (game.getActivePlayerCoordinate() == 4){
+        //     inclomeTaxPanel.setVisible(true);
+        // }
+        // else(){
+
+        // }
         setUpInfoTop();
     }
 

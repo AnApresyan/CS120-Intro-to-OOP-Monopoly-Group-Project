@@ -110,4 +110,14 @@ public abstract class Buyable extends Square
     public void setWantsToBuy(boolean wantsToBuy){
         this.wantsToBuy = wantsToBuy;
     }
+
+    public String getMessage(){
+
+        if (this.owner != null){
+
+            return "You pay $" + this.getRent() + " rent.";
+        }
+        return "You landed on an unowned property. \n Do you want to buy it?";
+
+    }
 }

@@ -27,4 +27,9 @@ public class GOTaxFree extends Square
             activePlayer.receiveMoney(-75);
         }
     }
+    @Override
+    public String getMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

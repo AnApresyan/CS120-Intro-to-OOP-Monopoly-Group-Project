@@ -9,6 +9,7 @@ public abstract class Square
     }
 
     public abstract void doAction(Player activePlayer);
+    public abstract String getMessage();
     
     public void setCoordinate(int coordinate)
     {

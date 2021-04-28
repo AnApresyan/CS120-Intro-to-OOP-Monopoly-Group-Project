@@ -9,4 +9,9 @@ public class GoToJail extends Square {
         activePlayer.setIsPrisoned(true);
         activePlayer.setCoordinate(10);
     }
+    @Override
+    public String getMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
