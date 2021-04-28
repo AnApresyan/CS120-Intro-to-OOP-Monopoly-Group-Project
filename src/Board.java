@@ -37,7 +37,7 @@ public class Board
         squares[27] = new Property(27, "Ventnor Avenue", 260, new int[]{22, 110, 330, 800, 975, 1150}, 150);
         squares[28] = new Utility(28, "Water Works");
         squares[29] = new Property(29, "Marvin Gardens", 280, new int[]{24, 120, 360, 850, 1025, 1200}, 150);
-        squares[30] = new GoToJail(30);
+        squares[30] = new GOTaxFree(30);
         squares[31] = new Property(31, "Pacific Avenue", 300, new int[]{26, 130, 390, 900, 1100, 1275}, 200);
         squares[32] = new Property(32, "North Carolina Avenue", 300, new int[]{26, 130, 390, 900, 1100, 1275}, 200);
         squares[33] = new CommunityChest(33);
