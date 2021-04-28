@@ -5,13 +5,12 @@ public class GoToJail extends Square {
     }
     public void doAction(Player activePlayer)
     {
-        System.out.println("Haha! You go to jail right now!");
+        //System.out.println("Haha! You go to jail right now!");
         activePlayer.setIsPrisoned(true);
         activePlayer.setCoordinate(10);
     }
     @Override
     public String getMessage() {
-        // TODO Auto-generated method stub
-        return null;
+        return "Haha! You go to jail right now!";
     }
 }
