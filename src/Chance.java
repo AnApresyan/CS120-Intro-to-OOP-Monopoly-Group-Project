@@ -1,3 +1,4 @@
+
 public class Chance extends Deck
 {
     enum CardMessages
@@ -31,7 +32,7 @@ public class Chance extends Deck
         }
     }
 
-    //private String message;
+    private CardMessages card;
     private boolean callDoAction;
 
     public boolean ifcallDoAction(){
@@ -48,6 +49,7 @@ public class Chance extends Deck
     // TESTED by Al
     public void doAction(Player activePlayer)
     {
+
         callDoAction = true;
         // int chance;
 
@@ -213,14 +215,23 @@ public class Chance extends Deck
             callDoAction = false;
         }
         activePlayer.enterMortgageLoop(null);
+
     }
 
     // public void setMessage(String message){
     //     this.message = message;
     // }
+
+    public void         setCard(int chance)
+    {
+        
+        this.card = CardMessages.values()[getChance()];
+    }
     public String getMessage()
     {
-        return getCard().getMessage();
+        drawCard();
+        setCard(getChance());
+        return card.getMessage();
     }
 
 }

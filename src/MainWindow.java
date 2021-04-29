@@ -175,7 +175,7 @@ public class MainWindow extends JFrame implements ActionListener{
             if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable))
                 return;
             this.instructions.setVisible(true);
-            this.instructions.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            this.instructions.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());     //something is wrong
             if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() != null)
                 this.buttonPanel.setVisible(false);
             else
@@ -238,7 +238,11 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         private void setTheCard(){ 
-            ((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).drawCard();
+            if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck)){
+                this.setVisible(false);
+                return;
+            }
+            //((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).drawCard();
             this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
             System.out.println("The message : " + this.message.getText());
 

@@ -1,3 +1,4 @@
+
 public class CommunityChest extends Deck
 {
     enum CardMessages
@@ -24,19 +25,24 @@ public class CommunityChest extends Deck
         {
             this.message = message;
         }
+        private String getMessage(){
+            return message;
+        }
     }
 
+
+    private CardMessages card;
     public CommunityChest(int square)
     {
         super(square);
+        setTitle("Community Chest");
     }
 
     // TESTED by Al     (and change by An:D)
     
     public void doAction(Player activePlayer)
-    {  
-        drawCard();
-        setCard((Deck.CardMessages) CardMessages.values()[getChance()]);
+    {
+
         if (getChance() == 0)
         {
             //System.out.println("ADVANCE TO GO (COLLECT $200).");
@@ -160,16 +166,26 @@ public class CommunityChest extends Deck
             activePlayer.receiveMoney(100);
         }
         activePlayer.enterMortgageLoop(null);
+        
         //System.out.println(this.message);
     }
     
 
+    public CardMessages getCard()
+    {
+        return (this.card);
+    }
 
-    // public void setMessage(String message){
-    //     this.message = message;
-    // }
+    public void         setCard(int chance)
+    {
+        
+        this.card = CardMessages.values()[getChance()];
+    }
+
     public String getMessage()
     {
-        return (this.getMessage());
+        drawCard();
+        setCard(getChance());
+        return (this.card.getMessage());
     }
 }
