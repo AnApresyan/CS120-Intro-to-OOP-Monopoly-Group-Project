@@ -1,8 +1,7 @@
-import java.util.Random;
-
-public class Chance extends Square implements Deck
+public class Chance extends Deck
 {
-    private enum CardMessages{
+    enum CardMessages
+    {
         CARD0 ("Advance to GO (Collect $200)."),
         CARD1 ("Advance to Illinois Ave."),
         CARD2 ("Advance to St. Charles Place. If you pass GO, collect $200."),
@@ -20,27 +19,19 @@ public class Chance extends Square implements Deck
         CARD14 ("YOUR BUILDING AND LOAN MATURES. RECEIVE $150."),
         CARD15 ("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
 
-
         private String message;
-        private CardMessages(String message){
+        private CardMessages(String message)
+        {
             this.message = message;
         }
 
-
-        private String getMessage(){
-            return this.message;
+        private String getMessage()
+        {
+            return (this.message);
         }
     }
 
-    public void randomCardGenerator() {
-        chance = new Random().nextInt(CardMessages.values().length);
-        this.card =  CardMessages.values()[chance];
-        System.out.println("Chance random number: " + chance);
-    }
-
     //private String message;
-    private CardMessages card;
-    private int chance;
     private boolean callDoAction;
 
     public boolean ifcallDoAction(){
@@ -62,7 +53,7 @@ public class Chance extends Square implements Deck
 
         // System.out.print("You're taking a chance: ");
         // chance = (int)(Math.random() * 16) + 1;
-        if (chance == 0)
+        if (getChance() == 0)
         {
             //System.out.println("ADVANCE TO GO (COLLECT $200).");
             //setMessage("ADVANCE TO GO (COLLECT $200).");
@@ -70,7 +61,7 @@ public class Chance extends Square implements Deck
                 activePlayer.movePlayer(1);
             callDoAction = false;
         }
-        else if (chance == 1)
+        else if (getChance() == 1)
         {
             //System.out.println("ADVANCE TO ILLINOIS AVE.");
             //setMessage("ADVANCE TO ILLINOIS AVE.");
@@ -78,7 +69,7 @@ public class Chance extends Square implements Deck
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
-        else if (chance == 2)
+        else if (getChance() == 2)
         {
             //System.out.println("ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.");
             //setMessage("ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.");
@@ -86,7 +77,7 @@ public class Chance extends Square implements Deck
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
-        else if (chance == 3)
+        else if (getChance() == 3)
         {
             //System.out.println("ADVANCE TO the NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES the AMOUNT THROWN.");
             //setMessage("ADVANCE TO the NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES the AMOUNT THROWN.");
@@ -102,7 +93,7 @@ public class Chance extends Square implements Deck
                 callDoAction = false;
             }
         }
-        else if (chance == 4)
+        else if (getChance() == 4)
         {
             //System.out.println("ADVANCE TO the NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED.");
             //setMessage("ADVANCE TO the NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED.");
@@ -117,28 +108,28 @@ public class Chance extends Square implements Deck
                 callDoAction = false;
             }
         }
-        else if (chance == 5)
+        else if (getChance() == 5)
         {
             //System.out.println("BANK PAYS YOU DIVIDEND OF $50.");
             //setMessage("BANK PAYS YOU DIVIDEND OF $50.");
             activePlayer.receiveMoney(50);
             callDoAction = false;
         }
-        else if (chance == 6)
+        else if (getChance() == 6)
         {
             //System.out.println("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
             //setMessage("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
             activePlayer.setGetOutOfJail(true);
             callDoAction = false;
         }
-        else if (chance == 7)
+        else if (getChance() == 7)
         {
             //System.out.println("GO BACK 3 SPACES.");
             //setMessage("GO BACK 3 SPACES.");
             activePlayer.setCoordinate(activePlayer.getCoordinate() - 3);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
-        else if (chance == 8)
+        else if (getChance() == 8)
         {
             //System.out.println("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
             //setMessage("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
@@ -146,7 +137,7 @@ public class Chance extends Square implements Deck
             activePlayer.setIsPrisoned(true);
             callDoAction = false;
         }
-        else if (chance == 9)
+        else if (getChance() == 9)
         {
             //System.out.println("MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY: FOR EACH HOUSE PAY $25, FOR EACH HOTEL $100.");
             //setMessage("MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY: FOR EACH HOUSE PAY $25, FOR EACH HOTEL $100.");
@@ -166,14 +157,14 @@ public class Chance extends Square implements Deck
             activePlayer.receiveMoney(-loss);
             callDoAction = false;
         }
-        else if (chance == 10)
+        else if (getChance() == 10)
         {
             //System.out.println("PAY POOR TAX OF $15.");
             //setMessage("PAY POOR TAX OF $15.");
             activePlayer.receiveMoney(-15);
             callDoAction = false;
         }
-        else if (chance == 11)
+        else if (getChance() == 11)
         {
             //System.out.println("TAKE A TRIP TO READING RAILROAD. IF YOU PASS GO, COLLECT $200.");
             //setMessage("TAKE A TRIP TO READING RAILROAD. IF YOU PASS GO, COLLECT $200.");
@@ -181,7 +172,7 @@ public class Chance extends Square implements Deck
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
-        else if (chance == 12)
+        else if (getChance() == 12)
         {
             //System.out.println("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
             //setMessage("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
@@ -189,7 +180,7 @@ public class Chance extends Square implements Deck
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
-        else if (chance == 13)
+        else if (getChance() == 13)
         {
             int i;
 
@@ -207,14 +198,14 @@ public class Chance extends Square implements Deck
             }
             callDoAction = false;
         }
-        else if (chance == 14)
+        else if (getChance() == 14)
         {
             //System.out.println("YOUR BUILDING AND LOAN MATURES. RECEIVE $150.");
             //setMessage("YOUR BUILDING AND LOAN MATURES. RECEIVE $150.");
             activePlayer.receiveMoney(150);
             callDoAction = false;
         } 
-        else if (chance == 15) 
+        else if (getChance() == 15) 
         {
             //System.out.println("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
             //setMessage("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
@@ -227,8 +218,9 @@ public class Chance extends Square implements Deck
     // public void setMessage(String message){
     //     this.message = message;
     // }
-    public String getMessage(){
-        return this.card.getMessage();
+    public String getMessage()
+    {
+        return getCard().getMessage();
     }
 
 }

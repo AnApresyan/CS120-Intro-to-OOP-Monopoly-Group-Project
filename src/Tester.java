@@ -1,5 +1,6 @@
 public class Tester
 {
+    // Al: ATTENTION: DICE THROW IS SET TO 1 FOR TESTING!
     public static void main (String[] args)
     {
         /*Player player = new Player("Alex", 1);  
@@ -19,7 +20,6 @@ public class Tester
         player2.rentProperty(player.getBelongings().get(0));*/
 
         MainWindow frame = new MainWindow();
-        
 
     }    
 }

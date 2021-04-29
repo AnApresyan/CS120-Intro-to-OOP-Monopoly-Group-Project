@@ -1,9 +1,8 @@
-import java.util.Random;
-
-public class CommunityChest extends Square implements Deck
+public class CommunityChest extends Deck
 {
-    private enum CardMessages{
-        CARD0 ("ADVANCE TO GO (COLLECT $200)."),
+    enum CardMessages
+    {
+        CARD0 ("Advance to GO (Collect $200)."),
         CARD1 ("BANK ERROR IN YOUR FAVOR. COLLECT $200."),
         CARD2 ("DOCTOR'S FEES. PAY $50."),
         CARD3 ("FROM SALE OF STOCK YOU GET $45."),
@@ -20,101 +19,63 @@ public class CommunityChest extends Square implements Deck
         CARD14 ("YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10."),
         CARD15 ("YOU INHERIT $100.");
 
-
         private String message;
-        private CardMessages(String message){
+        private CardMessages(String message)
+        {
             this.message = message;
         }
-
-
-        private String getMessage(){
-            return this.message;
-        }
     }
-    private CardMessages card;
-    private int chance;
-    private int[] deck = new int[16];
-    private int deckIndex;
 
     public CommunityChest(int square)
     {
         super(square);
-        //this.message = "";
-        setTitle("Community Chest");
-        for (int i = 0; i < 16; i++)
-            this.deck[i] = i;
-        shuffleDeck();
     }
-
-    public void shuffleDeck()
-    {
-        int swapIndex;
-        int temp;
-
-        this.deckIndex = 0;
-        for (int i = 0; i < deck.length; i++)
-        {
-            swapIndex = new Random().nextInt(deck.length);
-            temp = deck[swapIndex];
-            deck[swapIndex] = deck[i];
-            deck[i] = temp;
-        }
-    }
-
-    //private String message;
 
     // TESTED by Al     (and change by An:D)
-
-    public void drawCard()
-    {
-        System.out.print("You're opening the Community Chance: ");
-        this.chance = this.deck[this.deckIndex++];
-        if (this.deckIndex == deck.length)
-            shuffleDeck();
-    }
     
     public void doAction(Player activePlayer)
     {  
         drawCard();
-        if (chance == 0)
+        setCard((Deck.CardMessages) CardMessages.values()[getChance()]);
+        if (getChance() == 0)
         {
             //System.out.println("ADVANCE TO GO (COLLECT $200).");
             //setMessage("ADVANCE TO GO (COLLECT $200).");
             while (activePlayer.getCoordinate() != 0)
                 activePlayer.movePlayer(1);
         }
-        else if (chance == 1)
+        else if (getChance() == 1)
         {
             //System.out.println("BANK ERROR IN YOUR FAVOR. COLLECT $200.");
             //setMessage("BANK ERROR IN YOUR FAVOR. COLLECT $200.");
             activePlayer.receiveMoney(200);
         }
-        else if (chance == 2)
+        else if (getChance() == 2)
         {
             //System.out.println("DOCTOR'S FEES. PAY $50.");
             //setMessage("DOCTOR'S FEES. PAY $50.");
             activePlayer.receiveMoney(-50);
         }
-        else if (chance == 3)
+        else if (getChance() == 3)
         {
             //System.out.println("FROM SALE OF STOCK YOU GET $45.");
             //setMessage("FROM SALE OF STOCK YOU GET $45.");
             activePlayer.receiveMoney(45);
         }
-        else if (chance == 4)
+        else if (getChance() == 4)
         {
             //System.out.println("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
             //setMessage("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
             activePlayer.setCoordinate(10);
             activePlayer.setIsPrisoned(true);
         }
-        else if (chance == 5)
+        else if (getChance() == 5)
         {
             //System.out.println("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
             //setMessage("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
             activePlayer.setGetOutOfJail(true);
         }
-        else if (chance == 6)
+        else if (getChance() == 6)
         {
             int i;
 
@@ -131,43 +92,43 @@ public class CommunityChest extends Square implements Deck
                 i++;
             }
         }
-        else if (chance == 7)
+        else if (getChance() == 7)
         {
             //System.out.println("XMAS FUND MATURES. COLLECT $100.");
             //setMessage("XMAS FUND MATURES. COLLECT $100.");
             activePlayer.receiveMoney(100);
         }
-        else if (chance == 8)
+        else if (getChance() == 8)
         {
             //System.out.println("INCOME TAX REFUND. COLLECT $20.");
             //setMessage("INCOME TAX REFUND. COLLECT $20.");
             activePlayer.receiveMoney(20);
         }
-        else if (chance == 9)
+        else if (getChance() == 9)
         {
             //System.out.println("LIFE INSURANCE MATURES. COLLECT $100.");
             //setMessage("LIFE INSURANCE MATURES. COLLECT $100.");
             activePlayer.receiveMoney(100);
         }
-        else if (chance == 10)
+        else if (getChance() == 10)
         {
             //System.out.println("PAY HOSPITAL $100.");
             //setMessage("PAY HOSPITAL $100.");
             activePlayer.receiveMoney(-100);
         }
-        else if (chance == 11)
+        else if (getChance() == 11)
         {
             //System.out.println("PAY SCHOOL TAX OF $150.");
             //setMessage("PAY SCHOOL TAX OF $150.");
             activePlayer.receiveMoney(-150);
         }
-        else if (chance == 12)
+        else if (getChance() == 12)
         {
             //System.out.println("RECEIVE FOR SERVICES $25.");
             //setMessage("RECEIVE FOR SERVICES $25.");
             activePlayer.receiveMoney(25);
         }
-        else if (chance == 13)
+        else if (getChance() == 13)
         {
             //System.out.println("YOU ARE ASSESSED FOR STREET REPAIRS: PAY $40 PER HOUSE AND $115 PER HOTEL YOU OWN.");
             //setMessage("YOU ARE ASSESSED FOR STREET REPAIRS: PAY $40 PER HOUSE AND $115 PER HOTEL YOU OWN.");
@@ -186,13 +147,13 @@ public class CommunityChest extends Square implements Deck
             }
             activePlayer.receiveMoney(-loss);
         }
-        else if (chance == 14)
+        else if (getChance() == 14)
         {
             //System.out.println("YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10.");
             //setMessage("YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10.");
             activePlayer.receiveMoney(10);
         } 
-        else if (chance == 15) 
+        else if (getChance() == 15) 
         {
             //System.out.println("YOU INHERIT $100.");
             //setMessage("YOU INHERIT $100.");
@@ -207,7 +168,8 @@ public class CommunityChest extends Square implements Deck
     // public void setMessage(String message){
     //     this.message = message;
     // }
-    public String getMessage(){
-        return this.card.getMessage();
+    public String getMessage()
+    {
+        return (this.getMessage());
     }
 }

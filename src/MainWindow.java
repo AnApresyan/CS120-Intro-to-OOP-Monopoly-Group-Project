@@ -238,7 +238,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         private void setTheCard(){ 
-            ((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).randomCardGenerator();
+            ((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).drawCard();
             this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
             System.out.println("The message : " + this.message.getText());
 

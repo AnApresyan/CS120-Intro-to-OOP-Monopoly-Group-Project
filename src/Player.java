@@ -25,8 +25,10 @@ public class Player
 
     public int throwDice()
     {
-        this.dice[0] = (int)(Math.random() * 6) + 1;
-        this.dice[1] = (int)(Math.random() * 6) + 1;
+        // this.dice[0] = (int)(Math.random() * 6) + 1;
+        // this.dice[1] = (int)(Math.random() * 6) + 1;
+        this.dice[0] = 0;
+        this.dice[1] = 1;
 
         if (holdsDoubles())
             this.doublesInARow++;
@@ -34,7 +36,7 @@ public class Player
             this.doublesInARow = 0;
         
         System.out.print("Dice roll: ");
-        System.out.println(this.dice[0] + this.dice[1]);        //for testing
+        System.out.println(this.dice[0] + this.dice[1]);        // An: for testing
         return (this.dice[0] + this.dice[1]);
     }
 
