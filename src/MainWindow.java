@@ -303,17 +303,20 @@ public class MainWindow extends JFrame implements ActionListener{
                 if (Board.getSquares()[previousCoordinate].getClass().getName().equals("Chance")){
                     if (((Chance)Board.getSquares()[previousCoordinate]).ifcallDoAction())
                         setUpInfoCenter();
+                    else
+                        this.setVisible(false);
                 }
             }
             else if (e.getSource() == money){
                 ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(1);
                 Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
-
+                this.setVisible(false);
             }
 
             else if (e.getSource() == percent){
                 ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(2);
                 Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                this.setVisible(false);
             }
             titleDeed.setEverything(game.getActivePlayerCoordinate());
             setUpInfoTop();
