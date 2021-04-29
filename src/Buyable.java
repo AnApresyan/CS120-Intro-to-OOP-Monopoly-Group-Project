@@ -117,7 +117,7 @@ public abstract class Buyable extends Square
 
             return "You pay $" + this.getRent() + " rent.";
         }
-        return "You landed on an unowned property. \n Do you want to buy it?";
+        return "You landed on an unowned property. Do you want to buy it?";
 
     }
 }

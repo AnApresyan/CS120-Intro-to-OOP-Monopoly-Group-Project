@@ -42,7 +42,6 @@ public class Chance extends Deck
     public Chance (int coordinate)
     {
         super(coordinate);
-        //this.message = "";
         setTitle("Chance");
     }
 
@@ -51,14 +50,9 @@ public class Chance extends Deck
     {
 
         callDoAction = true;
-        // int chance;
-
-        // System.out.print("You're taking a chance: ");
-        // chance = (int)(Math.random() * 16) + 1;
         if (getChance() == 0)
         {
             //System.out.println("ADVANCE TO GO (COLLECT $200).");
-            //setMessage("ADVANCE TO GO (COLLECT $200).");
             while (activePlayer.getCoordinate() != 0)
                 activePlayer.movePlayer(1);
             callDoAction = false;
@@ -66,7 +60,6 @@ public class Chance extends Deck
         else if (getChance() == 1)
         {
             //System.out.println("ADVANCE TO ILLINOIS AVE.");
-            //setMessage("ADVANCE TO ILLINOIS AVE.");
             while (activePlayer.getCoordinate() != 24)
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
@@ -74,16 +67,13 @@ public class Chance extends Deck
         else if (getChance() == 2)
         {
             //System.out.println("ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.");
-            //setMessage("ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.");
             while (activePlayer.getCoordinate() != 11)
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
         else if (getChance() == 3)
         {
-            //System.out.println("ADVANCE TO the NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES the AMOUNT THROWN.");
-            //setMessage("ADVANCE TO the NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES the AMOUNT THROWN.");
-            
+            //System.out.println("ADVANCE TO the NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES the AMOUNT THROWN.");            
             while (activePlayer.getCoordinate() != 12 && activePlayer.getCoordinate() != 28)
                 activePlayer.movePlayer(1);
             if (((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null){
@@ -98,7 +88,6 @@ public class Chance extends Deck
         else if (getChance() == 4)
         {
             //System.out.println("ADVANCE TO the NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED.");
-            //setMessage("ADVANCE TO the NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED.");
             while (activePlayer.getCoordinate() != 5 && activePlayer.getCoordinate() != 15 && activePlayer.getCoordinate() != 25 && activePlayer.getCoordinate() != 35)
                 activePlayer.movePlayer(1);
             if (((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null){
@@ -113,28 +102,24 @@ public class Chance extends Deck
         else if (getChance() == 5)
         {
             //System.out.println("BANK PAYS YOU DIVIDEND OF $50.");
-            //setMessage("BANK PAYS YOU DIVIDEND OF $50.");
             activePlayer.receiveMoney(50);
             callDoAction = false;
         }
         else if (getChance() == 6)
         {
             //System.out.println("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
-            //setMessage("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
             activePlayer.setGetOutOfJail(true);
             callDoAction = false;
         }
         else if (getChance() == 7)
         {
             //System.out.println("GO BACK 3 SPACES.");
-            //setMessage("GO BACK 3 SPACES.");
             activePlayer.setCoordinate(activePlayer.getCoordinate() - 3);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
         else if (getChance() == 8)
         {
             //System.out.println("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
-            //setMessage("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
             activePlayer.setCoordinate(10);
             activePlayer.setIsPrisoned(true);
             callDoAction = false;
@@ -142,7 +127,6 @@ public class Chance extends Deck
         else if (getChance() == 9)
         {
             //System.out.println("MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY: FOR EACH HOUSE PAY $25, FOR EACH HOTEL $100.");
-            //setMessage("MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY: FOR EACH HOUSE PAY $25, FOR EACH HOTEL $100.");
             int loss;
 
             loss = 0;
@@ -162,14 +146,12 @@ public class Chance extends Deck
         else if (getChance() == 10)
         {
             //System.out.println("PAY POOR TAX OF $15.");
-            //setMessage("PAY POOR TAX OF $15.");
             activePlayer.receiveMoney(-15);
             callDoAction = false;
         }
         else if (getChance() == 11)
         {
             //System.out.println("TAKE A TRIP TO READING RAILROAD. IF YOU PASS GO, COLLECT $200.");
-            //setMessage("TAKE A TRIP TO READING RAILROAD. IF YOU PASS GO, COLLECT $200.");
             while (activePlayer.getCoordinate() != 5)
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
@@ -177,7 +159,6 @@ public class Chance extends Deck
         else if (getChance() == 12)
         {
             //System.out.println("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
-            //setMessage("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
             while (activePlayer.getCoordinate() != 39)
                 activePlayer.movePlayer(1);
             //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
@@ -187,7 +168,6 @@ public class Chance extends Deck
             int i;
 
             //System.out.println("YOU HAVE BEEN ELECTED CHAIRMAN OF the BOARD. PAY EACH PLAYER $50.");
-            //setMessage("YOU HAVE BEEN ELECTED CHAIRMAN OF the BOARD. PAY EACH PLAYER $50.");
             i = 0;
             while (i < Monopoly.getPlayers().size())
             {
@@ -203,14 +183,12 @@ public class Chance extends Deck
         else if (getChance() == 14)
         {
             //System.out.println("YOUR BUILDING AND LOAN MATURES. RECEIVE $150.");
-            //setMessage("YOUR BUILDING AND LOAN MATURES. RECEIVE $150.");
             activePlayer.receiveMoney(150);
             callDoAction = false;
         } 
         else if (getChance() == 15) 
         {
             //System.out.println("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
-            //setMessage("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
             activePlayer.receiveMoney(100);
             callDoAction = false;
         }
@@ -218,9 +196,6 @@ public class Chance extends Deck
 
     }
 
-    // public void setMessage(String message){
-    //     this.message = message;
-    // }
 
     public void         setCard(int chance)
     {

@@ -38,7 +38,7 @@ public class CommunityChest extends Deck
         setTitle("Community Chest");
     }
 
-    // TESTED by Al     (and change by An:D)
+    // TESTED by Al     (and changed by An:D)
     
     public void doAction(Player activePlayer)
     {
@@ -46,39 +46,33 @@ public class CommunityChest extends Deck
         if (getChance() == 0)
         {
             //System.out.println("ADVANCE TO GO (COLLECT $200).");
-            //setMessage("ADVANCE TO GO (COLLECT $200).");
             while (activePlayer.getCoordinate() != 0)
                 activePlayer.movePlayer(1);
         }
         else if (getChance() == 1)
         {
             //System.out.println("BANK ERROR IN YOUR FAVOR. COLLECT $200.");
-            //setMessage("BANK ERROR IN YOUR FAVOR. COLLECT $200.");
             activePlayer.receiveMoney(200);
         }
         else if (getChance() == 2)
         {
             //System.out.println("DOCTOR'S FEES. PAY $50.");
-            //setMessage("DOCTOR'S FEES. PAY $50.");
             activePlayer.receiveMoney(-50);
         }
         else if (getChance() == 3)
         {
             //System.out.println("FROM SALE OF STOCK YOU GET $45.");
-            //setMessage("FROM SALE OF STOCK YOU GET $45.");
             activePlayer.receiveMoney(45);
         }
         else if (getChance() == 4)
         {
             //System.out.println("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
-            //setMessage("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
             activePlayer.setCoordinate(10);
             activePlayer.setIsPrisoned(true);
         }
         else if (getChance() == 5)
         {
             //System.out.println("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
-            //setMessage("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
             activePlayer.setGetOutOfJail(true);
         }
         else if (getChance() == 6)
@@ -86,7 +80,6 @@ public class CommunityChest extends Deck
             int i;
 
             //System.out.println("GRAND OPERA NIGHT. COLLECT $50 FROM EVERY PLAYER FOR OPENING NIGHT SEATS.");
-            //setMessage("GRAND OPERA NIGHT. COLLECT $50 FROM EVERY PLAYER FOR OPENING NIGHT SEATS.");
             i = 0;
             while (i < Monopoly.getPlayers().size())
             {
@@ -101,43 +94,36 @@ public class CommunityChest extends Deck
         else if (getChance() == 7)
         {
             //System.out.println("XMAS FUND MATURES. COLLECT $100.");
-            //setMessage("XMAS FUND MATURES. COLLECT $100.");
             activePlayer.receiveMoney(100);
         }
         else if (getChance() == 8)
         {
             //System.out.println("INCOME TAX REFUND. COLLECT $20.");
-            //setMessage("INCOME TAX REFUND. COLLECT $20.");
             activePlayer.receiveMoney(20);
         }
         else if (getChance() == 9)
         {
             //System.out.println("LIFE INSURANCE MATURES. COLLECT $100.");
-            //setMessage("LIFE INSURANCE MATURES. COLLECT $100.");
             activePlayer.receiveMoney(100);
         }
         else if (getChance() == 10)
         {
             //System.out.println("PAY HOSPITAL $100.");
-            //setMessage("PAY HOSPITAL $100.");
             activePlayer.receiveMoney(-100);
         }
         else if (getChance() == 11)
         {
             //System.out.println("PAY SCHOOL TAX OF $150.");
-            //setMessage("PAY SCHOOL TAX OF $150.");
             activePlayer.receiveMoney(-150);
         }
         else if (getChance() == 12)
         {
             //System.out.println("RECEIVE FOR SERVICES $25.");
-            //setMessage("RECEIVE FOR SERVICES $25.");
             activePlayer.receiveMoney(25);
         }
         else if (getChance() == 13)
         {
             //System.out.println("YOU ARE ASSESSED FOR STREET REPAIRS: PAY $40 PER HOUSE AND $115 PER HOTEL YOU OWN.");
-            //setMessage("YOU ARE ASSESSED FOR STREET REPAIRS: PAY $40 PER HOUSE AND $115 PER HOTEL YOU OWN.");
             int loss;
 
             loss = 0;
@@ -156,18 +142,15 @@ public class CommunityChest extends Deck
         else if (getChance() == 14)
         {
             //System.out.println("YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10.");
-            //setMessage("YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10.");
             activePlayer.receiveMoney(10);
         } 
         else if (getChance() == 15) 
         {
             //System.out.println("YOU INHERIT $100.");
-            //setMessage("YOU INHERIT $100.");
             activePlayer.receiveMoney(100);
         }
         activePlayer.enterMortgageLoop(null);
         
-        //System.out.println(this.message);
     }
     
 

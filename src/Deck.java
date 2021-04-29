@@ -36,8 +36,6 @@ public abstract class Deck extends Square
         System.out.print("You're drawing a card: ");
         this.chance = this.deck[this.deckIndex++];
         System.out.println("Chance random number: " + this.chance);
-        //this.card = CardMessages.values()[this.chance];
-        // System.out.println("the message: " + this.card.getMessage());
         if (this.deckIndex == deck.length)
             shuffleDeck();
     }

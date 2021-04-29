@@ -34,10 +34,10 @@ public class MainWindow extends JFrame implements ActionListener{
     private JLabel[] playerInfo;
 
     //infoCenter
-    InfoForBuyable  infoForBuyable;
-    JPanel          commands;
-    CustomCards     card;
-    InfoGoTaxFree   infoGoTaxFree; 
+    //InfoForBuyable  infoForBuyable;
+    Commands          commands;
+    // CustomCards     card;
+    // InfoGoTaxFree   infoGoTaxFree; 
 
     //infoBottom buttons
     private JButton throwDice;
@@ -63,12 +63,14 @@ public class MainWindow extends JFrame implements ActionListener{
 
             setEverything(i);
             this.setLayout(new GridLayout(10, 1));
-            this.setPreferredSize(new Dimension(150, 200));
+            //this.setPreferredSize(new Dimension(150, 200));
             //this.setBorder(BorderFactory.createLineBorder(Color.black));
             this.add(titleOfDeed);
             this.add(priceOfDeed);
             this.add(ownerNameOfDeed);
             this.add(rentOfDeed);
+            // this.setBackground(Color.GRAY);
+            // this.setOpaque(true);
         }
         private TitleDeeds(){
             super();
@@ -107,6 +109,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
     }
+   
     private class CustomButton extends JButton{
         private Color color;
         private int direction;
@@ -141,7 +144,187 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }   
     
-    private class InfoForBuyable extends JPanel implements ActionListener{
+    private class Commands extends JPanel implements ActionListener{
+        private JTextArea message;
+        private JPanel containerForLabel;
+    
+       // private JPanel buyableButtons;
+        //private JPanel customCards;
+        // private JPanel forGoTaxFree;
+        // private JPanel forJail;
+
+        //button panel 
+        private JPanel buttons = new JPanel();
+
+        //buttons for Buyable;
+        private JButton yes = new JButton();
+        private JButton no = new JButton();
+
+        //buttons for the cards
+        private JButton ok = new JButton();
+
+        //buttons for the Tax
+        private JButton money = new JButton();
+        private JButton percent = new JButton();
+
+        //buttons for Jail
+        private JButton pay;
+        private JButton useTheCard;
+
+
+        private Commands(){
+            //BoxLayout theLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
+           // this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            this.setLayout(new GridLayout(2, 1));
+            this.setPreferredSize(new Dimension(250, 250));
+            
+            //this.add(Box.createVerticalGlue()); 
+            containerForLabel = new JPanel();
+            containerForLabel.setLayout(new GridLayout());
+
+            this.message = new JTextArea();
+            this.message.setOpaque(false);
+            this.message.setWrapStyleWord(true);
+            this.message.setLineWrap(true);
+            this.message.setEditable(false);
+            this.message.setFocusable(false);
+            this.message.setFont(new Font("Serif", Font.CENTER_BASELINE, 14));
+            //this.setPreferredSize(new Dimension(20, 20));
+            // this.buyableButtons = new JPanel();
+            // //this.customCards = new JPanel();
+            // this.forGoTaxFree = new JPanel();
+            // this.forJail = new JPanel();
+
+            this.buttons = new JPanel();
+            this.buttons.setLayout(new FlowLayout());
+            
+            this.yes = new JButton("Yes");
+            this.no = new JButton("No");
+            this.ok = new JButton("Ok");
+            this.money = new JButton("200$");
+            this.percent = new JButton("10% of your wealth");
+            this.pay = new JButton("Pay 50$");
+            this.useTheCard = new JButton("Use the card");
+
+            yes.addActionListener(this);
+            no.addActionListener(this);
+            ok.addActionListener(this);
+            money.addActionListener(this);
+            percent.addActionListener(this);
+            pay.addActionListener(this);
+            useTheCard.addActionListener(this);
+
+            this.buttons.add(yes);
+            this.buttons.add(no);
+            this.buttons.add(ok);
+            this.buttons.add(money);
+            this.buttons.add(percent);
+            this.buttons.add(pay);
+            this.buttons.add(useTheCard);
+
+            this.setBackground(Color.DARK_GRAY);
+            this.setOpaque(true);
+            this.setVisible(false);
+            containerForLabel.add(message);
+            this.add(containerForLabel);
+            this.add(buttons);
+            
+
+        }
+
+        private void setAllButtonsVisible(boolean bool){
+            this.yes.setVisible(bool);
+            this.no.setVisible(bool);
+            this.ok.setVisible(bool);
+            this.money.setVisible(bool);
+            this.percent.setVisible(bool);
+            this.pay.setVisible(bool);
+            this.useTheCard.setVisible(bool);
+        }
+
+        public void setVisible(boolean bool){
+            this.message.setVisible(bool);
+            this.setAllButtonsVisible(bool);
+        }
+
+        private void setBuyable(){
+            if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable))
+                return;
+
+            this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            this.message.setVisible(true);
+            if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() == null){
+                System.out.println("Offf");
+                this.yes.setVisible(true);
+                this.no.setVisible(true);
+            }
+        }
+
+        private void setCusomCards(){
+            if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck)){
+                return;
+            }
+            this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            this.message.setVisible(true);
+            this.ok.setVisible(true);
+        }
+
+        private void setGoTaxFree(){
+            if (!Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("GOTaxFree")){
+                return;
+            }
+            this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
+            this.message.setVisible(true);
+            if (game.getActivePlayerCoordinate() == 4){
+                this.money.setVisible(true);
+                this.percent.setVisible(true);
+            }
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setAllButtonsVisible(false);
+            if (e.getSource() == yes){
+                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(true);
+                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
+                this.setVisible(false);
+            }
+            else if (e.getSource() == no){
+                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(false);
+                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
+                ///need to open the auction part
+                this.setVisible(false);
+            }
+            else if (e.getSource() == ok){
+                int previousCoordinate = game.getActivePlayerCoordinate();
+                Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                setVisible(false);
+                if (Board.getSquares()[previousCoordinate].getClass().getName().equals("Chance")){
+                    if (((Chance)Board.getSquares()[previousCoordinate]).ifcallDoAction())
+                        setUpInfoCenter();
+                }
+            }
+            else if (e.getSource() == money){
+                ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(1);
+                Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+
+            }
+
+            else if (e.getSource() == percent){
+                ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(2);
+                Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+            }
+            titleDeed.setEverything(game.getActivePlayerCoordinate());
+            setUpInfoTop();
+            
+        }
+    }
+   
+   
+   
+   
+  /*  private class InfoForBuyable extends JPanel implements ActionListener{
         private JButton yesButton;
         private JButton noButton;
         private JLabel instructions;
@@ -207,8 +390,10 @@ public class MainWindow extends JFrame implements ActionListener{
 
             
     }
+*/
     
-    private class CustomCards extends JPanel{
+
+    /*private class CustomCards extends JPanel{
         private JLabel message;
         private JButton ok;
         private CustomCards(){
@@ -248,8 +433,8 @@ public class MainWindow extends JFrame implements ActionListener{
 
         }
     }
-    
-    private class InfoGoTaxFree extends JPanel implements ActionListener{
+    */
+/*    private class InfoGoTaxFree extends JPanel implements ActionListener{
         JLabel message;
         JPanel buttons;
         private JButton percent;
@@ -298,8 +483,8 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }
     
-
-    private class infoJail extends JPanel{
+*/
+ /*   private class infoJail extends JPanel{
         JLabel message;
         JPanel buttons;
         JButton pay;
@@ -330,6 +515,8 @@ public class MainWindow extends JFrame implements ActionListener{
             
         }
     }
+    
+*/
     
 
     public MainWindow(){
@@ -569,18 +756,20 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpInfo(){
 
         this.titleDeed = new TitleDeeds(0);
+        titleDeed.setPreferredSize(new Dimension(250, 250));
 
         //the components of commands
-        this.commands = new JPanel();
-        commands.setLayout(new FlowLayout());
-        
-        this.card = new CustomCards();
-        this.infoForBuyable = new InfoForBuyable();
-        this.infoGoTaxFree = new InfoGoTaxFree();
+        this.commands = new Commands();
 
-        this.card.setVisible(false);
-        this.infoForBuyable.setVisible(false);
-        this.infoGoTaxFree.setVisible(false);
+        // commands.setLayout(new FlowLayout());
+        
+        // this.card = new CustomCards();
+        // this.infoForBuyable = new InfoForBuyable();
+        // this.infoGoTaxFree = new InfoGoTaxFree();
+
+        // this.card.setVisible(false);
+        // this.infoForBuyable.setVisible(false);
+        // this.infoGoTaxFree.setVisible(false);
         //System.out.println(Board.getSquares()[0].getTitle());
        // titleDeed.setTilteOfDeed(Board.getSquares()[0].getTitle());
         
@@ -591,18 +780,19 @@ public class MainWindow extends JFrame implements ActionListener{
         infoTop.setLayout(new GridLayout(numberOfPlayers, 1));
        
         infoCenter.setSize(new Dimension(300, 600));
-        infoCenter.setLayout(new BorderLayout());           //maybe another layout
+        //infoCenter.setLayout(new FlowLayout());           //maybe another layout
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
 
         
         
         //adding to commands;
-        commands.add(infoForBuyable);
-        commands.add(card);
-        commands.add(infoGoTaxFree);
+        // commands.add(infoForBuyable);
+        // commands.add(card);
+        // commands.add(infoGoTaxFree);
         //infocenter.add commands and titleDeed;
-        infoCenter.add(titleDeed, BorderLayout.WEST);
-        infoCenter.add(commands, BorderLayout.CENTER);
+
+        infoCenter.add(titleDeed); //, BorderLayout.WEST
+        infoCenter.add(commands);  //, BorderLayout.NORTH
         
 
         infoBottom.setSize(new Dimension(300, 600));
@@ -617,18 +807,9 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         setUpInfoTop();
-        //for(int i = 0; i < numberOfPlayers; i++)
-            
-
-        //JLabel playersInfo = new JLabel(game.infoActivePlayer());
-        
-        //infoCenter
-        //infoCenter.add(titleDeed);
+  
         setUpInfoBottom();
-        //infoBottom.add(new JLabel("BOTTOM")); 
-        
 
-        //adding to info
         
         info.add(infoTop, BorderLayout.NORTH);
         info.add(infoCenter, BorderLayout.CENTER);
@@ -652,16 +833,17 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     private void setUpInfoCenter(){
-        infoForBuyable.setVisible(false);
-        card.setVisible(false);
-        infoGoTaxFree.setVisible(false);
+        // infoForBuyable.setVisible(false);
+        // card.setVisible(false);
+        // infoGoTaxFree.setVisible(false);
+        //this.commands.setVisible(false);
 
         titleDeed.setEverything(game.getActivePlayerCoordinate());
 
         if(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable){
-            this.infoForBuyable.setThePanel();
-            this.infoForBuyable.setVisible(true);
-            titleDeed.setEverything(game.getActivePlayerCoordinate());
+            // this.infoForBuyable.setThePanel();
+            this.commands.setBuyable();
+            //titleDeed.setEverything(game.getActivePlayerCoordinate());
         }
         else if (Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck){
             // System.out.println("Chance card needs to be visible");
@@ -669,15 +851,14 @@ public class MainWindow extends JFrame implements ActionListener{
            
             
 
-            this.card.setTheCard();
+            this.commands.setCusomCards();
             // System.out.println("ActivePlayerCoordinate: " + game.getActivePlayerCoordinate());
             // System.out.println("The message : " + (Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
             //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
-            card.setVisible(true);
+            //card.setVisible(true);
         }
         else if (Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("GOTaxFree")){
-            infoGoTaxFree.setMessage();
-            infoGoTaxFree.setVisible(true);
+            this.commands.setGoTaxFree();
         }
             
 
@@ -717,9 +898,10 @@ public class MainWindow extends JFrame implements ActionListener{
                 done.setEnabled(false);
                 setUpInfoTop();
                 throwDice.setEnabled(true);
-                infoForBuyable.setVisible(false);
-                card.setVisible(false);
-                infoGoTaxFree.setVisible(false);
+                commands.setVisible(false);
+                // infoForBuyable.setVisible(false);
+                // card.setVisible(false);
+                // infoGoTaxFree.setVisible(false);
                 //commands.setVisible(false);
                 //System.out.println(game.activePlayer.getName());
             }
