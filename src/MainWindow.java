@@ -34,10 +34,8 @@ public class MainWindow extends JFrame implements ActionListener{
     private JLabel[] playerInfo;
 
     //infoCenter
-    //InfoForBuyable  infoForBuyable;
-    Commands          commands;
-    // CustomCards     card;
-    // InfoGoTaxFree   infoGoTaxFree; 
+    private Commands commands;
+
 
     //infoBottom buttons
     private JButton throwDice;
@@ -147,11 +145,6 @@ public class MainWindow extends JFrame implements ActionListener{
     private class Commands extends JPanel implements ActionListener{
         private JTextArea message;
         private JPanel containerForLabel;
-    
-       // private JPanel buyableButtons;
-        //private JPanel customCards;
-        // private JPanel forGoTaxFree;
-        // private JPanel forJail;
 
         //button panel 
         private JPanel buttons = new JPanel();
@@ -190,11 +183,6 @@ public class MainWindow extends JFrame implements ActionListener{
             this.message.setEditable(false);
             this.message.setFocusable(false);
             this.message.setFont(new Font("Serif", Font.CENTER_BASELINE, 14));
-            //this.setPreferredSize(new Dimension(20, 20));
-            // this.buyableButtons = new JPanel();
-            // //this.customCards = new JPanel();
-            // this.forGoTaxFree = new JPanel();
-            // this.forJail = new JPanel();
 
             this.buttons = new JPanel();
             this.buttons.setLayout(new FlowLayout());
@@ -251,14 +239,16 @@ public class MainWindow extends JFrame implements ActionListener{
         private void setBuyable(){
             if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable))
                 return;
-
+            
+            game.setMessage();   
             this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
             this.message.setVisible(true);
+            game.play();
             if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() == null){
-                System.out.println("Offf");
                 this.yes.setVisible(true);
                 this.no.setVisible(true);
             }
+            
         }
 
         private void setCusomCards(){
@@ -280,25 +270,54 @@ public class MainWindow extends JFrame implements ActionListener{
                 this.money.setVisible(true);
                 this.percent.setVisible(true);
             }
+            if (game.getActivePlayerCoordinate() == 30){
+                throwDice.setEnabled(false);
+                done.setEnabled(true);
+            }
+            game.play();
         }
 
+        private void setJail(){
+            if (!(Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("Jail"))){
+                System.out.println("Checked Jail");
+                return;
+            }
+            game.setMessage();
+            this.message.setVisible(true);
+            this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
+            if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowCard())
+                this.useTheCard.setVisible(true);
+            if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowPay())
+                this.pay.setVisible(true);
+            if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowThrow()){
+                throwDice.setEnabled(true);
+            }
+            else{
+                throwDice.setEnabled(false);
+
+            }
+            
+        }
         @Override
         public void actionPerformed(ActionEvent e) {
             setAllButtonsVisible(false);
             if (e.getSource() == yes){
                 ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(true);
-                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
+                //Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
+                game.play();
                 this.setVisible(false);
             }
             else if (e.getSource() == no){
                 ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(false);
-                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
+                //Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
                 ///need to open the auction part
+                game.play();
                 this.setVisible(false);
             }
             else if (e.getSource() == ok){
                 int previousCoordinate = game.getActivePlayerCoordinate();
-                Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                game.play();
                 setVisible(false);
                 if (Board.getSquares()[previousCoordinate].getClass().getName().equals("Chance")){
                     if (((Chance)Board.getSquares()[previousCoordinate]).ifcallDoAction())
@@ -309,14 +328,27 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             else if (e.getSource() == money){
                 ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(1);
-                Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                game.play();
                 this.setVisible(false);
             }
 
             else if (e.getSource() == percent){
                 ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(2);
-                Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                game.play();
                 this.setVisible(false);
+            }
+            else if (e.getSource() == pay || e.getSource() == useTheCard){
+                if (e.getSource() == pay)
+                    ((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).setUserChoice(1);
+                else
+                    ((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).setUserChoice(2);
+
+                throwDice.setEnabled(true);
+                //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                game.play();
+                message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
             }
             titleDeed.setEverything(game.getActivePlayerCoordinate());
             setUpInfoTop();
@@ -324,203 +356,6 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }
    
-   
-   
-   
-  /*  private class InfoForBuyable extends JPanel implements ActionListener{
-        private JButton yesButton;
-        private JButton noButton;
-        private JLabel instructions;
-        private JPanel buttonPanel;
-
-        private InfoForBuyable(){
-            this.setLayout(new GridLayout(3, 1));
-            //this.setSize(new Dimension(100, 150));
-            buttonPanel = new JPanel();
-            buttonPanel.setLayout(new FlowLayout());
-
-            yesButton = new JButton("Yes");
-            noButton = new JButton("No");
-            instructions = new JLabel();
-
-            yesButton.setBackground(new Color(255, 255, 255));
-            noButton.setBackground(new Color(255, 255, 255));
-            yesButton.addActionListener(this);
-            noButton.addActionListener(this);
-
-
-            
-            buttonPanel.add(yesButton);
-            buttonPanel.add(noButton);
-            this.add(instructions);
-            this.add(buttonPanel);
-        }
-
-        
-        private void setThePanel(){
-            if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable))
-                return;
-            this.instructions.setVisible(true);
-            this.instructions.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());     //something is wrong
-            if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() != null)
-                this.buttonPanel.setVisible(false);
-            else
-                this.buttonPanel.setVisible(true);
-        }
-
-        // private void setAllVisible(boolean visibility){
-        //     this.buttonPanel.setVisible(visibility);
-        //     this.instructions.setVisible(visibility);
-        // }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == yesButton){
-                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(true);
-            }
-
-            else if (e.getSource() == noButton){
-                ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(false);
-                ///need to open the auction part
-            }
-
-            ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
-            titleDeed.setEverything(game.getActivePlayerCoordinate());
-            setUpInfoTop();
-            setVisible(false);
-            
-        }
-
-            
-    }
-*/
-    
-
-    /*private class CustomCards extends JPanel{
-        private JLabel message;
-        private JButton ok;
-        private CustomCards(){
-            //this.setSize(new Dimension(100, 100));
-            this.setLayout(new GridLayout(2, 1));
-            this.message = new JLabel();
-            this.ok = new JButton("OK");
-            ok.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int previousCoordinate = game.getActivePlayerCoordinate();
-                    Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
-                    setVisible(false);
-                    if (Board.getSquares()[previousCoordinate].getClass().getName().equals("Chance")){
-                        if (((Chance)Board.getSquares()[previousCoordinate]).ifcallDoAction())
-                            setUpInfoCenter();
-                    }
-                    titleDeed.setEverything(game.getActivePlayerCoordinate());
-                    setUpInfoTop();
-                }
-
-            });
-            //ok.setSize(new Dimension(30, 20));
-            this.add(message);
-            this.add(ok);
-            
-        }
-
-        private void setTheCard(){ 
-            if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck)){
-                this.setVisible(false);
-                return;
-            }
-            //((Deck) Board.getSquares()[game.getActivePlayerCoordinate()]).drawCard();
-            this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
-            System.out.println("The message : " + this.message.getText());
-
-        }
-    }
-    */
-/*    private class InfoGoTaxFree extends JPanel implements ActionListener{
-        JLabel message;
-        JPanel buttons;
-        private JButton percent;
-        private JButton money;
-        private InfoGoTaxFree(){
-            this.setLayout(new GridLayout(2, 1));
-            
-            buttons = new JPanel();
-            buttons.setLayout(new FlowLayout());
-            message = new JLabel();
-            percent = new JButton("10% of your wealth");
-            money = new JButton("200$");
-
-            money.addActionListener(this);
-            percent.addActionListener(this);
-
-            buttons.add(money);
-            buttons.add(percent);
-
-            this.add(message);
-            this.add(buttons);
-        }
-
-        private void setMessage(){
-            if (!Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("GOTaxFree")){
-                this.setVisible(false);
-                return;
-            }
-            this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
-            if (game.getActivePlayerCoordinate() == 4)
-                this.buttons.setVisible(true);
-            else
-                this.buttons.setVisible(false);
-
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == money)
-                ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(1);
-            else
-                ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(2);
-            this.setVisible(false);
-            Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
-            setUpInfoTop();
-        }
-    }
-    
-*/
- /*   private class infoJail extends JPanel{
-        JLabel message;
-        JPanel buttons;
-        JButton pay;
-        JButton useTheCard;
-
-        private infoJail(){
-            this.setLayout(new GridLayout(2, 1));
-            this.message = new JLabel();
-            this.buttons = new JPanel();
-            this.pay = new JButton();
-            this.useTheCard = new JButton();
-
-            buttons.add(pay);
-            buttons.add(useTheCard);
-
-            this.add(message);
-            this.add(buttons);
-        }
-
-        private void setThePanel(){
-            this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
-            // if ()
-            if (game.activePlayer.getGetOutOfJail())
-                this.useTheCard.setEnabled(true);
-            else
-                this.useTheCard.setEnabled(false);
-
-            
-        }
-    }
-    
-*/
-    
 
     public MainWindow(){
         
@@ -744,10 +579,6 @@ public class MainWindow extends JFrame implements ActionListener{
     
         
         boardContainer.add(board);
-        
-
-
-        
 
         //adding to the frame
         this.add(boardContainer, BorderLayout.WEST);
@@ -763,18 +594,6 @@ public class MainWindow extends JFrame implements ActionListener{
 
         //the components of commands
         this.commands = new Commands();
-
-        // commands.setLayout(new FlowLayout());
-        
-        // this.card = new CustomCards();
-        // this.infoForBuyable = new InfoForBuyable();
-        // this.infoGoTaxFree = new InfoGoTaxFree();
-
-        // this.card.setVisible(false);
-        // this.infoForBuyable.setVisible(false);
-        // this.infoGoTaxFree.setVisible(false);
-        //System.out.println(Board.getSquares()[0].getTitle());
-       // titleDeed.setTilteOfDeed(Board.getSquares()[0].getTitle());
         
         info.setLayout(new BorderLayout());
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
@@ -785,14 +604,6 @@ public class MainWindow extends JFrame implements ActionListener{
         infoCenter.setSize(new Dimension(300, 600));
         //infoCenter.setLayout(new FlowLayout());           //maybe another layout
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
-
-        
-        
-        //adding to commands;
-        // commands.add(infoForBuyable);
-        // commands.add(card);
-        // commands.add(infoGoTaxFree);
-        //infocenter.add commands and titleDeed;
 
         infoCenter.add(titleDeed); //, BorderLayout.WEST
         infoCenter.add(commands);  //, BorderLayout.NORTH
@@ -810,10 +621,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         setUpInfoTop();
-  
         setUpInfoBottom();
-
-        
         info.add(infoTop, BorderLayout.NORTH);
         info.add(infoCenter, BorderLayout.CENTER);
         info.add(infoBottom, BorderLayout.SOUTH);
@@ -824,8 +632,8 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpInfoTop(){
         for (int i = 0; i < numberOfPlayers; i++){
             
-            playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());
-            if (Monopoly.getPlayers().get(i).equals(game.activePlayer))
+            playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());     //check
+            if (Monopoly.getPlayers().get(i).equals(game.getActivePlayer()))
                 playerInfo[i].setFont(new Font("Serif", Font.BOLD, 18));
             else{
                 playerInfo[i].setFont(new Font("Serif", Font.ROMAN_BASELINE, 18));
@@ -836,41 +644,28 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     private void setUpInfoCenter(){
-        // infoForBuyable.setVisible(false);
-        // card.setVisible(false);
-        // infoGoTaxFree.setVisible(false);
-        //this.commands.setVisible(false);
 
         titleDeed.setEverything(game.getActivePlayerCoordinate());
-
         if(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable){
-            // this.infoForBuyable.setThePanel();
             this.commands.setBuyable();
-            //titleDeed.setEverything(game.getActivePlayerCoordinate());
         }
         else if (Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck){
-            // System.out.println("Chance card needs to be visible");
-            // card.setVisible(true);
-           
-            
-
             this.commands.setCusomCards();
-            // System.out.println("ActivePlayerCoordinate: " + game.getActivePlayerCoordinate());
-            // System.out.println("The message : " + (Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
-            //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
-            //card.setVisible(true);
         }
         else if (Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("GOTaxFree")){
             this.commands.setGoTaxFree();
         }
-            
-
-        // else if (game.getActivePlayerCoordinate() == 4){
-        //     inclomeTaxPanel.setVisible(true);
-        // }
-        // else(){
-
-        // }
+        else if (Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("Jail")){
+            if (game.ifPlayerIsPrisoned()){
+                System.out.println("the if of setUpInfoCenter");
+                this.commands.setJail();
+            }
+            else{
+                this.commands.setAllButtonsVisible(false);
+                this.commands.message.setText("Just Visiting the Jail");
+                this.commands.message.setVisible(true);
+            }
+        }
         setUpInfoTop();
     }
 
@@ -879,34 +674,65 @@ public class MainWindow extends JFrame implements ActionListener{
         this.throwDice = new JButton("Throw the dice");
         this.done = new JButton("Done");
         throwDice.addActionListener(new ActionListener(){
+            
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {   
+                
+                      
+                if (game.ifPlayerIsPrisoned()){
+                    game.startGame();
+                    if (!game.ifPlayerHoldsDoubles() || game.ifPlayerIsPrisoned()){      //moved to After doAction is complete
+                        //System.out.println("Holds doubles");
+                        throwDice.setEnabled(false);
+                        done.setEnabled(true);
+                    } 
+                    commands.setAllButtonsVisible(false);
+                    if (!game.ifPlayerIsPrisoned()){
+                
+                        commands.message.setText("You rolled doubles and are free to go.");
+                        //setUpInfoCenter();
+                        throwDice.setEnabled(false);
+                        done.setEnabled(true);
+                    }
+                    else{
+                        commands.message.setText("You failed to roll doubles. See you on the next turn!");
+                        throwDice.setEnabled(false);
+                    }
+                    commands.message.setVisible(true);
+                    return;
+                }
                 game.startGame();
-                setUpInfoCenter();
-                if (!game.ifPlayerHoldsDoubles()){          //moved to After doAction is complete
+                if (!game.ifPlayerHoldsDoubles()){      //moved to After doAction is complete
+                    //System.out.println("Holds doubles");
                     throwDice.setEnabled(false);
                     done.setEnabled(true);
+                }   
+                if (game.getMoveToJail()){
+                    return;
                 }
-                setUpInfoTop();
-                
+                //setUpInfoCenter();
+                setUpInfoCenter();
+                setUpInfoTop();  
             }
             
         });
 
         done.addActionListener(new ActionListener(){
-
             @Override
             public void actionPerformed(ActionEvent e) {
+                commands.setVisible(false);
                 game.changePlayer();
                 done.setEnabled(false);
-                setUpInfoTop();
+                titleDeed.setEverything(game.getActivePlayerCoordinate());
                 throwDice.setEnabled(true);
-                commands.setVisible(false);
-                // infoForBuyable.setVisible(false);
-                // card.setVisible(false);
-                // infoGoTaxFree.setVisible(false);
+                if (game.ifPlayerIsPrisoned()){
+                    System.out.println("Entered if");
+                    setUpInfoCenter();
+                    //System.out.println("He is prisoned");
+                }
+                setUpInfoTop();
+                
                 //commands.setVisible(false);
-                //System.out.println(game.activePlayer.getName());
             }
             
         });
@@ -961,9 +787,6 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpRight(){
         right.setLayout(new FlowLayout());
         right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
-
-        //left.setLayout(new GridLayout(9, 1, 0, 0));
-
         for (int i = 31; i < 40; i++){
             buttons[i].setMaximumSize(new Dimension(90, 57));
             right.add(buttons[i]);
@@ -972,26 +795,10 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     public void actionPerformed(ActionEvent e) {
-        
         for (int i = 0; i < 40; i++){
             if (e.getSource() == buttons[i]){
-                //System.out.println(Board.getSquares()[i].toString());
-                //this.titleDeed.setLayout(new GridLayout(10, 1));
-                System.out.println("Square coordinate: " + i);
-                // this.titleDeed.removeAll();
-                // repaint();
-                
-                // this.titleDeed.add(new JLabel("hello")); 
- 
+                System.out.println("Square coordinate: " + i); 
                 titleDeed.setEverything(i);
-                
-                // if (Board.getSquares()[i].getClass().getName().equals("Property")){
-                //    this.titleDeed.add(new JLabel(((Property) Board.getSquares()[i]).getHousePrice() + ""));
-                // }
-                //this.title.setText("Che inch esim ay axper");
-                // infoCenter.add(titleDeed);
-                // info.add(infoCenter);
-                // this.add(info); 
                 break;
             }
         }

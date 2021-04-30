@@ -25,24 +25,27 @@ public class Player
 
     public int throwDice()
     {
-        // this.dice[0] = (int)(Math.random() * 6) + 1;
-        // this.dice[1] = (int)(Math.random() * 6) + 1;
-        this.dice[0] = 0;
-        this.dice[1] = 1;
+        this.dice[0] = (int)(Math.random() * 6) + 1;
+        this.dice[1] = (int)(Math.random() * 6) + 1;
+        // this.dice[0] = 1;
+        // this.dice[1] = 1;
 
         if (holdsDoubles())
             this.doublesInARow++;
         else
             this.doublesInARow = 0;
         
-        System.out.print("Dice roll: ");
-        System.out.println(this.dice[0] + this.dice[1]);        // An: for testing
+        
+
+        System.out.println("Dice roll: " + this.dice[0] + ", " +  this.dice[1]);        // An: for testing
         return (this.dice[0] + this.dice[1]);
     }
 
     public boolean holdsDoubles()
     {
+        System.out.println("If holds doubles: " + (this.dice[0] == this.dice[1]));
         return (this.dice[0] == this.dice[1]);
+
     }
 
     public void movePlayer(int move)

@@ -129,8 +129,9 @@ import java.util.ArrayList;
 public class Monopoly 
 {
     private static ArrayList<Player>    players = new ArrayList<>();
-    public Player                       activePlayer;               //public for testing
+    private Player                       activePlayer;               //public for testing
     private int                         indexOfPlayer;
+    private boolean                     moveToJail;
 
     public Monopoly(ArrayList<Player> players)
     {
@@ -141,6 +142,23 @@ public class Monopoly
                                                     // Al: good idea, but let's leave it for later, if we have time 
     }
 
+    public void play(){
+        Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
+        System.out.println("Player coordinates: " + activePlayer.getCoordinate());
+    }
+    public boolean ifPlayerIsPrisoned(){
+        System.out.println(activePlayer.isPrisoned());
+        return activePlayer.isPrisoned();
+    }
+    public void setMessage(){
+        if (activePlayer.getCoordinate() == 10){
+            ((Jail)Board.getSquares()[activePlayer.getCoordinate()]).checkTheStateSetMessage(activePlayer);
+            System.out.println("setMessageOfJail");
+        }
+        else if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable){
+            ((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).setMessage(activePlayer);
+        }
+    }
     public void startGame(){
         // printHeader();
         // printMap();
@@ -152,8 +170,34 @@ public class Monopoly
             // this.activePlayer = players.get(indexOfPlayer);
             // Al: added a check on throwing the dice to move for if the player's prisoned.
             // if they are, then the dice will not be thrown, and the player won't move.
+            
             if (!(activePlayer.isPrisoned()))
                 Utility.setDice(activePlayer.throwDice());
+            else{
+                    //System.out.println("You have to throw dices now.");
+                    activePlayer.throwDice();
+                    if (activePlayer.holdsDoubles())
+                    {
+                        
+                        activePlayer.setIsPrisoned(false);
+                        activePlayer.setDaysInJail(1);
+                        //System.out.println("You rolled doubles and are free to go.");
+                        activePlayer.movePlayer(activePlayer.getDice());
+                        Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
+                        System.out.println("Player coordinates: " + activePlayer.getCoordinate());
+                        return ;
+                    }
+                    //System.out.println("You failed to roll doubles. See you on the next turn!");
+                    activePlayer.setDaysInJail(activePlayer.getDaysInJail() + 1);
+                }
+           
+            System.out.println("Double in a row: " + activePlayer.getDoublesInARow());
+            if (activePlayer.getDoublesInARow() == 3){
+                this.activePlayer.setIsPrisoned(true);
+                this.activePlayer.setDoublesInARow(0);
+                this.moveToJail = true;
+                return;
+            }
             // Al: updated movePlayer() such that if the player's prisoned, the coords do not change.
             activePlayer.movePlayer(activePlayer.getDice());
             // Al: having the dice not thrown, the player not moved, and the coords = 10 after landing 
@@ -171,11 +215,16 @@ public class Monopoly
                 activePlayer.setDoublesInARow(0);
             }
             
+            
             if (players.size() == 1)
                 System.out.println("Game Over");
                 //break;
     //     }
     //     System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
+     }
+
+     public boolean getMoveToJail(){
+        return this.moveToJail;
      }
 
 
@@ -197,6 +246,7 @@ public class Monopoly
             indexOfPlayer++;
             activePlayer.setDoublesInARow(0);
         }
+        
         if (indexOfPlayer == players.size())
             this.indexOfPlayer = 0;
         System.out.println("The index of player: " + indexOfPlayer);            //for testing
@@ -205,5 +255,9 @@ public class Monopoly
 
     public int getActivePlayerCoordinate(){
         return activePlayer.getCoordinate();
+    }
+
+    public Player getActivePlayer(){
+        return this.activePlayer;
     }
 }
