@@ -129,7 +129,7 @@ import java.util.ArrayList;
 public class Monopoly 
 {
     private static ArrayList<Player>    players = new ArrayList<>();
-    private Player                       activePlayer;               //public for testing
+    private Player                      activePlayer;               //public for testing
     private int                         indexOfPlayer;
     private boolean                     moveToJail;
 
@@ -143,9 +143,28 @@ public class Monopoly
     }
 
     public void play(){
+        setMessage();   //just added
+        
         Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         System.out.println("Player coordinates: " + activePlayer.getCoordinate());
     }
+
+    public void play(boolean bool){
+        if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable){
+            ((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).setWantsToBuy(bool);
+        }
+        play();
+    }
+
+    public void play(int choice){
+        if (Board.getSquares()[activePlayer.getCoordinate()].getClass().getName().equals("Jail") ){
+            ((Jail)Board.getSquares()[activePlayer.getCoordinate()]).setUserChoice(choice);
+        }
+        play();
+    }
+
+
+
     public boolean ifPlayerIsPrisoned(){
         System.out.println(activePlayer.isPrisoned());
         return activePlayer.isPrisoned();
