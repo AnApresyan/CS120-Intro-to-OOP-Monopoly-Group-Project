@@ -260,4 +260,9 @@ public class Monopoly
     public Player getActivePlayer(){
         return this.activePlayer;
     }
+
+    public int getActivePlayerIndex()
+    {
+        return (indexOfPlayer);
+    }
 }
