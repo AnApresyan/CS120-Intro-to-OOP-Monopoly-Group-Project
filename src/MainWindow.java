@@ -383,7 +383,9 @@ public class MainWindow extends JFrame implements ActionListener{
 
         //Labels
         JLabel mainLabel = new JLabel("Welcome to Alexander's and Anahit's Monopoly");
-        JPanel setUp = new JPanel();        //change
+   
+        //this.setOpacity(true);
+        JPanel setUp = new JPanel();        
         
         //The names of the players
         JLabel namesLabel = new JLabel();
@@ -672,6 +674,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpInfoBottom(){
         infoBottom.setLayout(new GridLayout());
         this.throwDice = new JButton("Throw the dice");
+
         this.done = new JButton("Done");
         throwDice.addActionListener(new ActionListener(){
             
