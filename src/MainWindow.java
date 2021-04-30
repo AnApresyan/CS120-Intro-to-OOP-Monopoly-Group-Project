@@ -9,6 +9,7 @@ import javax.swing.border.*;
 public class MainWindow extends JFrame implements ActionListener{
     private ArrayList<Player> players = new ArrayList<>();              //need to make this local
     private int numberOfPlayers;
+    private ArrayList<JLabel> sprites = new ArrayList<>();
     
     private CustomButton[] buttons = new CustomButton[40];
     private JLayeredPane boardContainer;    //was JPanel
@@ -147,7 +148,7 @@ public class MainWindow extends JFrame implements ActionListener{
         private JPanel containerForLabel;
 
         //button panel 
-        private JPanel buttons = new JPanel();
+        private JPanel button = new JPanel();
 
         //buttons for Buyable;
         private JButton yes = new JButton();
@@ -182,10 +183,10 @@ public class MainWindow extends JFrame implements ActionListener{
             this.message.setLineWrap(true);
             this.message.setEditable(false);
             this.message.setFocusable(false);
-            this.message.setFont(new Font("Serif", Font.CENTER_BASELINE, 14));
+            this.message.setFont(new Font("Futura", Font.CENTER_BASELINE, 14));
 
-            this.buttons = new JPanel();
-            this.buttons.setLayout(new FlowLayout());
+            this.button = new JPanel();
+            this.button.setLayout(new FlowLayout());
             
             this.yes = new JButton("Yes");
             this.no = new JButton("No");
@@ -203,20 +204,20 @@ public class MainWindow extends JFrame implements ActionListener{
             pay.addActionListener(this);
             useTheCard.addActionListener(this);
 
-            this.buttons.add(yes);
-            this.buttons.add(no);
-            this.buttons.add(ok);
-            this.buttons.add(money);
-            this.buttons.add(percent);
-            this.buttons.add(pay);
-            this.buttons.add(useTheCard);
+            this.button.add(yes);
+            this.button.add(no);
+            this.button.add(ok);
+            this.button.add(money);
+            this.button.add(percent);
+            this.button.add(pay);
+            this.button.add(useTheCard);
 
             this.setBackground(Color.DARK_GRAY);
             this.setOpaque(true);
             this.setVisible(false);
             containerForLabel.add(message);
             this.add(containerForLabel);
-            this.add(buttons);
+            this.add(button);
             
 
         }
@@ -316,6 +317,10 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             else if (e.getSource() == ok){
                 int previousCoordinate = game.getActivePlayerCoordinate();
+                // remove sprite
+                buttons[previousCoordinate].remove(sprites.get(game.getActivePlayerIndex()));
+                buttons[previousCoordinate].revalidate();
+                buttons[previousCoordinate].repaint();
                 //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
                 game.play();
                 setVisible(false);
@@ -325,6 +330,9 @@ public class MainWindow extends JFrame implements ActionListener{
                     else
                         this.setVisible(false);
                 }
+                // put sprite
+                buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+
             }
             else if (e.getSource() == money){
                 ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(1);
@@ -358,11 +366,12 @@ public class MainWindow extends JFrame implements ActionListener{
    
 
     public MainWindow(){
-        
+        super("Monopoly");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 500);
+        this.setSize(800, 700);
         this.setLayout(new BorderLayout());
-        
+        this.setResizable(false);
+        // this.getContentPane().setBackground(new Color(64, 184, 182));
         //setting up
         //this.board = new JPanel();
         this.info = new JPanel();
@@ -374,15 +383,17 @@ public class MainWindow extends JFrame implements ActionListener{
     
 
         //The images
-        ImageIcon image = new ImageIcon("./images/logo2.png");
+        ImageIcon image = new ImageIcon("./images/LOGO1.png");
         //ImageIcon image = new ImageIcon("CS120A_Group_Project_Monopoly/images/logo2.png");
         
         
         //The main panel
         JPanel mainMenu = new JPanel();
+        // mainMenu.setBackground(new Color(64, 184, 182));
 
         //Labels
         JLabel mainLabel = new JLabel("Welcome to Alexander's and Anahit's Monopoly");
+        // mainLabel.setFont(new Font("Futura", Font.ROMAN_BASELINE, 14));
         JPanel setUp = new JPanel();        //change
         
         //The names of the players
@@ -418,6 +429,13 @@ public class MainWindow extends JFrame implements ActionListener{
                     setUp.setVisible(false);
                     mainMenu.setVisible(false);
                     game = new Monopoly(players);
+                            // initializing player sprites
+                    sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+                    sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+                    if (numOfNames >= 3)
+                        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+                    if (numOfNames >= 4)
+                        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
                     setTheFlow();
 
                 }  
@@ -570,7 +588,6 @@ public class MainWindow extends JFrame implements ActionListener{
         this.setUpInfo();
         //setUpColors();
 
-
         board.add(top,BorderLayout.NORTH);
         board.add(left,BorderLayout.WEST);
         board.add(right,BorderLayout.EAST);
@@ -584,6 +601,9 @@ public class MainWindow extends JFrame implements ActionListener{
         this.add(boardContainer, BorderLayout.WEST);
         this.add(info);
 
+        // adding the players
+        for (int i = 0; i < sprites.size(); i++)
+            buttons[0].add(sprites.get(i));
     }
 
 
@@ -634,9 +654,9 @@ public class MainWindow extends JFrame implements ActionListener{
             
             playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());     //check
             if (Monopoly.getPlayers().get(i).equals(game.getActivePlayer()))
-                playerInfo[i].setFont(new Font("Serif", Font.BOLD, 18));
+                playerInfo[i].setFont(new Font("TimesRoman", Font.BOLD, 18));
             else{
-                playerInfo[i].setFont(new Font("Serif", Font.ROMAN_BASELINE, 18));
+                playerInfo[i].setFont(new Font("Monaco", Font.PLAIN, 18));
 
             }
         }
@@ -672,13 +692,20 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpInfoBottom(){
         infoBottom.setLayout(new GridLayout());
         this.throwDice = new JButton("Throw the dice");
+        // Al: WHY DOESN'T THIS WORK AAAAAAAAAAAAAAAAAAAAAAA
+        // this.throwDice.setFont(new Font("Futura", Font.PLAIN, 14));
         this.done = new JButton("Done");
+        // this.done.setFont(new Font("Futura", Font.PLAIN, 14));
         throwDice.addActionListener(new ActionListener(){
             
             @Override
             public void actionPerformed(ActionEvent e) {   
                 
-                      
+                // remove the old sprite
+                buttons[game.getActivePlayerCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
+                buttons[game.getActivePlayerCoordinate()].revalidate();
+                buttons[game.getActivePlayerCoordinate()].repaint();
+
                 if (game.ifPlayerIsPrisoned()){
                     game.startGame();
                     if (!game.ifPlayerHoldsDoubles() || game.ifPlayerIsPrisoned()){      //moved to After doAction is complete
@@ -710,6 +737,8 @@ public class MainWindow extends JFrame implements ActionListener{
                 if (game.getMoveToJail()){
                     return;
                 }
+                // put the sprite at a new space
+                buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
                 //setUpInfoCenter();
                 setUpInfoCenter();
                 setUpInfoTop();  
@@ -720,7 +749,15 @@ public class MainWindow extends JFrame implements ActionListener{
         done.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                // remove the old sprite
+                // buttons[game.getActivePlayerCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
+                // buttons[game.getActivePlayerCoordinate()].revalidate();
+                // buttons[game.getActivePlayerCoordinate()].repaint();
+
                 commands.setVisible(false);
+                // put the sprite at a new space
+                buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+                
                 game.changePlayer();
                 done.setEnabled(false);
                 titleDeed.setEverything(game.getActivePlayerCoordinate());
@@ -731,7 +768,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     //System.out.println("He is prisoned");
                 }
                 setUpInfoTop();
-                
+
                 //commands.setVisible(false);
             }
             
@@ -750,10 +787,12 @@ public class MainWindow extends JFrame implements ActionListener{
         top.add(buttons[20]);
         for (int i = 21; i < 30; i++){
             buttons[i].setPreferredSize(new Dimension(57, 90));
+            buttons[i].setLayout(new FlowLayout());
             top.add(buttons[i]);
         }
 
         buttons[30].setPreferredSize(new Dimension(90, 90));
+        buttons[30].setLayout(new FlowLayout());
         top.add(buttons[30]);
     }
 
@@ -764,10 +803,12 @@ public class MainWindow extends JFrame implements ActionListener{
         bottom.add(buttons[10]);
         for (int i = 9; i > 0; i--){
             buttons[i].setPreferredSize(new Dimension(57, 90));
+            buttons[i].setLayout(new FlowLayout());
             bottom.add(buttons[i]);
         }
 
         buttons[0].setPreferredSize(new Dimension(90, 90));
+        buttons[0].setLayout(new FlowLayout());
         bottom.add(buttons[0]);
     }
 
@@ -779,7 +820,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
         for (int i = 19; i > 10; i--){
             buttons[i].setMaximumSize(new Dimension(90, 57));
-           
+            buttons[i].setLayout(new FlowLayout());
             left.add(buttons[i]);
         }
     }
@@ -789,6 +830,7 @@ public class MainWindow extends JFrame implements ActionListener{
         right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
         for (int i = 31; i < 40; i++){
             buttons[i].setMaximumSize(new Dimension(90, 57));
+            buttons[i].setLayout(new FlowLayout());
             right.add(buttons[i]);
         }
     }
