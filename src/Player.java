@@ -277,7 +277,7 @@ public class Player
                 else if (response.equals("NO"))
                 {
                     System.out.println("Auction commenced.");
-                    property.initializeAuction(this);
+                    // property.initializeAuction(this);
                     // break ;
                 }
             // }
@@ -287,7 +287,7 @@ public class Player
             System.out.println("Auction commenced.");
             //property.initializeAuction(this);
         }
-    };
+    }
 
     // TESTED by Al
     public void rentProperty(Buyable property)

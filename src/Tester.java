@@ -7,5 +7,5 @@ public class Tester
         MainWindow frame = new MainWindow();
         //frame.pack();
 
-    }    
+    }
 }

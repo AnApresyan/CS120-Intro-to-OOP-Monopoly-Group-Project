@@ -153,27 +153,33 @@ import java.util.ArrayList;
  * 8) fixed an issue causing the title deeds not be refreshed after a button in the pop-ups is pressed;
  * 9) fixed an issue causing Erect House button stay active after 5 houses have been built;
  * 10) numberOfPlayers is now correctly accessed and refreshed;
+ * 11) auction pop-up created.
  * 
  * KNOWN ISSUES:
  * 1. Player 1 can pass the turn right away because Done is active from the beginning
  * 2. sometimes sprites disappear after an interaction with Chance&Chest
  * 3. after a Chance&Chest interaction, Done is NOT disabled until confirmation of card is pressed
  * 4. when receiving YES/NO upon landing on a Buyable, Done is NOT disabled
- * 5. have we made it so if a buyable is mortgaged then the rent is 0?
+ * 5. SLIDER VALUE DOESN'T REFRESH
  */
 public class Monopoly 
 {
     private static ArrayList<Player>    players = new ArrayList<>();
-    private Player                      activePlayer;               //public for testing
+    private Player                      activePlayer;
+    private static ArrayList<Player>    bidders;
+    private Player                      activeBidder;
     private int                         indexOfPlayer;
     private boolean                     moveToJail;
+    private int                         choice;
 
     public Monopoly(ArrayList<Player> players)
     {
         new Board();
         setPlayers(players);
         indexOfPlayer = 0;
-        this.activePlayer = players.get(0);         // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
+        this.activePlayer = players.get(0);
+        this.activeBidder = this.activePlayer;
+        this.choice = 1;                            // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
                                                     // Al: good idea, but let's leave it for later, if we have time 
     }
 
@@ -205,10 +211,10 @@ public class Monopoly
         System.out.println("Player coordinates: " + activePlayer.getCoordinate());
     }
 
-    public void play(boolean bool){
-        if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable){
+    public void play(boolean bool)
+    {
+        if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable)
             ((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).setWantsToBuy(bool);
-        }
         play();
     }
 
@@ -318,26 +324,64 @@ public class Monopoly
     public boolean ifPlayerHoldsDoubles(){
         return this.activePlayer.holdsDoubles();
     }
-    public void changePlayer(){
+
+    public void changePlayer()
+    {
         if (activePlayer.getDoublesInARow() == 0){
             indexOfPlayer++;
             activePlayer.setDoublesInARow(0);
         }
-        
         if (indexOfPlayer == players.size())
             this.indexOfPlayer = 0;
         System.out.println("The index of player: " + indexOfPlayer);            //for testing
         this.activePlayer = players.get(indexOfPlayer);
+        this.activeBidder = this.activePlayer;
     }
 
-    public int getActivePlayerCoordinate(){
+    public void changeBidder()
+    {
+
+    }
+
+    public void setBidders(int coordinate)
+    {
+        bidders = new ArrayList<>();
+        if (this.activeBidder.getMoney() >= ((Buyable) Board.getSquares()[coordinate]).getPrice())
+            bidders.add(this.activeBidder);
+        for (Player p : players)
+            if (!(p.equals(this.activeBidder)) && this.activeBidder.getMoney() >= ((Buyable) Board.getSquares()[coordinate]).getPrice())
+                bidders.add(p);
+    }
+
+    public static ArrayList<Player> getBidders()
+    {
+        return (bidders);
+    }
+
+    public int getActivePlayerCoordinate()
+    {
         return (this.activePlayer.getCoordinate());
     }
 
-    public Player getActivePlayer(){
+    public Player getActivePlayer()
+    {
         return (this.activePlayer);
     }
 
+    public Player getActiveBidder()
+    {
+        return (this.activeBidder);
+    }
+
+    public int getChoice()
+    {
+        return (this.choice);
+    }
+
+    public void setChoice(int choice)
+    {
+        this.choice = choice;
+    }
     public int getActivePlayerIndex()
     {
         return (this.indexOfPlayer);

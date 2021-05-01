@@ -4,6 +4,8 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 public class MainWindow extends JFrame implements ActionListener{
@@ -55,45 +57,88 @@ public class MainWindow extends JFrame implements ActionListener{
     private PopupFactory    popupFactory;
     private Popup           popUp;
     private CustomPopUp     popUpWindow;
-    // private AuctionPopUp    popUpAuction;
+    private AuctionPopUp    popUpAuction;
 
-    // private class AuctionPopUp extends JPanel implements ActionListener
-    // {
-    //     private JPanel              biddersPanel;
-    //     private ArrayList<JLabel>   bidders = new ArrayList<>();
-    //     private JPanel              slider;
-    //     private JPanel              auctionButtons;
-    //     private JButton             confirm;
-    //     private JButton             giveUp;
+    private class AuctionPopUp extends JPanel implements ActionListener, ChangeListener
+    {
+        private JPanel              biddersPanel;
+        private ArrayList<JLabel>   biddersLabels = new ArrayList<>();
+        private JPanel              sliderPanel;
+        private JLabel              sliderValue;
+        private JPanel              auctionButtons;
+        private JButton             confirm;
+        private JButton             giveUp;
+        private int                 coordinate;
+        private JSlider             slider;
 
-    //     private AuctionPopUp()
-    //     {
-    //         this.setLayout(new BorderLayout());
-    //         this.setSize(new Dimension(350, 450));
+        private AuctionPopUp()
+        {
+            this.setLayout(new BorderLayout());
+            this.setSize(new Dimension(350, 450));
+            this.biddersPanel = new JPanel();
+            this.sliderValue = new JLabel();
+            this.biddersPanel.setLayout(new GridLayout(game.getNumberOfPlayers(), 1));
+            this.sliderPanel = new JPanel();
+            this.slider = new JSlider();
 
-    //         this.biddersPanel = new JPanel();
-    //         this.biddersPanel.setLayout(new GridLayout(game.getNumberOfPlayers(), 1));      //in order to keep things compact
-    //         for (int i = 0; i < game.getNumberOfPlayers(); i++)
-    //         {
-    //             playerInfo[i] = new JLabel();
-    //             //playerInfo[i].setFont(new Font("Serif", Font.ITALIC, 18));
-    //             playersInfo.add(playerInfo[i]);
-    //         }
+            slider.addChangeListener(this);
 
-    //     }
+            slider.setMajorTickSpacing(10);
+            slider.setMinorTickSpacing(1);
+            slider.setPaintTicks(true);
+            slider.setPaintLabels(true);
 
-    //     private void refreshPlayersInfo()
-    //     {
-    //         for (int i = 0; i < game.getNumberOfPlayers(); i++)
-    //         {
-    //             playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());     //check
-    //             if (Monopoly.getPlayers().get(i).equals(game.getActivePlayer()))
-    //                 playerInfo[i].setFont(new Font("TimesRoman", Font.BOLD, 14));
-    //             else
-    //                 playerInfo[i].setFont(new Font("Monaco", Font.PLAIN, 14));
-    //         }
-    //     }
-    // }
+            this.add(biddersPanel, BorderLayout.NORTH);
+            this.add(sliderPanel, BorderLayout.CENTER);
+        }
+
+        private void refreshBiddersPanel()
+        {
+            // setBidders
+            game.setBidders(this.coordinate);
+            // delete old labels
+            for (JLabel l : biddersLabels)
+                biddersPanel.remove(l);
+            biddersPanel.revalidate();
+            biddersPanel.repaint();
+            // add new labels
+            for (int i = 0; i < Monopoly.getBidders().size(); i++)
+            {
+                biddersLabels.add(new JLabel());
+                biddersLabels.get(i).setText(Monopoly.getBidders().get(i).toString());
+                if (Monopoly.getBidders().get(i).equals(game.getActiveBidder()))
+                    biddersLabels.get(i).setFont(new Font("TimesRoman", Font.BOLD, 14));
+                else
+                    biddersLabels.get(i).setFont(new Font("Monaco", Font.PLAIN, 14));
+            }
+            for (JLabel l : biddersLabels)
+                biddersPanel.add(l);
+            // set slider
+            slider = new JSlider(game.getChoice(), game.getActiveBidder().getMoney());
+            sliderPanel.add(slider);
+            sliderValue.setText("Current bid: $" + slider.getValue());
+            sliderPanel.add(sliderValue);
+        }
+
+        private void    initAuctionPopUp(int coordinate)
+        {
+            this.coordinate = coordinate;
+            refreshBiddersPanel();
+        }
+
+        @Override
+        public void stateChanged(ChangeEvent e)
+        {
+            System.out.println("I'VE BEEN CHANGED");
+            sliderValue.setText("Current bid: " + slider.getValue());
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            
+        }
+    }
 
     private class CustomPopUp extends JPanel implements ActionListener
     {
@@ -604,8 +649,9 @@ public class MainWindow extends JFrame implements ActionListener{
                // ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(false);     //JUST REMOVED FOR TESTING
                 //Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
                 ///need to open the auction part
-                game.play(false);
                 this.setVisible(false);
+                popUpAuction.initAuctionPopUp(game.getActivePlayerCoordinate());
+                JOptionPane.showMessageDialog(null, popUpAuction, "Auction", JOptionPane.PLAIN_MESSAGE);
             }
             else if (e.getSource() == ok){
                 int previousCoordinate = game.getActivePlayerCoordinate();
@@ -684,7 +730,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
         //The images
         ImageIcon image = new ImageIcon("./images/LOGO1.png");
-        //ImageIcon image = new ImageIcon("CS120A_Group_Project_Monopoly/images/logo2.png");
+        //ImageIcon image = new ImageIcon("./images/logo2.png");
         
         
         //The main panel
@@ -728,10 +774,12 @@ public class MainWindow extends JFrame implements ActionListener{
                     nameFromField.setText("");
                     numOfNames++;
                 }
-                else{
+                else
+                {
                     setUp.setVisible(false);
                     mainMenu.setVisible(false);
                     game = new Monopoly(players);
+                    popUpAuction = new AuctionPopUp();
                             // initializing player sprites
                     sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
                     sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
@@ -806,8 +854,6 @@ public class MainWindow extends JFrame implements ActionListener{
 
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        
-        
     }
 
 
