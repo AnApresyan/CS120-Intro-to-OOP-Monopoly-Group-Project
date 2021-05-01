@@ -10,7 +10,7 @@ import javax.swing.event.ChangeListener;
 
 public class MainWindow extends JFrame implements ActionListener{
                  
-    private int numberOfPlayers;            //maybe needs to be local?
+    //private int numberOfPlayers;            //maybe needs to be local?                -----------------
     
     //the actual game (gonna call methods like throwDice() and other stuff from here)
     private Monopoly game;
@@ -29,7 +29,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private JPanel center;
     private TitleDeed titleDeed;
 
-    private int numOfNames;             //maybe not needed idk
+    //private int numOfNames;             //maybe not needed idk        -----------------
 
     //info components
     private JPanel info;
@@ -54,8 +54,6 @@ public class MainWindow extends JFrame implements ActionListener{
     BelongingButton[] belongingButtons;
 
     //pop up window
-    private PopupFactory    popupFactory;
-    private Popup           popUp;
     private CustomPopUp     popUpWindow;
     private AuctionPopUp    popUpAuction;
 
@@ -102,11 +100,11 @@ public class MainWindow extends JFrame implements ActionListener{
             biddersPanel.revalidate();
             biddersPanel.repaint();
             // add new labels
-            for (int i = 0; i < Monopoly.getBidders().size(); i++)
+            for (int i = 0; i < game.getBidders().size(); i++)
             {
                 biddersLabels.add(new JLabel());
-                biddersLabels.get(i).setText(Monopoly.getBidders().get(i).toString());
-                if (Monopoly.getBidders().get(i).equals(game.getActiveBidder()))
+                biddersLabels.get(i).setText(game.getBidders().get(i).toString());
+                if (game.getBidders().get(i).equals(game.getActiveBidder()))
                     biddersLabels.get(i).setFont(new Font("TimesRoman", Font.BOLD, 14));
                 else
                     biddersLabels.get(i).setFont(new Font("Monaco", Font.PLAIN, 14));
@@ -705,12 +703,13 @@ public class MainWindow extends JFrame implements ActionListener{
     }
     
 
-    public MainWindow(){
-        super("Monopoly");
+    public MainWindow(ArrayList<Player> players){
+        super("Monopoly");                                                       // ------------------
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 700);                 //this.setSize(1300, 750);
+        this.setSize(new Dimension(1300, 750));
         this.setLayout(new BorderLayout());
-        this.setResizable(false);
+        this.setResizable(false); 
+        this.setLocationRelativeTo(null);                                             //-----------------
         // this.getContentPane().setBackground(new Color(64, 184, 182));
         //setting up
         //this.board = new JPanel();
@@ -720,11 +719,16 @@ public class MainWindow extends JFrame implements ActionListener{
         this.infoCenter = new JPanel();
         this.infoBottom = new JPanel();
         this.popUpWindow = new CustomPopUp();
+
+        game = new Monopoly(players);
+        this.setTheFlow();
+        this.setVisible(true);
+
         // popupFactory = new PopupFactory();
         // popUp = popupFactory.getPopup(this, popUpWindow, 500, 500);
         
         //popUpWindow.setAlwaysOnTop(true);
-        numOfNames = 1;
+        /*numOfNames = 1;                                                               -----------------------
         
     
 
@@ -767,7 +771,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     }
                 }
                 players.add(new Player(name));
-                /*numberOfPlayers--;*/
+                //numberOfPlayers--;
                 if (numOfNames < numberOfPlayers){  
                     namesLabel.setText("Please enter the name of Player " + (players.size() + 1));
                     
@@ -853,7 +857,8 @@ public class MainWindow extends JFrame implements ActionListener{
         this.add(setUp, BorderLayout.CENTER);            //change        mainWindiw.add(setUp)
 
         this.setLocationRelativeTo(null);
-        this.setVisible(true);
+        this.setVisible(true);*/                                                             //-----------------------------
+        
     }
 
 
@@ -920,11 +925,15 @@ public class MainWindow extends JFrame implements ActionListener{
     //the board and the info
     private void setTheFlow()
     {
-        this.setSize(new Dimension(1300, 750));
-        this.setLocationRelativeTo(null);
-
-
-        Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
+        popUpAuction = new AuctionPopUp();
+        // initializing player sprites
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        if (Monopoly.getPlayers().size() >= 3)
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        if (Monopoly.getPlayers().size() >= 4)
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+                Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
         this.setButtons();
         for (int i = 0; i < 40; i++)
         {

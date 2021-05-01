@@ -155,6 +155,11 @@ import java.util.ArrayList;
  * 10) numberOfPlayers is now correctly accessed and refreshed;
  * 11) auction pop-up created.
  * 
+ * An:
+ * Thanks for the kind words:D
+ * 12) Separated the windows in the beginning from the MainWindow to make it look more organized;
+ * 13) Along with that got rid of the reduntant variable numOfNames; 
+ * 
  * KNOWN ISSUES:
  * 1. Player 1 can pass the turn right away because Done is active from the beginning
  * 2. sometimes sprites disappear after an interaction with Chance&Chest
@@ -338,10 +343,10 @@ public class Monopoly
         this.activeBidder = this.activePlayer;
     }
 
-    public void changeBidder()
-    {
+    // public void changeBidder()
+    // {
 
-    }
+    // }
 
     public void setBidders(int coordinate)
     {
@@ -353,7 +358,7 @@ public class Monopoly
                 bidders.add(p);
     }
 
-    public static ArrayList<Player> getBidders()
+    public ArrayList<Player> getBidders()
     {
         return (bidders);
     }
