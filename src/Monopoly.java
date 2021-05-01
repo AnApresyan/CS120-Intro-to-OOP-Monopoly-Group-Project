@@ -125,6 +125,17 @@ import java.util.ArrayList;
  * 2) lower-cased the card messages so that Anahit doesn't get annoyed by capsed letters;
  * An:
  * 3) merged GoToJail class with GOTaxFree class;
+ * 
+ * MONOPOLY 1.0.2
+ * An:
+ * 1)implemented a panel for the owned properties
+ * 2) a popUpWIndow each time a button from that panel is clicked will show up with different options
+ * 3) I don't completely remember the methods I changed, but I commented the 
+ *    loops for build/destroy houses and mortgage/liftMortgage
+ * 4) Instead, added/changed those methods, as well as the methods canBeImproved, canBeMortgaged and the others
+ * 5) Moved some of the methods from Player to the Property or Buyable, such as canBeImproved, etc, because it's not 
+ *    the player who can be improved, but the property:D
+ * 6) Please appreciate my work, thanks:D
  */
 public class Monopoly 
 {
