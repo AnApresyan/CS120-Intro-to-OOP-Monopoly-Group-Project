@@ -149,7 +149,7 @@ public class CommunityChest extends Deck
             //System.out.println("YOU INHERIT $100.");
             activePlayer.receiveMoney(100);
         }
-        activePlayer.enterMortgageLoop(null);
+        //activePlayer.enterMortgageLoop(null);
         
     }
     

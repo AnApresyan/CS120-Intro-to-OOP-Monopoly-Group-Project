@@ -7,8 +7,8 @@ import javax.swing.border.*;
 
 
 public class MainWindow extends JFrame implements ActionListener{
-    private ArrayList<Player> players = new ArrayList<>();              //need to make this local
-    private int numberOfPlayers;
+                 
+    private int numberOfPlayers;            //maybe needs to be local?
     
     //the actual game (gonna call methods like throwDice() and other stuff from here)
     private Monopoly game;
@@ -27,7 +27,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private JPanel center;
     private TitleDeeds titleDeed;
 
-    private int numOfNames;
+    private int numOfNames;             //maybe not needed idk
 
     //info components
     private JPanel info;
@@ -45,6 +45,117 @@ public class MainWindow extends JFrame implements ActionListener{
     //infoBottom buttons
     private JButton throwDice;
     private JButton done;
+
+    //belongings panel
+
+    private JPanel belongingsPanel;
+    BelongingButton[] belongingButtons;
+
+    //pop up window
+    private PopupFactory    popupFactory;
+    private Popup           popUp;
+    private CustomPopUp     popUpWindow;
+    
+
+    private class CustomPopUp extends JPanel implements ActionListener{
+        private TitleDeeds  titleDeed;
+        private JPanel      popUpButtons;
+        private JButton     build;
+        private JButton     destroy;
+        private JButton     mortgage;
+        private JButton     liftMortgage;
+        private int         coordinate;
+        
+        private CustomPopUp(){
+            
+            this.setLayout(new BorderLayout());
+            this.setSize(new Dimension(350, 450));
+            this.titleDeed = new TitleDeeds();
+            this.titleDeed.setSize(new Dimension(300, 300));
+        
+            //button oanel
+            this.popUpButtons = new JPanel();
+            this.popUpButtons.setLayout(new GridLayout(2, 2, 5, 5));
+    
+            this.build = new JButton("Build");
+            this.destroy = new JButton("Destroy");
+            this.mortgage = new JButton("Mortgage");
+            this.liftMortgage = new JButton("Lift Mortgage");
+            build.addActionListener(this);
+            destroy.addActionListener(this);
+            mortgage.addActionListener(this);
+            liftMortgage.addActionListener(this);
+
+    
+            this.popUpButtons.add(build);
+            this.popUpButtons.add(destroy);
+            this.popUpButtons.add(mortgage);
+            this.popUpButtons.add(liftMortgage);
+
+            this.add(titleDeed, BorderLayout.NORTH);
+            this.add(popUpButtons, BorderLayout.CENTER);
+        }
+        private void updatePopUp(int coordinate){
+            if (!(Board.getSquares()[coordinate] instanceof Buyable))
+                return;
+            this.coordinate = coordinate;
+            this.titleDeed.setEverything(coordinate);
+            this.updateButtons(coordinate);
+        }
+
+        public void updateButtons(int coordinate){
+            if (Board.getSquares()[coordinate].getClass().getName().equals("Property")){
+                if (((Property)Board.getSquares()[coordinate]).canBeImproved())
+                    build.setEnabled(true);
+                else
+                    build.setEnabled(false);
+                if (((Property)Board.getSquares()[coordinate]).getHouses() > 0)
+                    destroy.setEnabled(true);
+                else
+                    destroy.setEnabled(false);
+            }
+            else{
+                build.setEnabled(false);
+                destroy.setEnabled(false);
+            }
+
+            if (((Buyable) Board.getSquares()[coordinate]).canBeMortgaged())
+                mortgage.setEnabled(true);
+            else
+                mortgage.setEnabled(false);
+
+            if (((Buyable) Board.getSquares()[coordinate]).isMortgaged())
+                liftMortgage.setEnabled(true);
+            else
+                liftMortgage.setEnabled(false);;
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (this.coordinate > Board.getSquares().length)                //or maybe exception
+                return;
+            if (e.getSource() == build){
+                game.build(Board.getSquares()[coordinate]);
+                
+            }
+
+            else if (e.getSource() == destroy){
+                game.destroy(Board.getSquares()[coordinate]);
+            }
+
+            else if (e.getSource() == mortgage){
+                game.mortgage(Board.getSquares()[coordinate]);
+            }
+            else if (e.getSource() == liftMortgage){
+                game.liftMortgage(Board.getSquares()[coordinate]);
+            }
+
+            updateButtons(this.coordinate);
+            setUpInfoTop();
+            
+        }
+    }
+
      
     private class TitleDeeds extends JPanel{
         private JLabel titleOfDeed;
@@ -53,14 +164,13 @@ public class MainWindow extends JFrame implements ActionListener{
         private JLabel rentOfDeed;
         //private JLabel mortgageValue;
 
-        private TitleDeeds(int i){
+        private TitleDeeds(){
             super();
             this.titleOfDeed = new JLabel();
             this.priceOfDeed = new JLabel();
             this.ownerNameOfDeed = new JLabel();
             this.rentOfDeed = new JLabel();
 
-            setEverything(i);
             this.setLayout(new GridLayout(10, 1));
             //this.setPreferredSize(new Dimension(150, 200));
             //this.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -71,9 +181,9 @@ public class MainWindow extends JFrame implements ActionListener{
             // this.setBackground(Color.GRAY);
             // this.setOpaque(true);
         }
-        private TitleDeeds(){
-            super();
-        }
+        // private TitleDeeds(){
+        //     super();
+        // }
 
         private void setEverything(int i){
             setEmpty();
@@ -110,23 +220,26 @@ public class MainWindow extends JFrame implements ActionListener{
     }
    
     private class CustomButton extends JButton{
-        private Color color;
-        private int direction;
+        protected Color color;
+        protected int direction;
 
-        private CustomButton(){}
+        public CustomButton(){}
 
         private CustomButton(int direction){
             super();
             this.direction = direction;
         }
 
-        private void setColor(Color color){
+        protected void setColor(Color color){
             this.color = color;
         }
 
-
+        private Color getColor(){
+            return this.color;
+        }
 
         public void paintComponent(Graphics g){
+            
             super.paintComponent(g);
             if (this.color != null){
                 g.setColor(color);
@@ -141,8 +254,83 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             
         }
+    
     }   
     
+    private class BelongingButton extends CustomButton implements ActionListener{
+        private int coordinate;
+        private BelongingButton(){
+            super();
+            this.setFocusable(false);
+            this.addActionListener(this);
+            this.setBackground(Color.WHITE);
+            //this.setCoordinate(index);
+        }
+
+        private void setCoordinate(int coordinate){
+            this.coordinate = coordinate;
+            //this.setText(Integer.toString(coordinate));
+            this.setText(" ");      //until I find a way to give it a proper size
+            
+        }
+        private int getCoordinate(){
+            return this.coordinate;
+        }
+
+        private void setClickable(boolean bool){
+            if (bool == true){
+                this.setEnabled(true);
+                this.setBackground(Color.white);
+                this.setOpaque(true);
+                repaint();
+            }
+            else{
+                this.setBackground(new Color(234, 236, 238));
+                this.setEnabled(false);
+                this.setOpaque(true);
+
+                repaint();
+            }
+        }
+        
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+            if (this.color != null){
+                g.setColor(color);
+                g.fillRect(0, 0, this.getWidth(), this.getHeight()/2);
+            }
+            
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (belongingButtons.length > Board.getSquares().length)        //Checking not to have an exception
+                return;
+            for (int i = 0; i < belongingButtons.length; i++){
+                if(e.getSource() == belongingButtons[i]){
+                    popUpWindow.updatePopUp(belongingButtons[i].getCoordinate());
+                    JOptionPane.showMessageDialog(null, popUpWindow, "Build/Destroy", JOptionPane.PLAIN_MESSAGE);;
+                }
+            }        
+            
+        }
+
+        
+    }
+
+    private void setCoordinatesOfBelongings(BelongingButton[] buttons){
+        int indexOfButtons = 0;
+        int indexOfSquares = 0;
+        while (indexOfButtons < buttons.length && indexOfSquares < Board.getSquares().length){
+            while (!(Board.getSquares()[indexOfSquares] instanceof Buyable)){
+                indexOfSquares++;
+            }
+            buttons[indexOfButtons++].setCoordinate(indexOfSquares++);
+        }   
+    }
+
+    
+    //for Easy grouping and access
     private class Commands extends JPanel implements ActionListener{
         private JTextArea message;
         private JPanel containerForLabel;
@@ -368,12 +556,12 @@ public class MainWindow extends JFrame implements ActionListener{
             
         }
     }
-   
+    
 
     public MainWindow(){
         super("Monopoly");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 700);
+        this.setSize(800, 700);                 //this.setSize(1300, 750);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
         // this.getContentPane().setBackground(new Color(64, 184, 182));
@@ -381,8 +569,14 @@ public class MainWindow extends JFrame implements ActionListener{
         //this.board = new JPanel();
         this.info = new JPanel();
         this.infoTop = new JPanel();
+        this.belongingsPanel = new JPanel();
         this.infoCenter = new JPanel();
         this.infoBottom = new JPanel();
+        this.popUpWindow = new CustomPopUp();
+        // popupFactory = new PopupFactory();
+        // popUp = popupFactory.getPopup(this, popUpWindow, 500, 500);
+        
+        //popUpWindow.setAlwaysOnTop(true);
         numOfNames = 1;
         
     
@@ -400,6 +594,9 @@ public class MainWindow extends JFrame implements ActionListener{
         JLabel mainLabel = new JLabel("Welcome to Alexander's and Anahit's Monopoly");
         // mainLabel.setFont(new Font("Futura", Font.ROMAN_BASELINE, 14));
         JPanel setUp = new JPanel();        //change
+        
+        //the array list of players that will be given to the game when it is initialized
+        ArrayList<Player> players = new ArrayList<>(); 
         
         //The names of the players
         JLabel namesLabel = new JLabel();
@@ -515,7 +712,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     private void setButtons(){
-        for (int i = 0; i < 40; i++){                   //need to change this back, they do not need direction for now
+        for (int i = 0; i < buttons.length; i++){                   //need to change this back, they do not need direction for now
             if (i > 0 && i < 10)
                 buttons[i] = new CustomButton(1);
             else if (i > 10 && i < 20)
@@ -548,13 +745,39 @@ public class MainWindow extends JFrame implements ActionListener{
             // if (i != 10 || i != 20 || i != 30 || i != 0)
             //     buttons[i].setText(Board.getSquares()[i].getTitle());
         }
+
+        //setButtonsColor(buttons);
         
     }
 
+    /*private void setButtonsColor(CustomButton[] buttons){
+        for (int i = 0; i < Buyable.COLORS.length; i++){
+            for (int j = 0; j < Buyable.COLORS[i].length; j++){
+                if (Buyable.COLORS[i][j] < buttons.length){
+                    switch(i){
+                        case 0:  buttons[Buyable.COLORS[i][j]].setColor(new Color(192, 57, 43));   break;
+                        case 3:  buttons[Buyable.COLORS[i][j]].setColor(new Color(76, 167, 236));  break;
+                        case 4:  buttons[Buyable.COLORS[i][j]].setColor(new Color(236, 76, 100));  break;
+                        case 5:  buttons[Buyable.COLORS[i][j]].setColor(new Color(255, 133, 51));  break;
+                        case 6:  buttons[Buyable.COLORS[i][j]].setColor(new Color(247, 73, 36));   break;
+                        case 7:  buttons[Buyable.COLORS[i][j]].setColor(new Color(255, 223, 19));  break;
+                        case 8:  buttons[Buyable.COLORS[i][j]].setColor(new Color(31, 136, 64));   break;
+                        case 9:  buttons[Buyable.COLORS[i][j]].setColor(new Color(31, 93, 136));   break;
+                    }
+                }
+            }
+        }
+    }*/
+
 
     //the board and the info
+
+
+
     private void setTheFlow(){
-        this.setSize(new Dimension(1200, 750));
+        this.setSize(new Dimension(1300, 750));
+        this.setLocationRelativeTo(null);
+
 
         Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
         this.setButtons();
@@ -614,7 +837,8 @@ public class MainWindow extends JFrame implements ActionListener{
 
     private void setUpInfo(){
 
-        this.titleDeed = new TitleDeeds(0);
+        this.titleDeed = new TitleDeeds();
+        titleDeed.setEverything(0);
         titleDeed.setPreferredSize(new Dimension(250, 250));
 
         //the components of commands
@@ -623,11 +847,17 @@ public class MainWindow extends JFrame implements ActionListener{
         info.setLayout(new BorderLayout());
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
         
-        infoTop.setSize(new Dimension(300, 600));
-        infoTop.setLayout(new GridLayout(numberOfPlayers, 1));
+        infoTop.setSize(new Dimension(300, 500));
+        //infoTop.setLayout(new GridLayout(2, 1, 0, 20));                           SOS changed
+        infoTop.setLayout(new BorderLayout(20, 20)); 
+
+        
+ 
+        //this.setButtonsColor(belongingButtons);
+        
        
         infoCenter.setSize(new Dimension(300, 600));
-        //infoCenter.setLayout(new FlowLayout());           //maybe another layout
+        infoCenter.setLayout(new GridBagLayout());           //TRYING
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
 
         infoCenter.add(titleDeed); //, BorderLayout.WEST
@@ -638,12 +868,18 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
         //infoTop
+        JPanel playersInfo = new JPanel();
+        playersInfo.setLayout(new GridLayout(numberOfPlayers, 1));      //in order to keep things compact
         playerInfo = new JLabel[numberOfPlayers];
         for (int i = 0; i < numberOfPlayers; i++){
             playerInfo[i] = new JLabel();
             //playerInfo[i].setFont(new Font("Serif", Font.ITALIC, 18));
-            infoTop.add(playerInfo[i]);
+            playersInfo.add(playerInfo[i]);
         }
+        setUpBelongings();
+        //containerOfBelongings.add(belongingsPanel);
+        infoTop.add(playersInfo, BorderLayout.NORTH);
+        infoTop.add(belongingsPanel, BorderLayout.SOUTH);
 
         setUpInfoTop();
         setUpInfoBottom();
@@ -652,18 +888,49 @@ public class MainWindow extends JFrame implements ActionListener{
         info.add(infoBottom, BorderLayout.SOUTH);
     }
 
+    private void setUpBelongings(){
+        belongingButtons = new BelongingButton[28];
+        belongingsPanel.setLayout(new GridLayout(3, 10, 10, 10));
 
-
+        belongingsPanel.setSize(new Dimension(200, 200));
+        
+        
+        for (int i = 0; i < belongingButtons.length; i++){
+                belongingButtons[i] = new BelongingButton();
+                
+        }
+        this.setCoordinatesOfBelongings(belongingButtons);
+    
+        for (int i = 0; i < belongingButtons.length; i++){
+            belongingButtons[i].setSize(new Dimension(10, 10));
+            belongingButtons[i].setColor(buttons[belongingButtons[i].getCoordinate()].getColor());
+            belongingsPanel.add(belongingButtons[i]);
+        }
+    }
     private void setUpInfoTop(){
         for (int i = 0; i < numberOfPlayers; i++){
-            
             playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());     //check
             if (Monopoly.getPlayers().get(i).equals(game.getActivePlayer()))
-                playerInfo[i].setFont(new Font("TimesRoman", Font.BOLD, 18));
+                playerInfo[i].setFont(new Font("TimesRoman", Font.BOLD, 14));
             else{
-                playerInfo[i].setFont(new Font("Monaco", Font.PLAIN, 18));
-
+                playerInfo[i].setFont(new Font("Monaco", Font.PLAIN, 14));
             }
+        }
+        updateBelongingsPane();
+        //infoTop.add(belongingsPanel);
+    }
+
+    private void updateBelongingsPane(){
+        for (int i = 0; i < belongingButtons.length; i++){
+            if (Board.getSquares()[belongingButtons[i].getCoordinate()] instanceof Buyable){        //check or exception handling
+                if (game.getActivePlayer().owns(belongingButtons[i].getCoordinate())){
+                    belongingButtons[i].setClickable(true);
+                }
+                else{
+                    belongingButtons[i].setClickable(false);
+                }
+            }
+            
         }
     }
 
@@ -754,10 +1021,6 @@ public class MainWindow extends JFrame implements ActionListener{
         done.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                // remove the old sprite
-                // buttons[game.getActivePlayerCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
-                // buttons[game.getActivePlayerCoordinate()].revalidate();
-                // buttons[game.getActivePlayerCoordinate()].repaint();
 
                 commands.setVisible(false);
                 // put the sprite at a new space
@@ -842,13 +1105,17 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     public void actionPerformed(ActionEvent e) {
-        for (int i = 0; i < 40; i++){
+        for (int i = 0; i < buttons.length; i++){
             if (e.getSource() == buttons[i]){
                 System.out.println("Square coordinate: " + i); 
                 titleDeed.setEverything(i);
                 break;
             }
         }
+
+        
+        
+
     }
 
 }

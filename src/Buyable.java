@@ -38,6 +38,18 @@ public abstract class Buyable extends Square
         }
     }
 
+    public boolean canBeMortgaged()
+    {
+        if (!this.isMortgaged() && this.owner != null)
+        {
+            if (this.getClass().getName() != "Property" || ((this.getClass().getName() == "Property" && !((Property)this).isImproved())))
+                return (true);
+        }
+        return (false);
+    }
+
+
+
     public void initializeAuction(Player starter)
     {
         System.out.println("Auction commenced.");

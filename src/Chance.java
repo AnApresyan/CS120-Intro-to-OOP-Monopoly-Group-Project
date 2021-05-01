@@ -192,7 +192,7 @@ public class Chance extends Deck
             activePlayer.receiveMoney(100);
             callDoAction = false;
         }
-        activePlayer.enterMortgageLoop(null);
+        //activePlayer.enterMortgageLoop(null);
 
     }
 

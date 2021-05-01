@@ -142,6 +142,29 @@ public class Monopoly
                                                     // Al: good idea, but let's leave it for later, if we have time 
     }
 
+    public void build(Square property){
+        if (property.getClass().getName().equals("Property"))
+            activePlayer.erectHouse((Property)property);
+    }
+
+    public void destroy(Square property){
+        if (property.getClass().getName().equals("Property"))
+            activePlayer.degradeProperty((Property)property);
+    }
+
+    public void mortgage(Square property){
+        if (property instanceof Buyable)
+            activePlayer.mortgageProperty((Buyable)property);
+    }
+
+    public void liftMortgage(Square property){
+        if(property instanceof Buyable){
+            activePlayer.liftMortgage((Buyable)property);
+        }
+    }
+
+
+
     public void play(){
         setMessage();   //just added
         

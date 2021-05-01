@@ -25,10 +25,10 @@ public class Player
 
     public int throwDice()
     {
-        this.dice[0] = (int)(Math.random() * 6) + 1;
-        this.dice[1] = (int)(Math.random() * 6) + 1;
-        // this.dice[0] = 1;
-        // this.dice[1] = 1;
+        // this.dice[0] = (int)(Math.random() * 6) + 1;
+        // this.dice[1] = (int)(Math.random() * 6) + 1;
+        this.dice[0] = 0;
+        this.dice[1] = 1;
 
         if (holdsDoubles())
             this.doublesInARow++;
@@ -61,7 +61,16 @@ public class Player
         }
     }
 
-    public void     liftMortgage()
+    public boolean owns(int coordinate){
+        for (Buyable property : belongings){
+            if (property.getCoordinate() == coordinate){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*public void     liftMortgage()
     {
         // Al: An, the corresponding button should be enabled only when there's a mortgaged prop in their 
         // belongings. please take care of that condition
@@ -84,9 +93,16 @@ public class Player
                     b.setIsMortgaged(false);
                 receiveMoney((int)(-(b.getPrice() / 2) * 1.1));
             }
+    }*/
+
+    public void liftMortgage(Buyable property){
+        if (property.isMortgaged()){
+            property.setIsMortgaged(false);
+            receiveMoney((int)(-(property.getPrice() / 2) * 1.1));
+        }
     }
 
-    public void     erectHouse()
+    /*public void     erectHouse()
     {
         ArrayList<Buyable>  canBeImproved = new ArrayList<>();
         System.out.println("Please enter a property coordinate to build a house on:");
@@ -115,7 +131,18 @@ public class Player
                 break ;
             }
         }
+    }*/
+
+        
+    public void   erectHouse(Property property)
+    {
+        if (property.canBeImproved()){
+            property.buildHouse();
+        }
     }
+
+    
+
 
     public void     destroyHouse()
     {
@@ -268,11 +295,12 @@ public class Player
     public void rentProperty(Buyable property)
     {
         this.money -= property.getRent();
-        enterMortgageLoop(property.getOwner());
+        //enterMortgageLoop(property.getOwner());
+        System.out.println("You need to mortgage a house or build or ...");
     }
 
     // TESTED by Al
-    public void enterMortgageLoop(Player owner)
+    /*public void enterMortgageLoop(Player owner)
     {
         if (this.money < 0)
             System.out.println("Your balance is negative. Entered a mortgage loop.");
@@ -323,7 +351,7 @@ public class Player
             if (this.money >= 0)
                 System.out.println("You have managed to pay your debt off.");
         }
-    }
+    }*/
 
     // Al: has to undergo major testing: not safe for use!
     public void initializeTrade()
@@ -438,22 +466,19 @@ public class Player
                 Monopoly.getPlayers().remove(p);
     }
 
-    // TESTED by Al
-    public void mortgageProperty(int coord)
+    // TESTED by Al     (changed by An)
+    public void mortgageProperty(Buyable property)
     {
-        for (Buyable belonging : belongings)
-        {
-            if (belonging.getCoordinate() == coord)
-            {
-                this.money += (belonging.getPrice() / 2);
-                belonging.setIsMortgaged(true);
+        if (property.getOwner().equals(this)){
+            if (property.canBeMortgaged()){
+                this.money += (property.getPrice() / 2);
+                property.setIsMortgaged(true);
             }
         }
-        System.out.println("Mortgaged a property under coord " + coord);
     }
 
     // TESTED by Al
-    public void degradeProperty(int coord)
+    /*public void degradeProperty(int coord)
     {
         for (Buyable belonging : belongings)
         {
@@ -461,6 +486,15 @@ public class Player
             {
                 System.out.println(belonging + " has been degraded.");
                 ((Property) belonging).sellHouse();
+            }
+        }
+    }*/
+
+    //An:
+    public void degradeProperty(Property property){
+        if (property.getOwner().equals(this)){                  //check the owner in all the methods of popUp
+            if(property.getHouses() > 0){
+                property.sellHouse();
             }
         }
     }
@@ -489,26 +523,26 @@ public class Player
     }
 
     // TESTED by An
-    public boolean canBeMortgaged(Buyable belonging)
-    {
-        if (!belonging.isMortgaged())
-        {
-            if (belonging.getClass().getName() != "Property" || (belonging.getClass().getName() == "Property" && !((Property)belonging).isImproved()))
-                return (true);
-        }
-        return (false);
-    }
+    // public boolean canBeMortgaged(Buyable belonging)
+    // {
+    //     if (!belonging.isMortgaged())
+    //     {
+    //         if (belonging.getClass().getName() != "Property" || (belonging.getClass().getName() == "Property" && !((Property)belonging).isImproved()))
+    //             return (true);
+    //     }
+    //     return (false);
+    // }
 
     // TESTED by An
-    public boolean canBeMortgaged(int coordinate)
-    {
-        for (Buyable belonging : belongings)
-        {
-            if (belonging.getCoordinate() == coordinate && canBeMortgaged(belonging))
-                return (true);
-        }
-        return (false);
-    }
+    // public boolean canBeMortgaged(int coordinate)
+    // {
+    //     for (Buyable belonging : belongings)
+    //     {
+    //         if (belonging.getCoordinate() == coordinate && canBeMortgaged(belonging))
+    //             return (true);
+    //     }
+    //     return (false);
+    // }
 
     // TESTED by An
     public boolean equals(Object obj)

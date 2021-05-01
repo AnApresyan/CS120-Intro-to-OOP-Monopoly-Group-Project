@@ -31,6 +31,8 @@ public class Property extends Buyable
         return (false);
     }
 
+
+
     public int getRent()
     {
         if (this.getOwner() != null){
@@ -73,6 +75,14 @@ public class Property extends Buyable
     public int  getHousePrice()
     {
         return (housePrice);
+    }
+
+    public boolean canBeImproved(){                                                     //JUST ADDED
+        if (this.getOwner() == null)
+            return false;
+        if (this.getOwner().doesOwnAllProps(this) && !(this.getOwner().hasMortgagedPropertydInASet(this)))
+            return true;
+        return false;
     }
 
     public String toString()

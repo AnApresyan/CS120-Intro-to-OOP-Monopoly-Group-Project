@@ -111,7 +111,7 @@ public class Jail extends Square
                 System.out.println("You failed to roll doubles. See you on the next turn!");
                 activePlayer.setDaysInJail(activePlayer.getDaysInJail() + 1);
             }*/
-            activePlayer.enterMortgageLoop(null);
+            //activePlayer.enterMortgageLoop(null);
             
         }
         
