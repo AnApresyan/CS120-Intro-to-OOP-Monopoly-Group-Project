@@ -14,6 +14,8 @@ public class Utility extends Buyable
 
     public int getRent() 
     {
+        if (isMortgaged())
+            return (0);
         if (this.getOwner() != null)
         {
             if (this.getOwner().ownsOfThisColor(this) == 1)

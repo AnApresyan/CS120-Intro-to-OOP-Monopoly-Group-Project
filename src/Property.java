@@ -35,7 +35,10 @@ public class Property extends Buyable
 
     public int getRent()
     {
-        if (this.getOwner() != null){
+        if (isMortgaged())
+            return (0);
+        if (this.getOwner() != null)
+        {
             if (houses == 0 & getOwner().doesOwnAllProps(this))
             return (2 * rents[0]);
         }
@@ -77,12 +80,13 @@ public class Property extends Buyable
         return (housePrice);
     }
 
-    public boolean canBeImproved(){                                                     //JUST ADDED
+    public boolean canBeImproved()
+    {                                                     //JUST ADDED
         if (this.getOwner() == null)
-            return false;
-        if (this.getOwner().doesOwnAllProps(this) && !(this.getOwner().hasMortgagedPropertydInASet(this)))
-            return true;
-        return false;
+            return (false);
+        if (this.getOwner().doesOwnAllProps(this) && !(this.getOwner().hasMortgagedPropertydInASet(this)) && houses < 5)
+            return (true);
+        return (false);
     }
 
     public String toString()

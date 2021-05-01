@@ -126,16 +126,40 @@ import java.util.ArrayList;
  * An:
  * 3) merged GoToJail class with GOTaxFree class;
  * 
- * MONOPOLY 1.0.2
+ * MONOPOLY 1.0.2           04/29/2021
+ * Al:
+ * 1) implememted the sprites (RAW);
  * An:
- * 1)implemented a panel for the owned properties
+ * 2) changed the size of certain windows and edited the spacing.
+ * 3) reworked the MainWindow and Monopoly classes so that Monopoly is the game manager now;
+ * 4) the logic now is evenly implemented both in MainWindow and in Monopoly.
+ * 
+ * MONOPOLY 1.0.3           04/30/2021
+ * An:
+ * 1) properly connected "Lift Mortgage", "Mortgage", "Buy House", "Sell House" to the interface.
+ * 
+ * MONOPOLY 1.0.4           05/01/2021
+ * An:
+ * 1) implemented a panel for the owned properties
  * 2) a popUpWIndow each time a button from that panel is clicked will show up with different options
  * 3) I don't completely remember the methods I changed, but I commented the 
  *    loops for build/destroy houses and mortgage/liftMortgage
  * 4) Instead, added/changed those methods, as well as the methods canBeImproved, canBeMortgaged and the others
  * 5) Moved some of the methods from Player to the Property or Buyable, such as canBeImproved, etc, because it's not 
  *    the player who can be improved, but the property:D
- * 6) Please appreciate my work, thanks:D
+ * 6) Please appreciate my work, thanks:D   // Al: done. you cannot believe what pleasure it is to work with you in a team. love you endlessly <3
+ * Al:
+ * 7) info in the window pop-ups is now more detailed (mortgage state, houses, housePrice added);
+ * 8) fixed an issue causing the title deeds not be refreshed after a button in the pop-ups is pressed;
+ * 9) fixed an issue causing Erect House button stay active after 5 houses have been built;
+ * 10) numberOfPlayers is now correctly accessed and refreshed;
+ * 
+ * KNOWN ISSUES:
+ * 1. Player 1 can pass the turn right away because Done is active from the beginning
+ * 2. sometimes sprites disappear after an interaction with Chance&Chest
+ * 3. after a Chance&Chest interaction, Done is NOT disabled until confirmation of card is pressed
+ * 4. when receiving YES/NO upon landing on a Buyable, Done is NOT disabled
+ * 5. have we made it so if a buyable is mortgaged then the rent is 0?
  */
 public class Monopoly 
 {
@@ -174,8 +198,6 @@ public class Monopoly
         }
     }
 
-
-
     public void play(){
         setMessage();   //just added
         
@@ -199,10 +221,12 @@ public class Monopoly
 
 
 
-    public boolean ifPlayerIsPrisoned(){
+    public boolean ifPlayerIsPrisoned()
+    {
         System.out.println(activePlayer.isPrisoned());
         return activePlayer.isPrisoned();
     }
+
     public void setMessage(){
         if (activePlayer.getCoordinate() == 10){
             ((Jail)Board.getSquares()[activePlayer.getCoordinate()]).checkTheStateSetMessage(activePlayer);
@@ -307,15 +331,20 @@ public class Monopoly
     }
 
     public int getActivePlayerCoordinate(){
-        return activePlayer.getCoordinate();
+        return (this.activePlayer.getCoordinate());
     }
 
     public Player getActivePlayer(){
-        return this.activePlayer;
+        return (this.activePlayer);
     }
 
     public int getActivePlayerIndex()
     {
-        return (indexOfPlayer);
+        return (this.indexOfPlayer);
+    }
+
+    public int  getNumberOfPlayers()
+    {
+        return (players.size());
     }
 }

@@ -95,8 +95,10 @@ public class Player
             }
     }*/
 
-    public void liftMortgage(Buyable property){
-        if (property.isMortgaged()){
+    public void liftMortgage(Buyable property)
+    {
+        if (property.isMortgaged())
+        {
             property.setIsMortgaged(false);
             receiveMoney((int)(-(property.getPrice() / 2) * 1.1));
         }
@@ -136,13 +138,9 @@ public class Player
         
     public void   erectHouse(Property property)
     {
-        if (property.canBeImproved()){
+        if (property.canBeImproved())
             property.buildHouse();
-        }
     }
-
-    
-
 
     public void     destroyHouse()
     {

@@ -17,7 +17,6 @@ public abstract class Buyable extends Square
 
     public abstract int getRent();
 
-    // TESTED by Al
     public void doAction(Player activePlayer)
     {
         if (this.owner == null)
@@ -25,7 +24,9 @@ public abstract class Buyable extends Square
             //System.out.println("You landed on an unowned land!");
             if (wantsToBuy)
                 activePlayer.buyProperty(this);
-            
+            else
+                System.out.println("AUCTION TIMEE!!!");
+                // this.initializeAuction(activePlayer);
         }
         else
         {
@@ -53,11 +54,14 @@ public abstract class Buyable extends Square
     public void initializeAuction(Player starter)
     {
         System.out.println("Auction commenced.");
+        
         ArrayList<Player> bidders = new ArrayList<>();
         bidders.add(starter);
+
         for (Player p : Monopoly.getPlayers())
             if (p.equals(starter))
                 bidders.add(p);
+
         int index = 0;
         int lowEnd = 1;
         int highEnd;
@@ -120,15 +124,17 @@ public abstract class Buyable extends Square
     {
         return (this.owner);
     }
-    public void setWantsToBuy(boolean wantsToBuy){
+
+    public void setWantsToBuy(boolean wantsToBuy)
+    {
         this.wantsToBuy = wantsToBuy;
     }
 
-    public void setMessage(Player activPlayer){
-        if (this.owner != null && this.owner.equals(activPlayer)){
+    public void setMessage(Player activePlayer){
+        if (this.owner != null && this.owner.equals(activePlayer)){
             this.message = "Enjoy being in your properties";
         }
-        else if (this.owner != null && !this.owner.equals(activPlayer)){
+        else if (this.owner != null && !this.owner.equals(activePlayer)){
 
             this.message = "You pay $" + this.getRent() + " rent.";
         }
@@ -136,9 +142,9 @@ public abstract class Buyable extends Square
            this.message =  "You landed on an unowned property. Do you want to buy it?";
         }
     }
-    public String getMessage(){
 
-        return this.message;
-
+    public String getMessage()
+    {
+        return (this.message);
     }
 }

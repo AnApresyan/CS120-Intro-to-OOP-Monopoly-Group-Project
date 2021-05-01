@@ -25,7 +25,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private JPanel right;
     private JPanel bottom;
     private JPanel center;
-    private TitleDeeds titleDeed;
+    private TitleDeed titleDeed;
 
     private int numOfNames;             //maybe not needed idk
 
@@ -55,10 +55,49 @@ public class MainWindow extends JFrame implements ActionListener{
     private PopupFactory    popupFactory;
     private Popup           popUp;
     private CustomPopUp     popUpWindow;
-    
+    // private AuctionPopUp    popUpAuction;
 
-    private class CustomPopUp extends JPanel implements ActionListener{
-        private TitleDeeds  titleDeed;
+    // private class AuctionPopUp extends JPanel implements ActionListener
+    // {
+    //     private JPanel              biddersPanel;
+    //     private ArrayList<JLabel>   bidders = new ArrayList<>();
+    //     private JPanel              slider;
+    //     private JPanel              auctionButtons;
+    //     private JButton             confirm;
+    //     private JButton             giveUp;
+
+    //     private AuctionPopUp()
+    //     {
+    //         this.setLayout(new BorderLayout());
+    //         this.setSize(new Dimension(350, 450));
+
+    //         this.biddersPanel = new JPanel();
+    //         this.biddersPanel.setLayout(new GridLayout(game.getNumberOfPlayers(), 1));      //in order to keep things compact
+    //         for (int i = 0; i < game.getNumberOfPlayers(); i++)
+    //         {
+    //             playerInfo[i] = new JLabel();
+    //             //playerInfo[i].setFont(new Font("Serif", Font.ITALIC, 18));
+    //             playersInfo.add(playerInfo[i]);
+    //         }
+
+    //     }
+
+    //     private void refreshPlayersInfo()
+    //     {
+    //         for (int i = 0; i < game.getNumberOfPlayers(); i++)
+    //         {
+    //             playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());     //check
+    //             if (Monopoly.getPlayers().get(i).equals(game.getActivePlayer()))
+    //                 playerInfo[i].setFont(new Font("TimesRoman", Font.BOLD, 14));
+    //             else
+    //                 playerInfo[i].setFont(new Font("Monaco", Font.PLAIN, 14));
+    //         }
+    //     }
+    // }
+
+    private class CustomPopUp extends JPanel implements ActionListener
+    {
+        private TitleDeed   titleDeed;
         private JPanel      popUpButtons;
         private JButton     build;
         private JButton     destroy;
@@ -66,20 +105,20 @@ public class MainWindow extends JFrame implements ActionListener{
         private JButton     liftMortgage;
         private int         coordinate;
         
-        private CustomPopUp(){
-            
+        private CustomPopUp()
+        {
             this.setLayout(new BorderLayout());
             this.setSize(new Dimension(350, 450));
-            this.titleDeed = new TitleDeeds();
+            this.titleDeed = new TitleDeed();
             this.titleDeed.setSize(new Dimension(300, 300));
         
-            //button oanel
+            //button panel
             this.popUpButtons = new JPanel();
             this.popUpButtons.setLayout(new GridLayout(2, 2, 5, 5));
     
-            this.build = new JButton("Build");
-            this.destroy = new JButton("Destroy");
-            this.mortgage = new JButton("Mortgage");
+            this.build = new JButton("Erect House");
+            this.destroy = new JButton("Destroy House");
+            this.mortgage = new JButton("Mortgage Property");
             this.liftMortgage = new JButton("Lift Mortgage");
             build.addActionListener(this);
             destroy.addActionListener(this);
@@ -95,16 +134,20 @@ public class MainWindow extends JFrame implements ActionListener{
             this.add(titleDeed, BorderLayout.NORTH);
             this.add(popUpButtons, BorderLayout.CENTER);
         }
-        private void updatePopUp(int coordinate){
+
+        private void updatePopUp(int coordinate)
+        {
             if (!(Board.getSquares()[coordinate] instanceof Buyable))
-                return;
+                return ;
             this.coordinate = coordinate;
             this.titleDeed.setEverything(coordinate);
             this.updateButtons(coordinate);
         }
 
-        public void updateButtons(int coordinate){
-            if (Board.getSquares()[coordinate].getClass().getName().equals("Property")){
+        public void updateButtons(int coordinate)
+        {
+            if (Board.getSquares()[coordinate].getClass().getName().equals("Property"))
+            {
                 if (((Property)Board.getSquares()[coordinate]).canBeImproved())
                     build.setEnabled(true);
                 else
@@ -114,7 +157,8 @@ public class MainWindow extends JFrame implements ActionListener{
                 else
                     destroy.setEnabled(false);
             }
-            else{
+            else
+            {
                 build.setEnabled(false);
                 destroy.setEnabled(false);
             }
@@ -131,95 +175,138 @@ public class MainWindow extends JFrame implements ActionListener{
         }
         
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
             if (this.coordinate > Board.getSquares().length)                //or maybe exception
-                return;
-            if (e.getSource() == build){
+                return ;
+
+            if (e.getSource() == build)
                 game.build(Board.getSquares()[coordinate]);
-                
-            }
-
-            else if (e.getSource() == destroy){
+            else if (e.getSource() == destroy)
                 game.destroy(Board.getSquares()[coordinate]);
-            }
-
-            else if (e.getSource() == mortgage){
+            else if (e.getSource() == mortgage)
                 game.mortgage(Board.getSquares()[coordinate]);
-            }
-            else if (e.getSource() == liftMortgage){
+            else if (e.getSource() == liftMortgage)
                 game.liftMortgage(Board.getSquares()[coordinate]);
-            }
 
+            MainWindow.this.titleDeed.setEverything(this.coordinate);
             updateButtons(this.coordinate);
-            setUpInfoTop();
-            
+            updatePopUp(this.coordinate);
+            setUpInfoTop();   
         }
     }
 
      
-    private class TitleDeeds extends JPanel{
-        private JLabel titleOfDeed;
-        private JLabel priceOfDeed;
-        private JLabel ownerNameOfDeed;
-        private JLabel rentOfDeed;
+    private class TitleDeed extends JPanel
+    {
+        private JLabel  titleOfDeed;
+        private JLabel  priceOfDeed;
+        private JLabel  ownerNameOfDeed;
+        private JLabel  rentOfDeed;
+        private JLabel  housePriceOfDeed;
+        private JLabel  housesOfDeed;
+        private JLabel  isMortgagedOfDeed;
         //private JLabel mortgageValue;
 
-        private TitleDeeds(){
+        private TitleDeed()
+        {
             super();
             this.titleOfDeed = new JLabel();
             this.priceOfDeed = new JLabel();
             this.ownerNameOfDeed = new JLabel();
             this.rentOfDeed = new JLabel();
+            this.housePriceOfDeed = new JLabel();
+            this.isMortgagedOfDeed = new JLabel();
+            this.housesOfDeed = new JLabel();
 
             this.setLayout(new GridLayout(10, 1));
             //this.setPreferredSize(new Dimension(150, 200));
             //this.setBorder(BorderFactory.createLineBorder(Color.black));
             this.add(titleOfDeed);
             this.add(priceOfDeed);
-            this.add(rentOfDeed);
+            this.add(isMortgagedOfDeed);
             this.add(ownerNameOfDeed);
+            this.add(rentOfDeed);
+            this.add(housePriceOfDeed);
+            this.add(housesOfDeed);
             // this.setBackground(Color.GRAY);
             // this.setOpaque(true);
         }
-        // private TitleDeeds(){
+        // private TitleDeed(){
         //     super();
         // }
 
-        private void setEverything(int i){
+        private void setEverything(int i)
+        {
             setEmpty();
             setTilteOfDeed(Board.getSquares()[i].getTitle());
-            if(Board.getSquares()[i] instanceof Buyable){
+            if(Board.getSquares()[i] instanceof Buyable)
+            {
                 setPriceOfDeed(((Buyable)Board.getSquares()[i]).getPrice());
-                setRentOfDeed(((Buyable)Board.getSquares()[i]).getRent());
+                if (Board.getSquares()[i].getClass().getName().equals("Property"))
+                {
+                    setHousePriceOfDeed(((Property)Board.getSquares()[i]).getHousePrice());
+                    setHousesOfDeed(((Property)Board.getSquares()[i]).getHouses());
+                }
+                if (!(Board.getSquares()[i].getClass().getName().equals("Utility")))
+                    setRentOfDeed(((Buyable)Board.getSquares()[i]).getRent());
+                setIsMortgagedOfDeed(((Buyable)Board.getSquares()[i]).isMortgaged());
                 if (((Buyable)Board.getSquares()[i]).getOwner() != null)
                     setOwnerNameOfDeed(((Buyable)Board.getSquares()[i]).getOwner().getName());
-                
+                else
+                    setOwnerNameOfDeed("none");
             }
 
 
         }
-        private void setEmpty(){
+        private void setEmpty()
+        {
             this.priceOfDeed.setText("");
             this.ownerNameOfDeed.setText("");
             this.rentOfDeed.setText("");
+            this.isMortgagedOfDeed.setText("");
+            this.housePriceOfDeed.setText("");
+            this.housesOfDeed.setText("");
         }
-        private void setTilteOfDeed(String title){
+
+        private void setTilteOfDeed(String title)
+        {
             this.titleOfDeed.setText(title);
         }
-        private void setPriceOfDeed(int price){
-            this.priceOfDeed.setText("Price: " + price);
+
+        private void setPriceOfDeed(int price)
+        {
+            this.priceOfDeed.setText("Price: $" + price);
         }
-        private void setOwnerNameOfDeed(String ownerName){
+
+        private void setOwnerNameOfDeed(String ownerName)
+        {
             this.ownerNameOfDeed.setText("Owner: " + ownerName);
         }
 
-        private void setRentOfDeed(int rent){
-            this.rentOfDeed.setText("Rent: " + rent + " $");
+        private void setRentOfDeed(int rent)
+        {
+            this.rentOfDeed.setText("Current rent: $" + rent);
         }
 
+        private void setIsMortgagedOfDeed(boolean state)
+        {
+            this.isMortgagedOfDeed.setText("Is mortgaged? " + state);
+        }
+
+        private void setHousesOfDeed(int houses)
+        {
+            this.housesOfDeed.setText("Houses built: " + houses);
+        }
+
+        private void setHousePriceOfDeed(int housePrice)
+        {
+            this.housePriceOfDeed.setText("Houses cost $" + housePrice + " each");
+        }
     }
    
-    private class CustomButton extends JButton{
+    private class CustomButton extends JButton
+    {
         protected Color color;
         protected int direction;
 
@@ -257,9 +344,11 @@ public class MainWindow extends JFrame implements ActionListener{
     
     }   
     
-    private class BelongingButton extends CustomButton implements ActionListener{
+    private class BelongingButton extends CustomButton implements ActionListener
+    {
         private int coordinate;
-        private BelongingButton(){
+        private BelongingButton()
+        {
             super();
             this.setFocusable(false);
             this.addActionListener(this);
@@ -303,13 +392,15 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
             if (belongingButtons.length > Board.getSquares().length)        //Checking not to have an exception
-                return;
+                return ;
             for (int i = 0; i < belongingButtons.length; i++){
-                if(e.getSource() == belongingButtons[i]){
+                if (e.getSource() == belongingButtons[i])
+                {
                     popUpWindow.updatePopUp(belongingButtons[i].getCoordinate());
-                    JOptionPane.showMessageDialog(null, popUpWindow, "Build/Destroy", JOptionPane.PLAIN_MESSAGE);;
+                    JOptionPane.showMessageDialog(null, popUpWindow, "Title Deed", JOptionPane.PLAIN_MESSAGE);;
                 }
             }        
             
@@ -318,7 +409,8 @@ public class MainWindow extends JFrame implements ActionListener{
         
     }
 
-    private void setCoordinatesOfBelongings(BelongingButton[] buttons){
+    private void setCoordinatesOfBelongings(BelongingButton[] buttons)
+    {
         int indexOfButtons = 0;
         int indexOfSquares = 0;
         while (indexOfButtons < buttons.length && indexOfSquares < Board.getSquares().length){
@@ -331,7 +423,8 @@ public class MainWindow extends JFrame implements ActionListener{
 
     
     //for Easy grouping and access
-    private class Commands extends JPanel implements ActionListener{
+    private class Commands extends JPanel implements ActionListener
+    {
         private JTextArea message;
         private JPanel containerForLabel;
 
@@ -354,7 +447,8 @@ public class MainWindow extends JFrame implements ActionListener{
         private JButton useTheCard;
 
 
-        private Commands(){
+        private Commands()
+        {
             //BoxLayout theLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
            // this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -406,11 +500,10 @@ public class MainWindow extends JFrame implements ActionListener{
             containerForLabel.add(message);
             this.add(containerForLabel);
             this.add(button);
-            
-
         }
 
-        private void setAllButtonsVisible(boolean bool){
+        private void setAllButtonsVisible(boolean bool)
+        {
             this.yes.setVisible(bool);
             this.no.setVisible(bool);
             this.ok.setVisible(bool);
@@ -420,12 +513,14 @@ public class MainWindow extends JFrame implements ActionListener{
             this.useTheCard.setVisible(bool);
         }
 
-        public void setVisible(boolean bool){
+        public void setVisible(boolean bool)
+        {
             this.message.setVisible(bool);
             this.setAllButtonsVisible(bool);
         }
 
-        private void setBuyable(){
+        private void setBuyable()
+        {
             if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable))
                 return;
             
@@ -434,14 +529,17 @@ public class MainWindow extends JFrame implements ActionListener{
             this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
             this.message.setVisible(true);
             //game.play();
-            if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() == null){
+            if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() == null)
+            {
                 this.yes.setVisible(true);
+                if (game.getActivePlayer().getMoney() < ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getPrice())
+                    this.yes.setEnabled(false);
                 this.no.setVisible(true);
             }
             
         }
 
-        private void setCusomCards(){
+        private void setCustomCards(){
             if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck)){
                 return;
             }
@@ -490,16 +588,19 @@ public class MainWindow extends JFrame implements ActionListener{
             
         }
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
             setAllButtonsVisible(false);
-            if (e.getSource() == yes){
+            if (e.getSource() == yes)
+            {
                 //((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(true);  JUST REMOVED FOR TESTING
                 
                 //Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
                 game.play(true);
                 this.setVisible(false);
             }
-            else if (e.getSource() == no){
+            else if (e.getSource() == no)
+            {
                // ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(false);     //JUST REMOVED FOR TESTING
                 //Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
                 ///need to open the auction part
@@ -771,17 +872,16 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     //the board and the info
-
-
-
-    private void setTheFlow(){
+    private void setTheFlow()
+    {
         this.setSize(new Dimension(1300, 750));
         this.setLocationRelativeTo(null);
 
 
         Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
         this.setButtons();
-        for (int i = 0; i < 40; i++){
+        for (int i = 0; i < 40; i++)
+        {
             buttons[i].addActionListener(this);
             buttons[i].setBackground(Color.white);
             buttons[i].setBorder(border);
@@ -837,7 +937,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
     private void setUpInfo(){
 
-        this.titleDeed = new TitleDeeds();
+        this.titleDeed = new TitleDeed();
         titleDeed.setEverything(0);
         titleDeed.setPreferredSize(new Dimension(250, 250));
 
@@ -869,9 +969,9 @@ public class MainWindow extends JFrame implements ActionListener{
 
         //infoTop
         JPanel playersInfo = new JPanel();
-        playersInfo.setLayout(new GridLayout(numberOfPlayers, 1));      //in order to keep things compact
-        playerInfo = new JLabel[numberOfPlayers];
-        for (int i = 0; i < numberOfPlayers; i++){
+        playersInfo.setLayout(new GridLayout(game.getNumberOfPlayers(), 1));      //in order to keep things compact
+        playerInfo = new JLabel[game.getNumberOfPlayers()];
+        for (int i = 0; i < game.getNumberOfPlayers(); i++){
             playerInfo[i] = new JLabel();
             //playerInfo[i].setFont(new Font("Serif", Font.ITALIC, 18));
             playersInfo.add(playerInfo[i]);
@@ -888,49 +988,51 @@ public class MainWindow extends JFrame implements ActionListener{
         info.add(infoBottom, BorderLayout.SOUTH);
     }
 
-    private void setUpBelongings(){
+    private void setUpBelongings()
+    {
         belongingButtons = new BelongingButton[28];
         belongingsPanel.setLayout(new GridLayout(3, 10, 10, 10));
 
         belongingsPanel.setSize(new Dimension(200, 200));
         
         
-        for (int i = 0; i < belongingButtons.length; i++){
+        for (int i = 0; i < belongingButtons.length; i++)
                 belongingButtons[i] = new BelongingButton();
-                
-        }
+
         this.setCoordinatesOfBelongings(belongingButtons);
     
-        for (int i = 0; i < belongingButtons.length; i++){
+        for (int i = 0; i < belongingButtons.length; i++)
+        {
             belongingButtons[i].setSize(new Dimension(10, 10));
             belongingButtons[i].setColor(buttons[belongingButtons[i].getCoordinate()].getColor());
             belongingsPanel.add(belongingButtons[i]);
         }
     }
-    private void setUpInfoTop(){
-        for (int i = 0; i < numberOfPlayers; i++){
+
+    private void setUpInfoTop()
+    {
+        for (int i = 0; i < game.getNumberOfPlayers(); i++)
+        {
             playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());     //check
             if (Monopoly.getPlayers().get(i).equals(game.getActivePlayer()))
                 playerInfo[i].setFont(new Font("TimesRoman", Font.BOLD, 14));
-            else{
+            else
                 playerInfo[i].setFont(new Font("Monaco", Font.PLAIN, 14));
-            }
         }
         updateBelongingsPane();
         //infoTop.add(belongingsPanel);
     }
 
-    private void updateBelongingsPane(){
-        for (int i = 0; i < belongingButtons.length; i++){
+    private void updateBelongingsPane()
+    {
+        for (int i = 0; i < belongingButtons.length; i++)
+        {
             if (Board.getSquares()[belongingButtons[i].getCoordinate()] instanceof Buyable){        //check or exception handling
-                if (game.getActivePlayer().owns(belongingButtons[i].getCoordinate())){
+                if (game.getActivePlayer().owns(belongingButtons[i].getCoordinate()))
                     belongingButtons[i].setClickable(true);
-                }
-                else{
+                else
                     belongingButtons[i].setClickable(false);
-                }
             }
-            
         }
     }
 
@@ -942,7 +1044,7 @@ public class MainWindow extends JFrame implements ActionListener{
             this.commands.setBuyable();
         }
         else if (Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck){
-            this.commands.setCusomCards();
+            this.commands.setCustomCards();
         }
         else if (Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("GOTaxFree")){
             this.commands.setGoTaxFree();
@@ -1104,18 +1206,16 @@ public class MainWindow extends JFrame implements ActionListener{
     }
 
 
-    public void actionPerformed(ActionEvent e) {
-        for (int i = 0; i < buttons.length; i++){
-            if (e.getSource() == buttons[i]){
+    public void actionPerformed(ActionEvent e)
+    {
+        for (int i = 0; i < buttons.length; i++)
+        {
+            if (e.getSource() == buttons[i])
+            {
                 System.out.println("Square coordinate: " + i); 
                 titleDeed.setEverything(i);
                 break;
             }
         }
-
-        
-        
-
     }
-
 }
