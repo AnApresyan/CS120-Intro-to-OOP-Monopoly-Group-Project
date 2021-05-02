@@ -388,10 +388,10 @@ public class Monopoly
     public void setBidders(int coordinate)
     {
         bidders = new ArrayList<>();
-        if (this.activeBidder.getMoney() >= ((Buyable) Board.getSquares()[coordinate]).getPrice())
-            bidders.add(this.activeBidder);
+        //if (this.activeBidder.getMoney() >= ((Buyable) Board.getSquares()[coordinate]).getPrice())
+        bidders.add(this.activeBidder);
         for (Player p : players)
-            if (!(p.equals(this.activeBidder)) && this.activeBidder.getMoney() >= ((Buyable) Board.getSquares()[coordinate]).getPrice())
+            if (!(p.equals(this.activeBidder)))
                 bidders.add(p);
         // Al: testing
         System.out.println("the bidders:");

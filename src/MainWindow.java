@@ -251,7 +251,7 @@ public class MainWindow extends JFrame implements ActionListener{
             this.popUpButtons.add(mortgage);
             this.popUpButtons.add(liftMortgage);
 
-            this.add(titleDeed, BorderLayout.NORTH);
+            this.add(titleDeedPopUp, BorderLayout.NORTH);
             this.add(popUpButtons, BorderLayout.CENTER);
         }
 
