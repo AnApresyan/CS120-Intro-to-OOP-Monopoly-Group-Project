@@ -20,7 +20,7 @@ public class Player
         setName(name);
         this.coordinate = 0;
         this.daysInJail = 1;
-        this.money = 20;        //1500  
+        this.money = 120;        //1500  
                 // Al: FOR TESTING
         if (name.equals("bum"))
             this.money = 10;       

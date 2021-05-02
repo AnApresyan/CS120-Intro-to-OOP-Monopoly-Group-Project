@@ -333,11 +333,14 @@ public class Monopoly
             }
             
             
-            if (players.size() == 1)
-                System.out.println("Game Over");
+            
                 //break;
     //     }
     //     System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
+     }
+
+     public boolean activePlayerWon(){
+        return (players.size() == 1);
      }
 
      public boolean getMoveToJail(){

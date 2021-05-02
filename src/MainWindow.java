@@ -654,11 +654,15 @@ public class MainWindow extends JFrame implements ActionListener{
             if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() == null)
             {
                 this.yes.setVisible(true);
+                this.no.setVisible(true);
                 if (game.getActivePlayer().getMoney() < ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getPrice())
                     this.yes.setEnabled(false);
                 else   
                     this.yes.setEnabled(true);
-                this.no.setVisible(true);
+                
+            }
+            else{
+                
             }
             setTheState();
             
@@ -1215,6 +1219,7 @@ public class MainWindow extends JFrame implements ActionListener{
         //infoTop.add(belongingsPanel);
     }
 
+
     private void updateBelongingsPane()
     {
         for (int i = 0; i < belongingButtons.length; i++)
@@ -1296,11 +1301,14 @@ public class MainWindow extends JFrame implements ActionListener{
                     return;
                 }
                 game.startGame();
-                if (!game.ifPlayerHoldsDoubles()){      //moved to After doAction is complete
-                    //System.out.println("Holds doubles");
-                    throwDice.setEnabled(false);
-                    done.setEnabled(true);
-                }   
+
+                throwDice.setEnabled(false);            //JUST ADDED
+
+                // if (!game.ifPlayerHoldsDoubles()){      //moved to After doAction is complete
+                //     //System.out.println("Holds doubles");
+                //     throwDice.setEnabled(false);
+                //     done.setEnabled(true);
+                // }   
                 if (game.getMoveToJail()){
                     return;
                 }
@@ -1317,11 +1325,19 @@ public class MainWindow extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                /*if (!game.getActivePlayerState())
+                     game.removePlayer();*/
+                
+
                 commands.setVisible(false);
                 // put the sprite at a new space
                 buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
                 
                 game.changePlayer();
+                /*if (game.activePlayerWon()){
+                    new Winwindow(game.getActivePlayer);
+                    dispose();
+                }*/
                 done.setEnabled(false);
                 titleDeed.setEverything(game.getActivePlayerCoordinate());
                 throwDice.setEnabled(true);
