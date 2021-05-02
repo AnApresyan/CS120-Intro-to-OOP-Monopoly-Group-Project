@@ -38,7 +38,8 @@ public class MainWindow extends JFrame implements ActionListener{
     private JPanel infoBottom;
 
     //infoTop
-    private JLabel[] playerInfo;
+    private ArrayList<JLabel>   playersLabels = new ArrayList<>();
+    private JPanel playersInfo;
 
     //infoCenter
     private Commands commands;
@@ -198,7 +199,10 @@ public class MainWindow extends JFrame implements ActionListener{
                 game.getActiveBidder().getBelongings().add(((Buyable) Board.getSquares()[this.coordinate]));
                 ((Buyable) Board.getSquares()[this.coordinate]).setOwner(game.getActiveBidder());
                 System.out.println("ending with CHOICE equal to " + game.getChoice());
-                game.getActiveBidder().receiveMoney(-game.getChoice());
+                if (game.getChoice() != 0)
+                    game.getActiveBidder().receiveMoney(-game.getChoice());
+                else
+                    game.getActiveBidder().receiveMoney(-1);
                 game.setChoice(0);
                 game.nullifyBidders();
                 this.auctionButtons.remove(cool);
@@ -210,7 +214,6 @@ public class MainWindow extends JFrame implements ActionListener{
                 {
                     emptyPanel();
                 }
-                System.out.println("THE CHOICE IS " + game.getChoice());
             }
         }
     }
@@ -793,7 +796,8 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }
 
-    private void setTheState(){
+    private void setTheState()
+    {
         if (!game.getActivePlayerState()){
             // System.out.println("Player removed");
             // game.removePlayer();
@@ -1057,12 +1061,10 @@ public class MainWindow extends JFrame implements ActionListener{
         sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         if (Monopoly.getPlayers().size() >= 3)
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         if (Monopoly.getPlayers().size() >= 4)
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
-        
-        
+            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
         
         this.setButtons();
         for (int i = 0; i < 40; i++)
@@ -1160,14 +1162,8 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
         //infoTop
-        JPanel playersInfo = new JPanel();
-        playersInfo.setLayout(new GridLayout(game.getNumberOfPlayers(), 1));      //in order to keep things compact
-        playerInfo = new JLabel[game.getNumberOfPlayers()];
-        for (int i = 0; i < game.getNumberOfPlayers(); i++){
-            playerInfo[i] = new JLabel();
-            //playerInfo[i].setFont(new Font("Serif", Font.ITALIC, 18));
-            playersInfo.add(playerInfo[i]);
-        }
+        this.playersInfo = new JPanel();
+        this.playersInfo.setLayout(new GridLayout(game.getNumberOfPlayers(), 1));      //in order to keep things compact
         setUpBelongings();
         //containerOfBelongings.add(belongingsPanel);
         infoTop.add(playersInfo, BorderLayout.NORTH);
@@ -1203,14 +1199,26 @@ public class MainWindow extends JFrame implements ActionListener{
 
     private void setUpInfoTop()
     {
-        for (int i = 0; i < game.getNumberOfPlayers(); i++)
+        // delete old labels
+        for (JLabel l : playersLabels)
+            this.playersInfo.remove(l);
+        this.playersInfo.revalidate();
+        this.playersInfo.repaint();
+        // add new labels
+        playersLabels = new ArrayList<>();
+        for (int i = 0; i < Monopoly.getPlayers().size(); i++)
         {
-            playerInfo[i].setText(Monopoly.getPlayers().get(i).toString());     //check
+            playersLabels.add(new JLabel());
+
+            playersLabels.get(i).setText(Monopoly.getPlayers().get(i).toString());
             if (Monopoly.getPlayers().get(i).equals(game.getActivePlayer()))
-                playerInfo[i].setFont(new Font("Futura", Font.BOLD, 14));
+                playersLabels.get(i).setFont(new Font("Futura", Font.BOLD, 14));
             else
-                playerInfo[i].setFont(new Font("Futura", Font.PLAIN, 14));
+                playersLabels.get(i).setFont(new Font("Futura", Font.PLAIN, 14));
         }
+        for (JLabel l : playersLabels)
+            this.playersInfo.add(l);
+    
         updateBelongingsPane();
         //infoTop.add(belongingsPanel);
     }
@@ -1256,18 +1264,16 @@ public class MainWindow extends JFrame implements ActionListener{
         setUpInfoTop();
     }
 
-    private void setUpInfoBottom(){
+    private void setUpInfoBottom()
+    {
         infoBottom.setLayout(new GridLayout());
         this.throwDice = new JButton("Throw the dice");
-        // Al: WHY DOESN'T THIS WORK AAAAAAAAAAAAAAAAAAAAAAA
-        // this.throwDice.setFont(new Font("Futura", Font.PLAIN, 14));
         this.done = new JButton("Done");
-        // this.done.setFont(new Font("Futura", Font.PLAIN, 14));
         throwDice.addActionListener(new ActionListener(){
             
             @Override
-            public void actionPerformed(ActionEvent e) {   
-                
+            public void actionPerformed(ActionEvent e)
+            {   
                 // remove the old sprite
                 buttons[game.getActivePlayerCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
                 buttons[game.getActivePlayerCoordinate()].revalidate();

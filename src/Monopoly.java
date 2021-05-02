@@ -167,7 +167,12 @@ import java.util.ArrayList;
  * 4) made the auction window unclosable by the user;
  * 5) the auction now automatically eliminates players who don't have enough money;
  * An:
- * 
+ * 6) fixed an issue causing the players not to get added to bidders when their balance is less than
+ *    the price of the property being auctioned;
+ * 7) fixed an issue causing the belongings buttons display incorrectly on 42's IMacs;
+ * Al:
+ * 8) fixed an issue causing severe sync problems with the players list in infoTop (now utilizing arraylist
+ *    of JLabels instead of an array).
  * 
  * KNOWN ISSUES:
  * 1. Player 1 can pass the turn right away because Done is active from the beginning
@@ -186,7 +191,6 @@ public class Monopoly
     private boolean                     moveToJail;
     private int                         choice;
     
-
     public Monopoly(ArrayList<Player> players)
     {
         new Board();
