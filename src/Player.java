@@ -21,6 +21,9 @@ public class Player
         this.coordinate = 0;
         this.daysInJail = 1;
         this.money = 1500;
+        // Al: FOR TESTING
+        if (name.equals("bum"))
+            this.money = 10;
     }
 
     public int throwDice()
@@ -500,6 +503,7 @@ public class Player
     // TESTED by Al
     public void receiveMoney(int mon)
     {
+        System.out.println("entered RECEIVEMONEY. mon = " + mon);
         this.money += mon;
     }
 

@@ -4,21 +4,21 @@ public class CommunityChest extends Deck
     enum CardMessages
     {
         CARD0 ("Advance to GO (Collect $200)."),
-        CARD1 ("BANK ERROR IN YOUR FAVOR. COLLECT $200."),
-        CARD2 ("DOCTOR'S FEES. PAY $50."),
-        CARD3 ("FROM SALE OF STOCK YOU GET $45."),
-        CARD4 ("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200."),
-        CARD5 ("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD."),
-        CARD6 ("GRAND OPERA NIGHT. COLLECT $50 FROM EVERY PLAYER FOR OPENING NIGHT SEATS."),
-        CARD7 ("XMAS FUND MATURES. COLLECT $100."),
-        CARD8 ("INCOME TAX REFUND. COLLECT $20."),
-        CARD9 ("LIFE INSURANCE MATURES. COLLECT $100."),
-        CARD10 ("PAY HOSPITAL $100."),
-        CARD11 ("PAY SCHOOL TAX OF $150."),
-        CARD12 ("RECEIVE FOR SERVICES $25."),
-        CARD13 ("YOU ARE ASSESSED FOR STREET REPAIRS: PAY $40 PER HOUSE AND $115 PER HOTEL YOU OWN."),
-        CARD14 ("YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10."),
-        CARD15 ("YOU INHERIT $100.");
+        CARD1 ("Bank error in your favor. Collect $200."),
+        CARD2 ("Doctor's fees. Pay $50."),
+        CARD3 ("From sale of stock you get $45."),
+        CARD4 ("Go directly to jail. Do not pass go. Do not collect $200."),
+        CARD5 ("Get out of jail free. This card may be kept until needed, or traded/sold."),
+        CARD6 ("Grand Opera Night. Collect $50 from every player for opening night seats."),
+        CARD7 ("Xmas fund matures. Collect $100."),
+        CARD8 ("Income tax refund. Collect $20."),
+        CARD9 ("Life insurance matures. Collect $100."),
+        CARD10 ("Pay hospital $100."),
+        CARD11 ("Pay school tax of $150."),
+        CARD12 ("Receive for services $25."),
+        CARD13 ("You are assessed for street repairs: pay $40 per house and $115 per hotel you own."),
+        CARD14 ("You have won second prize in a beauty contest. Collect $10."),
+        CARD15 ("You inherit $100.");
 
         private String message;
         private CardMessages(String message)

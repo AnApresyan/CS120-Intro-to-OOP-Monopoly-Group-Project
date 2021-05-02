@@ -95,7 +95,7 @@ import java.util.ArrayList;
  * 4) implemented trading (RAW);
  * 5) implemented auction (RAW);
  * 6) fixed an issue causing a removed player's properties to remain owned by them when failing to break 
- * out of the mortgageLoop by taking a Chance/Chest card;
+ *    out of the mortgageLoop by taking a Chance/Chest card;
  * An:
  * 7) added buttons THROW_DICE and DONE, and tied them to corresponding methods;
  * 8) made the info header refresh each time DONE is pressed;
@@ -106,11 +106,11 @@ import java.util.ArrayList;
  * 1) added dummy images for sprites;
  * An:
  * 2) fixed an issue causing a player's name to be displayed in each title deed card as the owner after a
- * property is bought for the first time;
+ *    property is bought for the first time;
  * 3) fixed an issue causing the player's turn not to end;
  * 4) fixed an issue causing the balance and coordinate refresh only after DONE is pressed;
  * 5) properly connected Buyable to the interface. the program now correctly handles YES and NO input through
- * the corresponding buttons;
+ *    the corresponding buttons;
  * 6) properly connected Chance&Chest to the interface with corresponding message pop-ups.
  * 
  * MONOPOLY 1.0.0           04/27/2021
@@ -154,18 +154,26 @@ import java.util.ArrayList;
  * 9) fixed an issue causing Erect House button stay active after 5 houses have been built;
  * 10) numberOfPlayers is now correctly accessed and refreshed;
  * 11) auction pop-up created.
- * 
  * An:
  * Thanks for the kind words:D
  * 12) Separated the windows in the beginning from the MainWindow to make it look more organized;
- * 13) Along with that got rid of the reduntant variable numOfNames; 
+ * 13) Along with that got rid of the reduntant variable numOfNames.
+ * 
+ * MONOPOLY 1.1.0           05/02/2021
+ * Al:
+ * 1) AuctionPopUp created; NO now properly start the auction;
+ * 2) fixed an issue causing the winner pay 2 times the bid;
+ * 3) fixed an issue causing the labels not get refreshed properly in bidders list;
+ * 4) made the auction window unclosable by the user;
+ * 5) the auction now automatically eliminates players who don't have enough money;
+ * An:
+ * 
  * 
  * KNOWN ISSUES:
  * 1. Player 1 can pass the turn right away because Done is active from the beginning
  * 2. sometimes sprites disappear after an interaction with Chance&Chest
  * 3. after a Chance&Chest interaction, Done is NOT disabled until confirmation of card is pressed
  * 4. when receiving YES/NO upon landing on a Buyable, Done is NOT disabled
- * 5. SLIDER VALUE DOESN'T REFRESH
  */
 public class Monopoly 
 {
@@ -174,6 +182,7 @@ public class Monopoly
     private static ArrayList<Player>    bidders;
     private Player                      activeBidder;
     private int                         indexOfPlayer;
+    private int                         indexOfBidder;
     private boolean                     moveToJail;
     private int                         choice;
 
@@ -182,9 +191,10 @@ public class Monopoly
         new Board();
         setPlayers(players);
         indexOfPlayer = 0;
+        indexOfBidder = 0;
         this.activePlayer = players.get(0);
         this.activeBidder = this.activePlayer;
-        this.choice = 1;                            // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
+        this.choice = 0;                            // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
                                                     // Al: good idea, but let's leave it for later, if we have time 
     }
 
@@ -332,7 +342,8 @@ public class Monopoly
 
     public void changePlayer()
     {
-        if (activePlayer.getDoublesInARow() == 0){
+        if (activePlayer.getDoublesInARow() == 0)
+        {
             indexOfPlayer++;
             activePlayer.setDoublesInARow(0);
         }
@@ -341,12 +352,19 @@ public class Monopoly
         System.out.println("The index of player: " + indexOfPlayer);            //for testing
         this.activePlayer = players.get(indexOfPlayer);
         this.activeBidder = this.activePlayer;
+        this.indexOfBidder = this.indexOfPlayer;
     }
 
-    // public void changeBidder()
-    // {
-
-    // }
+    public void changeBidder()
+    {
+        System.out.println("STARTED CHANGING BIDDER. INDEX OF BIDDER: " + this.indexOfBidder);
+        this.indexOfBidder++;
+        if (indexOfBidder == bidders.size())
+            this.indexOfBidder = 0;
+        this.activeBidder = bidders.get(indexOfBidder);
+        System.out.println("bidder now: " + this.activeBidder.toString());
+        System.out.println("ENDED CHANGING BIDDER. INDEX OF BIDDER: " + this.indexOfBidder);
+    }
 
     public void setBidders(int coordinate)
     {
@@ -356,6 +374,32 @@ public class Monopoly
         for (Player p : players)
             if (!(p.equals(this.activeBidder)) && this.activeBidder.getMoney() >= ((Buyable) Board.getSquares()[coordinate]).getPrice())
                 bidders.add(p);
+        // Al: testing
+        System.out.println("the bidders:");
+        for (Player b : bidders)
+            System.out.println(b);
+    }
+
+    public void removeActiveBidder()
+    {
+        for (Player b : bidders)
+            if (b.equals(activeBidder))
+            {
+                System.out.println("Removed " + b + " from bidders");
+                bidders.remove(b);
+                break ;
+            }
+        this.indexOfBidder--;
+        // Al: testing
+        System.out.println("the bidders after removal:");
+        for (Player b : bidders)
+            System.out.println(b);
+        changeBidder();
+    }
+
+    public void nullifyBidders()
+    {
+        bidders = null;
     }
 
     public ArrayList<Player> getBidders()
@@ -387,9 +431,15 @@ public class Monopoly
     {
         this.choice = choice;
     }
+
     public int getActivePlayerIndex()
     {
         return (this.indexOfPlayer);
+    }
+
+    public int getActiveBidderIndex()
+    {
+        return (this.indexOfBidder);
     }
 
     public int  getNumberOfPlayers()

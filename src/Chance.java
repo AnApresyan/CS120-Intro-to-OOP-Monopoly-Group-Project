@@ -7,18 +7,18 @@ public class Chance extends Deck
         CARD1 ("Advance to Illinois Ave."),
         CARD2 ("Advance to St. Charles Place. If you pass GO, collect $200."),
         CARD3 ("Advance to the nearest utility. If unowned, you may buy it from the bank. If owned, throw dice and pay owner a total 10 times the amount thrown."),
-        CARD4 ("Advance to the nearest railroad. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED."),
-        CARD5 ("BANK PAYS YOU DIVIDEND OF $50."),
-        CARD6 ("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD."),
-        CARD7 ("GO BACK 3 SPACES."),
-        CARD8 ("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200."),
-        CARD9 ("MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY: FOR EACH HOUSE PAY $25, FOR EACH HOTEL $100."),
-        CARD10 ("PAY POOR TAX OF $15."),
-        CARD11 ("TAKE A TRIP TO READING RAILROAD. IF YOU PASS GO, COLLECT $200."),
-        CARD12 ("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK."),
-        CARD13 ("YOU HAVE BEEN ELECTED CHAIRMAN OF the BOARD. PAY EACH PLAYER $50."),
-        CARD14 ("YOUR BUILDING AND LOAN MATURES. RECEIVE $150."),
-        CARD15 ("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
+        CARD4 ("Advance to the nearest railroad. If unowned you may buy it from the bank. If owned, pay owner twice the retail to which they are otherwise entitled."),
+        CARD5 ("Bank pays you dividend of $50."),
+        CARD6 ("Get out of jail free. This card may be kept until needed, or traded/sold."),
+        CARD7 ("Go back 3 spaces."),
+        CARD8 ("Go directly to jail. Do not pass go. Do not collect $200."),
+        CARD9 ("Make general repairs on all your property: for each house pay $25, for each hotel $100."),
+        CARD10 ("Pay poor tax of $15."),
+        CARD11 ("Take a trip to reading railroad. If you pass go, collect $200."),
+        CARD12 ("Take a walk on the boardwalk. Advance token to boardwalk."),
+        CARD13 ("You have been elected chairman of the board. Pay each player $50."),
+        CARD14 ("Your building and loan matures. Receive $150."),
+        CARD15 ("You have won a crossword competition. Collect $100.");
 
         private String message;
         private CardMessages(String message)

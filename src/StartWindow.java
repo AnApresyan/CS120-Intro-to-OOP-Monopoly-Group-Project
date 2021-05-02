@@ -25,6 +25,7 @@ public class StartWindow extends JFrame{
 
         //Labels
         JLabel mainLabel = new JLabel("Welcome to Alexander's and Anahit's Monopoly");
+        // mainLabel.setFont(font);
         // mainLabel.setFont(new Font("Futura", Font.ROMAN_BASELINE, 14));
         JPanel setUp = new JPanel();        //change
         
