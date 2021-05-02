@@ -1,6 +1,7 @@
 public class Tester
 {
-    //AN: Dice set to one at a time for testing
+    //An: Player money set to 20 for testing
+    //An: Dice set to one at a time for testing
     public static void main (String[] args)
     {
 

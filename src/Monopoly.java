@@ -176,6 +176,7 @@ public class Monopoly
     private int                         indexOfPlayer;
     private boolean                     moveToJail;
     private int                         choice;
+    
 
     public Monopoly(ArrayList<Player> players)
     {
@@ -188,19 +189,28 @@ public class Monopoly
                                                     // Al: good idea, but let's leave it for later, if we have time 
     }
 
+
+    public boolean getActivePlayerState(){
+        return this.activePlayer.state();
+    }
+
     public void build(Square property){
-        if (property.getClass().getName().equals("Property"))
-            activePlayer.erectHouse((Property)property);
+        if (property.getClass().getName().equals("Property")){
+            activePlayer.erectHouse((Property)property);  
+        }
+        
     }
 
     public void destroy(Square property){
-        if (property.getClass().getName().equals("Property"))
+        if (property.getClass().getName().equals("Property")){
             activePlayer.degradeProperty((Property)property);
+        }
     }
 
     public void mortgage(Square property){
-        if (property instanceof Buyable)
+        if (property instanceof Buyable){
             activePlayer.mortgageProperty((Buyable)property);
+        }
     }
 
     public void liftMortgage(Square property){
@@ -245,6 +255,15 @@ public class Monopoly
         }
         else if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable){
             ((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).setMessage(activePlayer);
+        }
+    }
+
+    public void removePlayer(){
+        for (Player player : players){
+            if (player.equals(activePlayer)){
+                players.remove(player);
+                break;
+            }
         }
     }
     public void startGame(){

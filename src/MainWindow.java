@@ -56,6 +56,10 @@ public class MainWindow extends JFrame implements ActionListener{
     //pop up window
     private CustomPopUp     popUpWindow;
     private AuctionPopUp    popUpAuction;
+    
+    //ifLost or has <0 money
+    private JPanel          ifLost;
+    private JLabel          ifLostText;
 
     private class AuctionPopUp extends JPanel implements ActionListener, ChangeListener
     {
@@ -140,7 +144,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
     private class CustomPopUp extends JPanel implements ActionListener
     {
-        private TitleDeed   titleDeed;
+        private TitleDeed   titleDeedPopUp;
         private JPanel      popUpButtons;
         private JButton     build;
         private JButton     destroy;
@@ -152,8 +156,8 @@ public class MainWindow extends JFrame implements ActionListener{
         {
             this.setLayout(new BorderLayout());
             this.setSize(new Dimension(350, 450));
-            this.titleDeed = new TitleDeed();
-            this.titleDeed.setSize(new Dimension(300, 300));
+            this.titleDeedPopUp = new TitleDeed();
+            this.titleDeedPopUp.setSize(new Dimension(300, 300));
         
             //button panel
             this.popUpButtons = new JPanel();
@@ -183,7 +187,7 @@ public class MainWindow extends JFrame implements ActionListener{
             if (!(Board.getSquares()[coordinate] instanceof Buyable))
                 return ;
             this.coordinate = coordinate;
-            this.titleDeed.setEverything(coordinate);
+            this.titleDeedPopUp.setEverything(coordinate);
             this.updateButtons(coordinate);
         }
 
@@ -231,8 +235,9 @@ public class MainWindow extends JFrame implements ActionListener{
                 game.mortgage(Board.getSquares()[coordinate]);
             else if (e.getSource() == liftMortgage)
                 game.liftMortgage(Board.getSquares()[coordinate]);
-
-            MainWindow.this.titleDeed.setEverything(this.coordinate);
+            
+            
+            titleDeed.setEverything(this.coordinate);
             updateButtons(this.coordinate);
             updatePopUp(this.coordinate);
             setUpInfoTop();   
@@ -393,6 +398,7 @@ public class MainWindow extends JFrame implements ActionListener{
         private BelongingButton()
         {
             super();
+            //this.setSize(new Dimension(20, 10));
             this.setFocusable(false);
             this.addActionListener(this);
             this.setBackground(Color.WHITE);
@@ -402,7 +408,7 @@ public class MainWindow extends JFrame implements ActionListener{
         private void setCoordinate(int coordinate){
             this.coordinate = coordinate;
             //this.setText(Integer.toString(coordinate));
-            this.setText(" ");      //until I find a way to give it a proper size
+            this.setText("  ");      //until I find a way to give it a proper size
             
         }
         private int getCoordinate(){
@@ -443,7 +449,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 if (e.getSource() == belongingButtons[i])
                 {
                     popUpWindow.updatePopUp(belongingButtons[i].getCoordinate());
-                    JOptionPane.showMessageDialog(null, popUpWindow, "Title Deed", JOptionPane.PLAIN_MESSAGE);;
+                    JOptionPane.showMessageDialog(null, popUpWindow, "Title Deed", JOptionPane.PLAIN_MESSAGE);
                 }
             }        
             
@@ -577,8 +583,11 @@ public class MainWindow extends JFrame implements ActionListener{
                 this.yes.setVisible(true);
                 if (game.getActivePlayer().getMoney() < ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getPrice())
                     this.yes.setEnabled(false);
+                else   
+                    this.yes.setEnabled(true);
                 this.no.setVisible(true);
             }
+            setTheState();
             
         }
 
@@ -606,6 +615,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 done.setEnabled(true);
             }
             game.play();
+            setTheState();
         }
 
         private void setJail(){
@@ -615,6 +625,7 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             //ATTENTION : Just Trying
             game.play();//game.setMessage();
+            setTheState();
             this.message.setVisible(true);
             this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
             if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowCard())
@@ -626,10 +637,10 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             else{
                 throwDice.setEnabled(false);
-
             }
             
         }
+
         @Override
         public void actionPerformed(ActionEvent e)
         {
@@ -698,7 +709,28 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             titleDeed.setEverything(game.getActivePlayerCoordinate());
             setUpInfoTop();
-            
+            setTheState();
+        }
+    }
+
+    private void setTheState(){
+        if (!game.getActivePlayerState()){
+            // System.out.println("Player removed");
+            // game.removePlayer();
+            // for (Player player : Monopoly.getPlayers())
+            //     System.out.println(player.toString());
+            //optionPane telling the player lost
+            ifLostText.setText("You lost. Please precede and click done to get out of the game.");
+            JOptionPane.showMessageDialog(null, ifLost, "Your state", JOptionPane.PLAIN_MESSAGE); 
+        }
+        else if (game.getActivePlayer().getMoney() < 0 && game.getActivePlayerState()){
+            ifLostText.setText("Please mortgage any of your properties or destroy the houses to pay your debts");
+            JOptionPane.showMessageDialog(null, ifLost, "Your state", JOptionPane.PLAIN_MESSAGE); 
+        }
+        else{
+            //this.message.setText("You can not give the turn to the next player");
+            //You can not give the turn to the next player
+            //done.setEnabled(true);
         }
     }
     
@@ -894,9 +926,24 @@ public class MainWindow extends JFrame implements ActionListener{
             else if (i == 37 || i == 39)
                 buttons[i].setColor(new Color(31, 93, 136));
 
-            // if (i != 10 || i != 20 || i != 30 || i != 0)
-            //     buttons[i].setText(Board.getSquares()[i].getTitle());
+            
+            // if (Board.getSquares()[i].getClass().getName().equals("Property")){
+            //     JTextArea text =  new JTextArea(5,10);                      //Exception
+            //     text.setOpaque(false);
+            //     text.setWrapStyleWord(true);
+            //     text.setLineWrap(true);
+            //     text.setEditable(false);
+            //     text.setFocusable(false);
+            //     text.setText(Board.getSquares()[i].getTitle());
+            // //  this.message.setFont(new Font("Futura", Font.CENTER_BASELINE, 14));
+                
+            //     buttons[i].add(text);   
+            // }    
         }
+
+        ImageIcon image = new ImageIcon("./images/chance.png");
+        buttons[2].setIcon(image);
+        buttons[2].setHorizontalTextPosition(SwingConstants.CENTER);
 
         //setButtonsColor(buttons);
         
@@ -927,13 +974,16 @@ public class MainWindow extends JFrame implements ActionListener{
     {
         popUpAuction = new AuctionPopUp();
         // initializing player sprites
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         if (Monopoly.getPlayers().size() >= 3)
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         if (Monopoly.getPlayers().size() >= 4)
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
                 Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
+        
+        
+        
         this.setButtons();
         for (int i = 0; i < 40; i++)
         {
@@ -943,6 +993,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         this.setLayout(new BorderLayout());
+        
         boardContainer = new JLayeredPane();//JPanel();
         boardContainer.setLayout(new FlowLayout());
 
@@ -955,6 +1006,12 @@ public class MainWindow extends JFrame implements ActionListener{
         right = new JPanel();
         bottom = new JPanel();
         center = new JPanel();
+        
+        //ifLost popUp
+        ifLost = new JPanel();
+        ifLostText = new JLabel();
+        ifLost.add(ifLostText);
+        
 
 
         top.setPreferredSize(new Dimension(693,90));
@@ -1046,7 +1103,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpBelongings()
     {
         belongingButtons = new BelongingButton[28];
-        belongingsPanel.setLayout(new GridLayout(3, 10, 10, 10));
+        belongingsPanel.setLayout(new GridLayout(3, 10, 25, 15));
 
         belongingsPanel.setSize(new Dimension(200, 200));
         
@@ -1058,7 +1115,7 @@ public class MainWindow extends JFrame implements ActionListener{
     
         for (int i = 0; i < belongingButtons.length; i++)
         {
-            belongingButtons[i].setSize(new Dimension(10, 10));
+            //belongingButtons[i].setSize(new Dimension(10, 10));
             belongingButtons[i].setColor(buttons[belongingButtons[i].getCoordinate()].getColor());
             belongingsPanel.add(belongingButtons[i]);
         }
@@ -1093,6 +1150,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     private void setUpInfoCenter(){
+        
 
         titleDeed.setEverything(game.getActivePlayerCoordinate());
         if(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable){

@@ -20,7 +20,31 @@ public class Player
         setName(name);
         this.coordinate = 0;
         this.daysInJail = 1;
-        this.money = 1500;
+        this.money = 20;        //1500         
+    }
+
+    public boolean state(){
+        int sum = 0;
+        if (this.money >= 0)
+            return true;
+        if (this.ownsUnmortgagedProps() == 0)
+            return false;
+        else{
+            for (Buyable belonging : belongings){
+                if (!belonging.isMortgaged()){
+                    if (belonging.getClass().getName().equals("Property") && ((Property)belonging).getHouses() > 0){
+                        for (int i = 0; i < ((Property)belonging).getHouses(); i++)
+                            sum += (((Property)belonging).getHousePrice() / 2);
+                    }
+                    sum += (belonging.getPrice() / 2);
+                 }                    
+            }
+        }
+
+        if ((sum + this.money) >= 0)
+            return true;
+        return false;
+        
     }
 
     public int throwDice()
