@@ -185,13 +185,21 @@ import java.util.ArrayList;
  * 
  * MONOPOLY 1.2.0           05/03/2021
  * Al:
- * 1) the dices rolled are now displayed on the playing screen;
- * 2) added a Trade button which now allows to initialize trade;
- * 3) trade wholly implemented! YAY!
+ * 1) the dices rolled are now displayed on the playing screen, as well as the getouttajail card;
+ * 2) trade wholly implemented! YAY!
+ * An:
+ * 3) fixed an issue causing the sprite get duplicated after landing on GoToJail;
+ * 4) fixed various issues causing Done, Trade and Throw Dice to get disabled/enabled in an untimely manner;
+ * Al:
+ * 5) fixed an issue causing handed-over properties' owner stay unchanged after a trade;
+ * 6) fixed an issue causing the tradee automatically accept a trade offer;
+ * 7) fixed an issue causing the trade slider to have a wrong range when a player's balance is beyond zero;
  * 
  * KNOWN ISSUES:
  * 2. change the layouts of trade
- * 3. change the winning window
+ * 3. change the winnding window
+ * 4. DONE is active and a player with negative balance can proceed to play without paying off the debt
+ * 5. the sprites of defeated players remain on the board
  */
 public class Monopoly 
 {
@@ -213,6 +221,16 @@ public class Monopoly
     {
         new Board();
         setPlayers(players);
+        // for (Player p : players)
+        // {
+        //     if (p.getName().equals("bum"))
+        //     {
+        //         p.getBelongings().add((Buyable)Board.getSquares()[12]);
+        //         ((Buyable)Board.getSquares()[12]).setOwner(p);
+        //         p.getBelongings().add((Buyable)Board.getSquares()[28]);
+        //         ((Buyable)Board.getSquares()[28]).setOwner(p);
+        //     }
+        // }
         indexOfPlayer = 0;
         indexOfBidder = 0;
         this.activePlayer = players.get(0);

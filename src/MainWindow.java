@@ -285,7 +285,10 @@ public class MainWindow extends JFrame implements ActionListener{
             this.tradeInfoLabel.setText(game.getActivePlayer().getName() + " is trading with " + game.getTradee().getName());
             //sliders
             this.traderSlider.setMinimum(0);
-            this.traderSlider.setMaximum(game.getActivePlayer().getMoney());
+            if (game.getActivePlayer().getMoney() >= 0)
+                this.traderSlider.setMaximum(game.getActivePlayer().getMoney());
+            else
+                this.traderSlider.setMaximum(0);
             this.traderSliderValue.setText("Money to give: $" + this.traderSlider.getValue());
             this.tradeeSlider.setMinimum(0);
             this.tradeeSlider.setMaximum(game.getTradee().getMoney());
@@ -348,7 +351,6 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             if (e.getSource() == confirmTrade)
             {
-                // DON'T FORGET TO ADD BACK AFTER EITHER DECLINE OR ACCEPT IS HIT
                 this.remove(this.tradeInfoPanel);
                 this.remove(this.lobbyPanel);
                 this.tradeButtons.remove(confirmTrade);
@@ -364,9 +366,9 @@ public class MainWindow extends JFrame implements ActionListener{
                 this.add(confirmationPanel, BorderLayout.NORTH);
             }
 
-            if (e.getSource() == confirmTrade || e.getSource() == declineTrade)
+            if (e.getSource() == acceptTrade || e.getSource() == declineTrade)
             {
-                if (e.getSource() == confirmTrade)
+                if (e.getSource() == acceptTrade)
                 {
                     // handing over money
                     game.getActivePlayer().receiveMoney(this.tradeeSlider.getValue());
@@ -377,11 +379,13 @@ public class MainWindow extends JFrame implements ActionListener{
                     for (Buyable b : game.getSelectedPropsToGive())
                     {
                         game.getActivePlayer().getBelongings().remove(b);
+                        b.setOwner(game.getTradee());
                         game.getTradee().getBelongings().add(b);
                     }
                     for (Buyable b : game.getSelectedPropsToReceive())
                     {
                         game.getTradee().getBelongings().remove(b);
+                        b.setOwner(game.getActivePlayer());
                         game.getActivePlayer().getBelongings().add(b);
                     }
                     // handing over cards
