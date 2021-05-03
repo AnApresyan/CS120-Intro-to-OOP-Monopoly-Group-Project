@@ -190,7 +190,9 @@ import java.util.ArrayList;
  * 3) trade wholly implemented! YAY!
  * 
  * KNOWN ISSUES:
- * 1. some sprites disappear after doubles are rolled
+ * 1. throwdice disable when landed on go to jail 
+ * 2. change the layouts of trade
+ * 3. change the winnding window
  */
 public class Monopoly 
 {

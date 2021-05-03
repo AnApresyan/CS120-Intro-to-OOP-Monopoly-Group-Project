@@ -54,10 +54,10 @@ public class Player
 
     public int throwDice()
     {
-        // this.dice[0] = (int)(Math.random() * 6) + 1;
-        // this.dice[1] = (int)(Math.random() * 6) + 1;
-        this.dice[0] = 15;
-        this.dice[1] = 15;
+        this.dice[0] = (int)(Math.random() * 6) + 1;
+        this.dice[1] = (int)(Math.random() * 6) + 1;
+        // this.dice[0] = 15;
+        // this.dice[1] = 15;
 
         if (holdsDoubles())
             this.doublesInARow++;
@@ -73,6 +73,8 @@ public class Player
     public boolean holdsDoubles()
     {
         System.out.println("If holds doubles: " + (this.dice[0] == this.dice[1]));
+        if (this.dice[0] == 0)
+            return false;
         return (this.dice[0] == this.dice[1]);
 
     }

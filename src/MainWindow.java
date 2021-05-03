@@ -139,6 +139,7 @@ public class MainWindow extends JFrame implements ActionListener{
             this.youHave.setText("Your properties:");
 
             this.setLayout(new BorderLayout());
+            this.setSize(new Dimension(500, 500));    
             // this.setSize(new Dimension(200, 300));
             this.traderSliderValue = new JLabel();
             this.tradeeSliderValue = new JLabel();
@@ -207,6 +208,12 @@ public class MainWindow extends JFrame implements ActionListener{
             this.declineTrade.addActionListener(this);
             this.lobbyPanel.add(this.traderPanel);
             this.lobbyPanel.add(this.tradeePanel);
+           
+            // JPanel centerLobby = new JPanel();
+            // centerLobby.setLayout(new BorderLayout());
+            // centerLobby.setSize(new Dimension (400, 400));
+            // centerLobby.add(lobbyPanel, BorderLayout.CENTER);
+
             this.add(this.tradeInfoPanel, BorderLayout.NORTH);
             this.add(this.lobbyPanel, BorderLayout.CENTER);
             this.add(this.tradeButtons, BorderLayout.SOUTH);
@@ -782,8 +789,10 @@ public class MainWindow extends JFrame implements ActionListener{
             updatePopUp(this.coordinate);
             setUpInfoTop();
             
-            if (game.getActivePlayer().getMoney() > 0 && !commands.ok.isVisible() && !commands.yes.isVisible() && !commands.no.isVisible())
-                done.setEnabled(true);
+            if (game.getActivePlayer().getMoney() > 0){
+                updateBottomButtons();
+            }
+            //     done.setEnabled(true);
         }
     }
 
@@ -1162,7 +1171,7 @@ public class MainWindow extends JFrame implements ActionListener{
             if (game.getActivePlayerCoordinate() == 30){
                 throwDice.setEnabled(false);
                 ok.setVisible(true);
-                done.setEnabled(true);
+                done.setEnabled(false);         //------------------------
             }
             else
                 game.play();
@@ -1289,12 +1298,14 @@ public class MainWindow extends JFrame implements ActionListener{
             if (game.ifPlayerHoldsDoubles() && !game.getActivePlayer().isPrisoned())
             {      //moved to After doAction is complete
                 //System.out.println("Holds doubles");
+                System.out.println("first");
                 throwDice.setEnabled(true);
                 done.setEnabled(false);
                 trade.setEnabled(false);
             }
             else
             {
+                System.out.println("Second");
                 throwDice.setEnabled(false);
                 done.setEnabled(true);
                 trade.setEnabled(true);
@@ -1302,6 +1313,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
         else
         {
+            System.out.println("Last");
             throwDice.setEnabled(false);
             done.setEnabled(false);
             trade.setEnabled(false);
@@ -1658,6 +1670,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpInfoCenter(){
         
 
+        commands.message.setVisible(false);
         titleDeed.setEverything(game.getActivePlayerCoordinate());
         if(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable){
             this.commands.setBuyable();
@@ -1681,7 +1694,8 @@ public class MainWindow extends JFrame implements ActionListener{
         }
         if (game.getActivePlayer().getMoney() < 0)
             done.setEnabled(false);
-            
+        
+        updateBottomButtons();    
         setUpInfoTop();
     }
 
@@ -1735,6 +1749,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     return;
                 }
                 game.startGame();
+                
 
                 //throwDice.setEnabled(false);            //JUST ADDED
 
