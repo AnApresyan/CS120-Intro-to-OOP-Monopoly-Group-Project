@@ -856,9 +856,11 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             if (game.getActivePlayerCoordinate() == 30){
                 throwDice.setEnabled(false);
+                ok.setVisible(true);
                 done.setEnabled(true);
             }
-            game.play();
+            else
+                game.play();
             setTheState();
         }
 
@@ -932,7 +934,8 @@ public class MainWindow extends JFrame implements ActionListener{
                 // put sprite
                 System.out.println("PUTTING A NEW SPRITE AT " + game.getActivePlayerCoordinate() + " OF THE PLAYER UNDER INDEX OF " + game.getActivePlayerIndex());
                 buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
-
+                buttons[previousCoordinate].revalidate();
+                buttons[game.getActivePlayerCoordinate()].repaint();
             }
             else if (e.getSource() == money){
                 ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(1);
@@ -1408,7 +1411,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     if (!game.ifPlayerIsPrisoned()){
                 
                         commands.message.setText("You rolled doubles and are free to go.");
-                        //setUpInfoCenter();
+                        setUpInfoCenter();
                         //throwDice.setEnabled(false);
                         //done.setEnabled(true);
                     }
@@ -1419,6 +1422,10 @@ public class MainWindow extends JFrame implements ActionListener{
                     }
                     done.setEnabled(true);
                     commands.message.setVisible(true);
+                    setUpInfoTop();
+                    buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+                    buttons[game.getActivePlayerCoordinate()].revalidate();
+                    buttons[game.getActivePlayerCoordinate()].repaint();
                     return;
                 }
                 game.startGame();
@@ -1430,15 +1437,22 @@ public class MainWindow extends JFrame implements ActionListener{
                 //     throwDice.setEnabled(false);
                 //     done.setEnabled(true);
                 // }   
+                setUpInfoTop(); 
+                buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+                buttons[game.getActivePlayerCoordinate()].revalidate();
+                buttons[game.getActivePlayerCoordinate()].repaint();
+                updateBottomButtons();
                 if (game.getMoveToJail()){
+                    commands.message.setText("You rolled doubles 3 times in a row. GO to Jail");
+                    commands.message.setVisible(true);
                     return ;
                 }
                 // put the sprite at a new space
-                buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+
                 //setUpInfoCenter();
                 setUpInfoCenter();
-                setUpInfoTop();  
-                updateBottomButtons();
+                //setUpInfoTop();  
+                
             }
             
         });
