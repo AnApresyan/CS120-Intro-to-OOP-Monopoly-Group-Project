@@ -404,11 +404,12 @@ public class Monopoly
 
     public void changePlayer()
     {
-        if (activePlayer.getDoublesInARow() == 0)
+        if (activePlayer.getDoublesInARow() == 0 || (activePlayer.getDoublesInARow() != 0 && activePlayer.isPrisoned()))
         {
             indexOfPlayer++;
             activePlayer.setDoublesInARow(0);
         }
+        //else if (activePlayer.getDoublesInARow() != 0 && activePlayer.)
         if (indexOfPlayer == players.size())
         {
             this.indexOfPlayer = 0;

@@ -1476,7 +1476,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
                 commands.setVisible(false);
                 // put the sprite at a new space
-                buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+                //buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
                 
                 game.changePlayer();
                 if (game.activePlayerWon()){
@@ -1485,6 +1485,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 }
                 done.setEnabled(false);
                 titleDeed.setEverything(game.getActivePlayerCoordinate());
+                System.out.println(game.getActivePlayer().getName());
                 throwDice.setEnabled(true);
                 if (game.getActivePlayer().isPrisoned())
                 {

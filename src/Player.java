@@ -54,8 +54,8 @@ public class Player
     {
         // this.dice[0] = (int)(Math.random() * 6) + 1;
         // this.dice[1] = (int)(Math.random() * 6) + 1;
-        this.dice[0] = 1;
-        this.dice[1] = 1;
+        this.dice[0] = 15;
+        this.dice[1] = 15;
 
         if (holdsDoubles())
             this.doublesInARow++;
