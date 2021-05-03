@@ -316,7 +316,10 @@ public class MainWindow extends JFrame implements ActionListener{
             titleDeed.setEverything(this.coordinate);
             updateButtons(this.coordinate);
             updatePopUp(this.coordinate);
-            setUpInfoTop();   
+            setUpInfoTop();
+            
+            if (game.getActivePlayer().getMoney() > 0 && !commands.ok.isVisible() && !commands.yes.isVisible() && !commands.no.isVisible())
+                done.setEnabled(true);
         }
     }
 
@@ -483,8 +486,10 @@ public class MainWindow extends JFrame implements ActionListener{
 
         private void setCoordinate(int coordinate){
             this.coordinate = coordinate;
+            //this.setSize(20, 100);
             //this.setText(Integer.toString(coordinate));
-            this.setText("  ");      //until I find a way to give it a proper size
+            this.setText(" ");      //until I find a way to give it a proper size
+            // this.setFocusable(false);
             
         }
         private int getCoordinate(){
@@ -704,13 +709,13 @@ public class MainWindow extends JFrame implements ActionListener{
                 return;
             }
             //ATTENTION : Just Trying
-            game.play();//game.setMessage();
+            game.setMessage();//game.play();
             setTheState();
             this.message.setVisible(true);
             this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
             if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowCard())
                 this.useTheCard.setVisible(true);
-            if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowPay())
+            //if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowPay())
                 this.pay.setVisible(true);
             if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowThrow()){
                 throwDice.setEnabled(true);
@@ -788,16 +793,43 @@ public class MainWindow extends JFrame implements ActionListener{
                 }
                 else
                     game.play(2);//((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).setUserChoice(2);
-
-                throwDice.setEnabled(true);
+                
+                //throwDice.setEnabled(true);
                 //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
                 //game.play();      //JUST CHANGED
-                message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
+                if (!game.getActivePlayerState())
+                    message.setText("You lost :(");
+                else
+                    message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
             }
+            
+            if (e.getSource() != pay && e.getSource() != useTheCard)
+                updateBottomButtons();
+
+
             titleDeed.setEverything(game.getActivePlayerCoordinate());
             setUpInfoTop();
             setTheState();
         }
+    }
+
+    private void updateBottomButtons(){
+        if (!commands.yes.isVisible() && !commands.no.isVisible() && !commands.ok.isVisible() &&
+            !commands.pay.isVisible() && !commands.percent.isVisible() && !commands.useTheCard.isVisible() && !commands.money.isVisible()){
+            if (game.ifPlayerHoldsDoubles() && !game.getActivePlayer().isPrisoned()){      //moved to After doAction is complete
+                //System.out.println("Holds doubles");
+                throwDice.setEnabled(true);
+                done.setEnabled(false);
+            }
+            else{
+                throwDice.setEnabled(false);
+                done.setEnabled(true);
+            }
+        }
+        else{
+            throwDice.setEnabled(false);
+            done.setEnabled(false);
+        } 
     }
 
     private void setTheState()
@@ -810,10 +842,16 @@ public class MainWindow extends JFrame implements ActionListener{
             //optionPane telling the player lost
             ifLostText.setText("You lost. Please precede and click done to get out of the game.");
             JOptionPane.showMessageDialog(null, ifLost, "Your state", JOptionPane.PLAIN_MESSAGE); 
+            done.setEnabled(true);
+            throwDice.setEnabled(false);
         }
         else if (game.getActivePlayer().getMoney() < 0 && game.getActivePlayerState()){
             ifLostText.setText("Please mortgage any of your properties or destroy the houses to pay your debts");
             JOptionPane.showMessageDialog(null, ifLost, "Your state", JOptionPane.PLAIN_MESSAGE); 
+            if (game.getActivePlayerState() && game.getActivePlayer().getMoney() < 0){
+                throwDice.setEnabled(false);
+                throwDice.setEnabled(false);
+            }
         }
         else{
             //this.message.setText("You can not give the turn to the next player");
@@ -822,6 +860,12 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }
     
+
+
+    // public void updateBottomButtons(){
+        
+    // }
+
 
     public MainWindow(ArrayList<Player> players){
         super("Monopoly");                                                       // ------------------
@@ -843,141 +887,6 @@ public class MainWindow extends JFrame implements ActionListener{
         game = new Monopoly(players);
         this.setTheFlow();
         this.setVisible(true);
-
-        // popupFactory = new PopupFactory();
-        // popUp = popupFactory.getPopup(this, popUpWindow, 500, 500);
-        
-        //popUpWindow.setAlwaysOnTop(true);
-        /*numOfNames = 1;                                                               -----------------------
-        
-    
-
-        //The images
-        ImageIcon image = new ImageIcon("./images/LOGO1.png");
-        //ImageIcon image = new ImageIcon("./images/logo2.png");
-        
-        
-        //The main panel
-        JPanel mainMenu = new JPanel();
-        // mainMenu.setBackground(new Color(64, 184, 182));
-
-        //Labels
-        JLabel mainLabel = new JLabel("Welcome to Alexander's and Anahit's Monopoly");
-        // mainLabel.setFont(new Font("Futura", Font.ROMAN_BASELINE, 14));
-        JPanel setUp = new JPanel();        //change
-        
-        //the array list of players that will be given to the game when it is initialized
-        ArrayList<Player> players = new ArrayList<>(); 
-        
-        //The names of the players
-        JLabel namesLabel = new JLabel();
-        JTextField nameFromField = new JTextField();
-        nameFromField.setPreferredSize(new Dimension(80, 40));
-        JButton submitName = new JButton("Submit");
-        submitName.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = nameFromField.getText();
-                if (name.equals("")){
-                    namesLabel.setText( "Empty name. " + namesLabel.getText());
-                    return;
-                }
-                for (Player player : players) {
-                    if (name.equalsIgnoreCase(player.getName())){
-                        namesLabel.setText( "There is already a player with that name. " + namesLabel.getText());
-                        nameFromField.setText("");
-                        return;
-                    }
-                }
-                players.add(new Player(name));
-                //numberOfPlayers--;
-                if (numOfNames < numberOfPlayers){  
-                    namesLabel.setText("Please enter the name of Player " + (players.size() + 1));
-                    
-                    nameFromField.setText("");
-                    numOfNames++;
-                }
-                else
-                {
-                    setUp.setVisible(false);
-                    mainMenu.setVisible(false);
-                    game = new Monopoly(players);
-                    popUpAuction = new AuctionPopUp();
-                            // initializing player sprites
-                    sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                    sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                    if (numOfNames >= 3)
-                        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                    if (numOfNames >= 4)
-                        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                    setTheFlow();
-
-                }  
-            }
-
-        });
-
-        namesLabel.setVisible(false);
-        nameFromField.setVisible(false);
-        submitName.setVisible(false);
-
-        //Number of Players
-        SpinnerModel values = new SpinnerNumberModel(2, 2, 4, 1);
-        JSpinner howManyPlayers = new JSpinner(values);
-        howManyPlayers.setVisible(false);
-        JButton submitNumberOfPlayers = new JButton("Submit");
-        submitNumberOfPlayers.setVisible(false);
-        submitNumberOfPlayers.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                numberOfPlayers = (Integer) howManyPlayers.getValue();
-                submitNumberOfPlayers.setVisible(false);
-                howManyPlayers.setVisible(false);
-                namesLabel.setText("Please enter the name of Player 1");
-                namesLabel.setVisible(true);
-                nameFromField.setVisible(true);
-                submitName.setVisible(true);
-            }
-        
-        });
-
-        //Start button
-        JButton start = new JButton("START");
-        start.setVerticalAlignment(JButton.BOTTOM);
-        start.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                start.setVisible(false);
-                howManyPlayers.setVisible(true);
-                submitNumberOfPlayers.setVisible(true);         
-            }
-        });
-
-        //Adding to the setUp           //change
-        setUp.add(start); 
-        setUp.add(howManyPlayers);
-        setUp.add(submitNumberOfPlayers);
-        setUp.add(namesLabel);
-        setUp.add(nameFromField);
-        setUp.add(submitName);
-
-        //Adding to the mainLabel
-        mainLabel.setIcon(image);
-        mainLabel.setHorizontalTextPosition(JLabel.CENTER);
-        mainLabel.setVerticalTextPosition(JLabel.BOTTOM);
-        mainLabel.setVerticalAlignment(JLabel.BOTTOM);
-        
-        //Adding to the mainMenu
-        mainMenu.add(mainLabel);
-       
-        //Adding to the frame
-        this.add(mainMenu, BorderLayout.NORTH);
-        this.add(setUp, BorderLayout.CENTER);            //change        mainWindiw.add(setUp)
-
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);*/                                                             //-----------------------------
         
     }
 
@@ -1015,6 +924,9 @@ public class MainWindow extends JFrame implements ActionListener{
                 buttons[i].setColor(new Color(31, 93, 136));
 
             
+            ImageIcon image = new ImageIcon("./images/image" + i + ".png");
+            buttons[i].setIcon(image);
+            buttons[i].setHorizontalTextPosition(SwingConstants.CENTER);
             // if (Board.getSquares()[i].getClass().getName().equals("Property")){
             //     JTextArea text =  new JTextArea(5,10);                      //Exception
             //     text.setOpaque(false);
@@ -1029,9 +941,13 @@ public class MainWindow extends JFrame implements ActionListener{
             // }    
         }
 
-        ImageIcon image = new ImageIcon("./images/chance.png");
-        buttons[2].setIcon(image);
-        buttons[2].setHorizontalTextPosition(SwingConstants.CENTER);
+        // ImageIcon image = new ImageIcon("./images/chance.png");
+        // buttons[2].setIcon(image);
+        // buttons[2].setHorizontalTextPosition(SwingConstants.CENTER);
+
+        // ImageIcon image2 = new ImageIcon("./images/image1.png");
+        // buttons[1].setIcon(image2);
+        // buttons[1].setHorizontalTextPosition(SwingConstants.CENTER);
 
         //setButtonsColor(buttons);
         
@@ -1093,6 +1009,15 @@ public class MainWindow extends JFrame implements ActionListener{
         bottom = new JPanel();
         center = new JPanel();
         
+
+        //center.setBackground(new Color(254, 245, 231));        //----------------------------
+        //center.setOpaque(true);
+
+        JLabel image = new JLabel();
+        ImageIcon bg = new ImageIcon("./images/bg2.png");
+        
+        image.setIcon(bg);
+        center.add(image);                                      //---------------------------
         //ifLost popUp
         ifLost = new JPanel();
         ifLostText = new JLabel();
@@ -1145,7 +1070,7 @@ public class MainWindow extends JFrame implements ActionListener{
         info.setLayout(new BorderLayout());
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
         
-        infoTop.setSize(new Dimension(300, 500));
+        infoTop.setSize(new Dimension(300, 700));
         //infoTop.setLayout(new GridLayout(2, 1, 0, 20));                           SOS changed
         infoTop.setLayout(new BorderLayout(20, 20)); 
 
@@ -1171,8 +1096,11 @@ public class MainWindow extends JFrame implements ActionListener{
         setUpBelongings();
         //containerOfBelongings.add(belongingsPanel);
         infoTop.add(playersInfo, BorderLayout.NORTH);
-        infoTop.add(belongingsPanel, BorderLayout.SOUTH);
+        infoTop.add(belongingsPanel, BorderLayout.CENTER);
 
+
+        // infoTop.setBackground(Color.yellow);        //SOS just added
+        // infoTop.setOpaque(true);
         setUpInfoTop();
         setUpInfoBottom();
         info.add(infoTop, BorderLayout.NORTH);
@@ -1183,9 +1111,9 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpBelongings()
     {
         belongingButtons = new BelongingButton[28];
-        belongingsPanel.setLayout(new GridLayout(3, 10, 25, 15));
+        belongingsPanel.setLayout(new GridLayout(4, 7, 25, 15));        //3, 10
 
-        belongingsPanel.setSize(new Dimension(200, 200));
+        belongingsPanel.setSize(new Dimension(400, 400));
         
         
         for (int i = 0; i < belongingButtons.length; i++)
@@ -1266,6 +1194,9 @@ public class MainWindow extends JFrame implements ActionListener{
                 this.commands.message.setVisible(true);
             }
         }
+        if (game.getActivePlayer().getMoney() < 0)
+            done.setEnabled(false);
+            
         setUpInfoTop();
     }
 
@@ -1274,11 +1205,14 @@ public class MainWindow extends JFrame implements ActionListener{
         infoBottom.setLayout(new GridLayout());
         this.throwDice = new JButton("Throw the dice");
         this.done = new JButton("Done");
+        done.setEnabled(false);
         throwDice.addActionListener(new ActionListener(){
             
             @Override
             public void actionPerformed(ActionEvent e)
             {   
+                //throwDice.setEnabled(false);
+                
                 // remove the old sprite
                 buttons[game.getActivePlayerCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
                 buttons[game.getActivePlayerCoordinate()].revalidate();
@@ -1286,29 +1220,33 @@ public class MainWindow extends JFrame implements ActionListener{
 
                 if (game.ifPlayerIsPrisoned()){
                     game.startGame();
-                    if (!game.ifPlayerHoldsDoubles() || game.ifPlayerIsPrisoned()){      //moved to After doAction is complete
-                        //System.out.println("Holds doubles");
-                        throwDice.setEnabled(false);
-                        done.setEnabled(true);
-                    } 
+                    // if (!game.ifPlayerHoldsDoubles() || game.ifPlayerIsPrisoned()){      //moved to After doAction is complete
+                    //     //System.out.println("Holds doubles");
+                    //     throwDice.setEnabled(false);
+                    //     done.setEnabled(true);
+                    // } 
+
+
                     commands.setAllButtonsVisible(false);
                     if (!game.ifPlayerIsPrisoned()){
                 
                         commands.message.setText("You rolled doubles and are free to go.");
                         //setUpInfoCenter();
-                        throwDice.setEnabled(false);
-                        done.setEnabled(true);
+                        //throwDice.setEnabled(false);
+                        //done.setEnabled(true);
                     }
                     else{
                         commands.message.setText("You failed to roll doubles. See you on the next turn!");
                         throwDice.setEnabled(false);
+
                     }
+                    done.setEnabled(true);
                     commands.message.setVisible(true);
                     return;
                 }
                 game.startGame();
 
-                throwDice.setEnabled(false);            //JUST ADDED
+                //throwDice.setEnabled(false);            //JUST ADDED
 
                 // if (!game.ifPlayerHoldsDoubles()){      //moved to After doAction is complete
                 //     //System.out.println("Holds doubles");
@@ -1323,6 +1261,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 //setUpInfoCenter();
                 setUpInfoCenter();
                 setUpInfoTop();  
+                updateBottomButtons();
             }
             
         });
@@ -1331,8 +1270,8 @@ public class MainWindow extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                /*if (!game.getActivePlayerState())
-                     game.removePlayer();*/
+                if (!game.getActivePlayerState())
+                     game.removePlayer();
                 
 
                 commands.setVisible(false);
@@ -1340,10 +1279,10 @@ public class MainWindow extends JFrame implements ActionListener{
                 buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
                 
                 game.changePlayer();
-                /*if (game.activePlayerWon()){
-                    new Winwindow(game.getActivePlayer);
+                if (game.activePlayerWon()){
+                    new WinWindow(game.getActivePlayer());
                     dispose();
-                }*/
+                }
                 done.setEnabled(false);
                 titleDeed.setEverything(game.getActivePlayerCoordinate());
                 throwDice.setEnabled(true);

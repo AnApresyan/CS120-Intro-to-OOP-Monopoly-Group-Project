@@ -3,7 +3,7 @@ public class Jail extends Square
     //for user interaction
     private int     userChoice;
     private String  userState;
-    private boolean allowPay;
+    //private boolean allowPay;
     private boolean allowCard;
     private boolean allowThrow;
 
@@ -118,45 +118,45 @@ public class Jail extends Square
     }
 
     public void checkTheStateSetMessage(Player activePlayer){
-        allowPay = false;
+        //allowPay = false;
         allowCard = false;
         allowThrow = true;
         
-        if (activePlayer.getMoney() >= 50){
-            this.allowPay = true;
-        }
+        // if (activePlayer.getMoney() >= 50){
+        //     this.allowPay = true;
+        // }
         if (activePlayer.getGetOutOfJail() && activePlayer.getDaysInJail() <= 3){
             this.allowCard = true;
         }
         if (activePlayer.getDaysInJail() > 3){
             this.allowThrow = false;
         }
-        System.out.println("allowPay: " + this.allowPay);
+        //System.out.println("allowPay: " + this.allowPay);
         System.out.println("allowCard" + this.allowCard);
         System.out.println("allowThrow " + this.allowThrow);
         this.setMessage();
     }
 
     public void setMessage(){
-        String pay = "";
-        String mortgage = "-mortgage any of your owned properties to get out of Jail";
+        String pay = "-pay 50$";
+        //String mortgage = "-mortgage any of your owned properties to get out of Jail";
         String card = "";
         String throwDice = "";
-        if (allowPay()){
-            pay = "-pay 50$";
-        }
+        // if (allowPay()){
+        //     pay = "-pay 50$";
+        // }
         if (allowCard()){
             card = "-use your Get out of Jail card";
         }
         if (allowThrow()){
             throwDice = "-throw the dice";
         }
-        this.setMessage("You can " +"\n" + pay + "\n" + mortgage + "\n" +card + "\n" + throwDice);
+        this.setMessage("You can " +"\n" + pay +"\n" +card + "\n" + throwDice);
     }
 
-    public boolean allowPay(){
-        return allowPay;
-    }
+    // public boolean allowPay(){
+    //     return allowPay;
+    // }
     public boolean allowCard(){
         return allowCard;
     }

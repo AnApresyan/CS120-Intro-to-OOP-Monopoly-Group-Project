@@ -199,9 +199,16 @@ public class Monopoly
         indexOfBidder = 0;
         this.activePlayer = players.get(0);
         this.activeBidder = this.activePlayer;
-        this.choice = 0;                            // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
-                                                    // Al: good idea, but let's leave it for later, if we have time 
+        this.choice = 0; 
+        
+        // players.get(1).setMoney(1);
+        // players.get(1).getBelongings().add((Buyable)Board.getSquares()[39]);
+        // ((Buyable)Board.getSquares()[39]).setOwner(players.get(1));
+        //((Buyable)Board.getSquares()[3]).setIsMortgaged(true);
     }
+                                                    // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
+                                                    // Al: good idea, but let's leave it for later, if we have time 
+    
 
 
     public boolean getActivePlayerState(){
@@ -273,9 +280,23 @@ public class Monopoly
     }
 
     public void removePlayer(){
+        if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable){
+            if (((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null){
+                for (Buyable belonging : activePlayer.getBelongings()){
+                    ((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).getOwner().getBelongings().add(belonging);
+                    belonging.setOwner(((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).getOwner());
+                }
+            }
+            else{
+                for (Buyable belonging : activePlayer.getBelongings())
+                    belonging.setOwner(null);
+            }
+        }
+    
         for (Player player : players){
             if (player.equals(activePlayer)){
                 players.remove(player);
+                this.indexOfPlayer--;
                 break;
             }
         }

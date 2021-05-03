@@ -20,10 +20,10 @@ public class Player
         setName(name);
         this.coordinate = 0;
         this.daysInJail = 1;
-        this.money = 120;        //1500  
+        this.money = 1500;        //1500  
                 // Al: FOR TESTING
-        if (name.equals("bum"))
-            this.money = 10;       
+
+        
     }
 
     public boolean state(){
@@ -346,8 +346,7 @@ public class Player
             {
                 System.out.println("Unfortunately, " + this.name + ", you lost.");
                 
-                for (Buyable b : belongings)
-                {
+                for (Buyable b : belongings){
                     if (!(owner == null))
                     {
                         owner.belongings.add(b);
@@ -379,7 +378,7 @@ public class Player
     }*/
 
     // Al: has to undergo major testing: not safe for use!
-    public void initializeTrade()
+    /*public void initializeTrade()
     {
         // Al: also need to implement selling of getouttajail card
         System.out.println("Please select a player to trade with: ");
@@ -482,7 +481,8 @@ public class Player
                 this.getBelongings().remove(e);
             }
         }
-    }
+    }*/
+
     // TESTED by Al
     public void removePlayer(Player player)
     {
