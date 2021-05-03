@@ -22,8 +22,10 @@ public class Player
         this.daysInJail = 1;
         this.money = 1500;        //1500  
                 // Al: FOR TESTING
-
-        
+        if (name.equals("a"))
+            this.getOutOfJail = true;
+        if (name.equals("c"))
+            this.getOutOfJail = true;
     }
 
     public boolean state(){
@@ -685,7 +687,7 @@ public class Player
     }
 
     public String toString(){
-        return "Player: " + this.name + "   Money: " + this.money + "   Coordinate: " + this.coordinate;
+        return ("Player: " + this.name + "   Money: " + this.money + "   Coordinate: " + this.coordinate + " Card: " + this.getGetOutOfJail());
     }
 
 }

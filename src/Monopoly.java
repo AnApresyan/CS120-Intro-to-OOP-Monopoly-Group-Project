@@ -186,10 +186,11 @@ import java.util.ArrayList;
  * MONOPOLY 1.2.0           05/03/2021
  * Al:
  * 1) the dices rolled are now displayed on the playing screen;
- * 2) added a Trade button which now allows to initialize trade. 
+ * 2) added a Trade button which now allows to initialize trade;
+ * 3) trade wholly implemented! YAY!
  * 
  * KNOWN ISSUES:
- * 1. sprites are duplicated after GoToJail interaction
+ * 1. some sprites disappear after doubles are rolled
  */
 public class Monopoly 
 {
@@ -202,6 +203,10 @@ public class Monopoly
     private boolean                     moveToJail;
     private int                         choice;
     private Player                      tradee;
+    private ArrayList<Buyable>          propsToGive;
+    private ArrayList<Buyable>          selectedPropsToGive;
+    private ArrayList<Buyable>          propsToReceive;
+    private ArrayList<Buyable>          selectedPropsToReceive;
     
     public Monopoly(ArrayList<Player> players)
     {
@@ -445,6 +450,56 @@ public class Monopoly
         System.out.println("the bidders:");
         for (Player b : bidders)
             System.out.println(b);
+    }
+
+    public void setPropsToGive()
+    {
+        this.selectedPropsToGive = new ArrayList<>();
+        this.propsToGive = new ArrayList<>();
+        for (Buyable b : this.activePlayer.getBelongings())
+            this.propsToGive.add(b);
+    }
+
+    public void setPropsToReceive()
+    {
+        this.selectedPropsToReceive = new ArrayList<>();
+        this.propsToReceive = new ArrayList<>();
+        for (Buyable b : this.tradee.getBelongings())
+            this.propsToReceive.add(b);
+    }
+
+    public void setTradeLists()
+    {
+        this.setPropsToGive();
+        this.setPropsToReceive();
+    }
+
+    public void nullifyTradeProps()
+    {
+        this.propsToGive = null;
+        this.propsToReceive = null;
+        this.selectedPropsToGive = null;
+        this.selectedPropsToReceive = null;
+    }
+
+    public ArrayList<Buyable>   getPropsToReceive()
+    {
+        return (this.propsToReceive);
+    }
+
+    public ArrayList<Buyable>   getPropsToGive()
+    {
+        return (this.propsToGive);
+    }
+
+    public ArrayList<Buyable>   getSelectedPropsToReceive()
+    {
+        return (this.selectedPropsToReceive);
+    }
+
+    public ArrayList<Buyable>   getSelectedPropsToGive()
+    {
+        return (this.selectedPropsToGive);
     }
 
     public void removeActiveBidder()
