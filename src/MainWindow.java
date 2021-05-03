@@ -71,30 +71,75 @@ public class MainWindow extends JFrame implements ActionListener{
 
     private class TradePopUp extends JPanel implements ActionListener, ChangeListener
     {
-        private JPanel  tradeInfoPanel;
-        private JLabel  tradeInfoLabel;
-        private JPanel  lobbyPanel;
-        private JPanel  traderPanel;
-        private JPanel  traderSliderPanel;
-        private JSlider traderSlider;
-        private JLabel  traderSliderValue;
-        private JPanel  traderBelongingsPanel;
-        private JPanel  traderCardPanel;
-        private JPanel  tradeePanel;
-        private JPanel  tradeeSliderPanel;
-        private JSlider tradeeSlider;
-        private JLabel  tradeeSliderValue;
-        private JPanel  tradeeBelongingsPanel;
-        private JPanel  tradeeCardPanel;
-        private JPanel  tradeButtons;
-        private JButton confirmTrade;
-        private JButton cancelTrade;
-        private JButton acceptTrade;
-        private JButton declineTrade;
+        private JPanel              tradeInfoPanel;
+        private JLabel              tradeInfoLabel;
+        private JPanel              lobbyPanel;
+
+        private JPanel              traderPanel;
+        private JPanel              traderSliderPanel;
+        private JSlider             traderSlider;
+        private JLabel              traderSliderValue;
+        private JPanel              traderBelongingsPanel;
+        private JLabel              youHave;
+        private JLabel              youGive;
+        private JPanel              propsToGivePanel;
+        private JPanel              selectedPropsToGivePanel;
+        private ArrayList<JButton>  propsToGive = new ArrayList<>();
+        private ArrayList<JButton>  selectedPropsToGive = new ArrayList<>();
+        private JPanel              traderCardPanel;
+        private JLabel              traderCardLabel;
+        private JComboBox<String>   traderCard;
+
+        private JPanel              tradeePanel;
+        private JPanel              tradeeSliderPanel;
+        private JSlider             tradeeSlider;
+        private JLabel              tradeeSliderValue;
+        private JPanel              tradeeBelongingsPanel;
+        private JLabel              theyHave;
+        private JLabel              theyGive;
+        private JPanel              propsToReceivePanel;
+        private JPanel              selectedPropsToReceivePanel;
+        private ArrayList<JButton>  propsToReceive = new ArrayList<>();
+        private ArrayList<JButton>  selectedPropsToReceive = new ArrayList<>();    
+        private JPanel              tradeeCardPanel;
+        private JLabel              tradeeCardLabel;
+        private JComboBox<String>   tradeeCard;
+
+        private JPanel              tradeButtons;
+
+        private JButton             confirmTrade;
+        private JButton             cancelTrade;
+        private JButton             acceptTrade;
+        private JButton             declineTrade;
+
+        private JLabel              confirmation;
+        private JPanel              confirmationPanel;
 
         private TradePopUp()
         {
+            this.confirmation = new JLabel();
+            this.confirmationPanel = new JPanel();
+            this.confirmationPanel.add(this.confirmation);
+
+            this.traderCardLabel = new JLabel();
+            this.traderCardLabel.setText("Include the 'Get out of Jail' card?");
+            this.tradeeCardLabel = new JLabel();
+            this.tradeeCardLabel.setText("Include the 'Get out of Jail' card?");
+            this.traderCard = new JComboBox<>(new String[]{"Yes", "No"});
+            this.tradeeCard = new JComboBox<>(new String[]{"Yes", "No"});
+
+            this.theyGive = new JLabel();
+            this.theyGive.setText("Selected properties to receive:");
+            this.theyHave = new JLabel();
+            this.theyHave.setText("Tradee's properties:");
+
+            this.youGive = new JLabel();
+            this.youGive.setText("Selected properties to give:");
+            this.youHave = new JLabel();
+            this.youHave.setText("Your properties:");
+
             this.setLayout(new BorderLayout());
+            // this.setSize(new Dimension(200, 300));
             this.traderSliderValue = new JLabel();
             this.tradeeSliderValue = new JLabel();
             this.tradeInfoPanel = new JPanel();
@@ -108,6 +153,10 @@ public class MainWindow extends JFrame implements ActionListener{
             this.tradeePanel.setLayout(new GridLayout(3, 1));
             this.tradeButtons = new JPanel();
             this.tradeButtons.setLayout(new GridLayout(1, 2));
+            this.propsToGivePanel = new JPanel();
+            this.selectedPropsToGivePanel = new JPanel();
+            this.propsToReceivePanel = new JPanel();
+            this.selectedPropsToReceivePanel = new JPanel();
             // lobby components
             this.traderSliderPanel =  new JPanel();
             this.traderSliderPanel.setLayout(new GridLayout(2, 1));
@@ -116,7 +165,14 @@ public class MainWindow extends JFrame implements ActionListener{
             this.traderSliderPanel.add(this.traderSliderValue);
             this.traderSliderPanel.add(this.traderSlider);
             this.traderBelongingsPanel = new JPanel();
+            this.traderBelongingsPanel.setLayout(new GridLayout(4, 1));
+            this.traderBelongingsPanel.add(this.youHave);
+            this.traderBelongingsPanel.add(this.propsToGivePanel);
+            this.traderBelongingsPanel.add(this.youGive);
+            this.traderBelongingsPanel.add(this.selectedPropsToGivePanel);
             this.traderCardPanel = new JPanel();
+            this.traderCardPanel.setLayout(new GridLayout(2, 1));
+            
 
             this.traderPanel.add(this.traderSliderPanel);
             this.traderPanel.add(this.traderBelongingsPanel);
@@ -129,7 +185,13 @@ public class MainWindow extends JFrame implements ActionListener{
             this.tradeeSliderPanel.add(this.tradeeSliderValue);
             this.tradeeSliderPanel.add(this.tradeeSlider);
             this.tradeeBelongingsPanel = new JPanel();
+            this.tradeeBelongingsPanel.setLayout(new GridLayout(4, 1));
+            this.tradeeBelongingsPanel.add(this.theyHave);
+            this.tradeeBelongingsPanel.add(this.propsToReceivePanel);
+            this.tradeeBelongingsPanel.add(this.theyGive);
+            this.tradeeBelongingsPanel.add(this.selectedPropsToReceivePanel);
             this.tradeeCardPanel = new JPanel();
+            this.tradeeCardPanel.setLayout(new GridLayout(2, 1));
 
             this.tradeePanel.add(this.tradeeSliderPanel);
             this.tradeePanel.add(this.tradeeBelongingsPanel);
@@ -139,6 +201,10 @@ public class MainWindow extends JFrame implements ActionListener{
             this.cancelTrade = new JButton("Cancel");
             this.acceptTrade = new JButton("Accept");
             this.declineTrade = new JButton("Decline");
+            this.confirmTrade.addActionListener(this);
+            this.cancelTrade.addActionListener(this);
+            this.acceptTrade.addActionListener(this);
+            this.declineTrade.addActionListener(this);
             this.lobbyPanel.add(this.traderPanel);
             this.lobbyPanel.add(this.tradeePanel);
             this.add(this.tradeInfoPanel, BorderLayout.NORTH);
@@ -146,26 +212,256 @@ public class MainWindow extends JFrame implements ActionListener{
             this.add(this.tradeButtons, BorderLayout.SOUTH);
         }
 
+        private void refreshBelongingsPanel()
+        {
+            // deleting old buttons
+            for (JButton b : this.propsToGive)
+                this.propsToGivePanel.remove(b);
+            this.propsToGivePanel.revalidate();
+            this.propsToGivePanel.repaint();
+            for (JButton b : this.selectedPropsToGive)
+                this.selectedPropsToGivePanel.remove(b);
+            this.selectedPropsToGivePanel.revalidate();
+            this.selectedPropsToGivePanel.repaint();
+            for (JButton b : this.propsToReceive)
+                this.propsToReceivePanel.remove(b);
+            this.propsToReceivePanel.revalidate();
+            this.propsToReceivePanel.repaint();
+            for (JButton b : this.selectedPropsToReceive)
+                this.selectedPropsToReceivePanel.remove(b);
+            this.selectedPropsToReceivePanel.revalidate();
+            this.selectedPropsToReceivePanel.repaint();
+            // removing old buttons
+            this.propsToGive = new ArrayList<>();
+            this.selectedPropsToGive = new ArrayList<>();
+            this.propsToReceive = new ArrayList<>();
+            this.selectedPropsToReceive = new ArrayList<>();
+            // creating new buttons
+            for (int i = 0; i < game.getPropsToGive().size(); i++)
+                this.propsToGive.add(new JButton(game.getPropsToGive().get(i).toString()));
+            for (int i = 0; i < game.getSelectedPropsToGive().size(); i++)
+                this.selectedPropsToGive.add(new JButton(game.getSelectedPropsToGive().get(i).toString()));
+            for (int i = 0; i < game.getPropsToReceive().size(); i++)
+                this.propsToReceive.add(new JButton(game.getPropsToReceive().get(i).toString()));
+            for (int i = 0; i < game.getSelectedPropsToReceive().size(); i++)
+                this.selectedPropsToReceive.add(new JButton(game.getSelectedPropsToReceive().get(i).toString()));
+            // adding new buttons
+            this.propsToGivePanel.setLayout(new GridLayout(game.getPropsToGive().size(), 1));
+            for (JButton b : this.propsToGive)
+            {
+                b.addActionListener(this);
+                this.propsToGivePanel.add(b);
+            }
+            this.selectedPropsToGivePanel.setLayout(new GridLayout(game.getSelectedPropsToGive().size(), 1));
+            for (JButton b : this.selectedPropsToGive)
+            {
+                b.addActionListener(this);
+                this.selectedPropsToGivePanel.add(b);
+            }
+            this.propsToReceivePanel.setLayout(new GridLayout(game.getPropsToReceive().size(), 1));
+            for (JButton b : this.propsToReceive)
+            {
+                b.addActionListener(this);
+                this.propsToReceivePanel.add(b);
+            }
+            this.selectedPropsToReceivePanel.setLayout(new GridLayout(game.getSelectedPropsToReceive().size(), 1));
+            for (JButton b : this.selectedPropsToReceive)
+            {
+                b.addActionListener(this);
+                this.selectedPropsToReceivePanel.add(b);
+            }
+        }
+
         private void initTradePopUp()
         {
+            game.setTradeLists();
             this.tradeInfoLabel.setText(game.getActivePlayer().getName() + " is trading with " + game.getTradee().getName());
             //sliders
             this.traderSlider.setMinimum(0);
             this.traderSlider.setMaximum(game.getActivePlayer().getMoney());
+            this.traderSliderValue.setText("Money to give: $" + this.traderSlider.getValue());
             this.tradeeSlider.setMinimum(0);
             this.tradeeSlider.setMaximum(game.getTradee().getMoney());
+            this.tradeeSliderValue.setText("Money to receive: $" + this.tradeeSlider.getValue());
+            this.tradeButtons.add(confirmTrade);
+            this.tradeButtons.add(cancelTrade);
+            // System.out.println("Trader: " + game.getActivePlayer() + " and their card is " + game.getActivePlayer().getGetOutOfJail());
+            // System.out.println("Tradee: " + game.getTradee() + " and their card is " + game.getTradee().getGetOutOfJail());
+            if (game.getActivePlayer().getGetOutOfJail() && !(game.getTradee().getGetOutOfJail()))
+            {
+                // System.out.println("ADDED TO TRADER");
+                this.traderCardPanel.add(this.traderCardLabel);
+                this.traderCardPanel.add(this.traderCard);
+            }
+            if (!(game.getActivePlayer().getGetOutOfJail()) && game.getTradee().getGetOutOfJail())
+            {
+                // System.out.println("ADDED TO TRADEE");
+                this.tradeeCardPanel.add(this.tradeeCardLabel);
+                this.tradeeCardPanel.add(this.tradeeCard);
+            }
+            this.refreshBelongingsPanel();
         }
 
         @Override
         public void stateChanged(ChangeEvent e) 
         {
-            
+            this.traderSliderValue.setText("Money to give: $" + this.traderSlider.getValue());
+            this.tradeeSliderValue.setText("Money to receive: $" + this.tradeeSlider.getValue());
+        }
+        private void recoverPanel()
+        {
+            this.tradeButtons.remove(acceptTrade);
+            this.tradeButtons.remove(declineTrade);
+            this.remove(confirmationPanel);
+            this.tradeButtons.add(confirmTrade);
+            this.tradeButtons.add(cancelTrade);
+            this.traderCardPanel.remove(this.traderCardLabel);
+            this.traderCardPanel.remove(this.traderCard);
+            this.traderCard.setSelectedItem("Yes");
+            this.tradeeCard.setSelectedItem("Yes");
+            this.tradeeCardPanel.remove(this.tradeeCardLabel);
+            this.tradeeCardPanel.remove(this.tradeeCard);
+            this.add(this.tradeInfoPanel, BorderLayout.NORTH);
+            this.add(this.lobbyPanel, BorderLayout.CENTER);
+            tradeDialog.setVisible(false);
         }
 
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            
+            if (e.getSource() == cancelTrade)
+            {
+                this.traderCardPanel.remove(this.traderCardLabel);
+                this.traderCardPanel.remove(this.traderCard);
+                this.traderCard.setSelectedItem("Yes");
+                this.tradeeCard.setSelectedItem("Yes");
+                this.tradeeCardPanel.remove(this.tradeeCardLabel);
+                this.tradeeCardPanel.remove(this.tradeeCard);
+                tradeDialog.setVisible(false);
+            }
+            if (e.getSource() == confirmTrade)
+            {
+                // DON'T FORGET TO ADD BACK AFTER EITHER DECLINE OR ACCEPT IS HIT
+                this.remove(this.tradeInfoPanel);
+                this.remove(this.lobbyPanel);
+                this.tradeButtons.remove(confirmTrade);
+                this.tradeButtons.remove(cancelTrade);
+
+                this.tradeButtons.revalidate();
+                this.tradeButtons.repaint();
+
+                this.tradeButtons.add(acceptTrade);
+                this.tradeButtons.add(declineTrade);
+
+                this.confirmation.setText(game.getTradee().getName() + ", do you want to accept the offer from " + game.getActivePlayer().getName() + "?");
+                this.add(confirmationPanel, BorderLayout.NORTH);
+            }
+
+            if (e.getSource() == confirmTrade || e.getSource() == declineTrade)
+            {
+                if (e.getSource() == confirmTrade)
+                {
+                    // handing over money
+                    game.getActivePlayer().receiveMoney(this.tradeeSlider.getValue());
+                    game.getActivePlayer().receiveMoney(-this.traderSlider.getValue());
+                    game.getTradee().receiveMoney(this.traderSlider.getValue());
+                    game.getTradee().receiveMoney(-this.tradeeSlider.getValue());
+                    // handing over props
+                    for (Buyable b : game.getSelectedPropsToGive())
+                    {
+                        game.getActivePlayer().getBelongings().remove(b);
+                        game.getTradee().getBelongings().add(b);
+                    }
+                    for (Buyable b : game.getSelectedPropsToReceive())
+                    {
+                        game.getTradee().getBelongings().remove(b);
+                        game.getActivePlayer().getBelongings().add(b);
+                    }
+                    // handing over cards
+                    if (game.getActivePlayer().getGetOutOfJail() && !(game.getTradee().getGetOutOfJail()))
+                    {
+                        if (traderCard.getSelectedItem().equals("Yes"))
+                        {
+                            game.getActivePlayer().setGetOutOfJail(false);
+                            game.getTradee().setGetOutOfJail(true);
+                        }
+                    }
+                    else if (!(game.getActivePlayer().getGetOutOfJail()) && game.getTradee().getGetOutOfJail())
+                    {
+                        if (tradeeCard.getSelectedItem().equals("Yes"))
+                        {
+                            game.getTradee().setGetOutOfJail(false);
+                            game.getActivePlayer().setGetOutOfJail(true);
+                        }
+                    }
+                    updateBelongingsPane();
+                    setUpInfoTop();
+                }
+                recoverPanel();
+                game.nullifyTradeProps();
+            }
+
+            for (JButton button : this.propsToGive)
+            {
+                if (e.getSource() == button)
+                {
+                    for (Buyable buyable : game.getPropsToGive())
+                        if (buyable.toString().equals(button.getText()))
+                        {
+                            game.getSelectedPropsToGive().add(buyable);
+                            game.getPropsToGive().remove(buyable);
+                            this.refreshBelongingsPanel();
+                            return ;
+                        }
+                }
+            }
+            for (JButton button : this.selectedPropsToGive)
+            {
+                if (e.getSource() == button)
+                {
+                    for (Buyable buyable : game.getSelectedPropsToGive())
+                        if (buyable.toString().equals(button.getText()))
+                        {
+                            
+                            game.getPropsToGive().add(buyable);
+                            game.getSelectedPropsToGive().remove(buyable);
+                            this.refreshBelongingsPanel();
+                            return ;
+                        }
+                }
+            }
+            for (JButton button : this.propsToReceive)
+            {
+                if (e.getSource() == button)
+                {
+                    for (Buyable buyable : game.getPropsToReceive())
+                    {
+                        if (buyable.toString().equals(button.getText()))
+                        {
+                            game.getSelectedPropsToReceive().add(buyable);
+                            game.getPropsToReceive().remove(buyable);
+                            this.refreshBelongingsPanel();
+                            return ;
+                        }
+                    }
+                }
+            }
+            for (JButton button : this.selectedPropsToReceive)
+            {
+                if (e.getSource() == button)
+                {
+                    for (Buyable buyable : game.getSelectedPropsToReceive())
+                    {
+                        if (buyable.toString().equals(button.getText()))
+                        {
+                            game.getPropsToReceive().add(buyable);
+                            game.getSelectedPropsToReceive().remove(buyable);
+                            this.refreshBelongingsPanel();
+                            return ;
+                        }
+                    }
+                }
+            }
         }
         
     }
@@ -207,7 +503,7 @@ public class MainWindow extends JFrame implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            for (JButton b : selectButtons)
+            for (JButton b : this.selectButtons)
             {
                 if (e.getSource() == b)
                 {
@@ -219,6 +515,15 @@ public class MainWindow extends JFrame implements ActionListener{
                         }
                 }
             }
+            popUpTrade.initTradePopUp();
+            JOptionPane popTrade = new JOptionPane(popUpTrade, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+            tradeDialog = new JDialog();
+            tradeDialog.setTitle("Trade");
+            tradeDialog.setModal(true);
+            tradeDialog.setContentPane(popTrade);
+            tradeDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+            tradeDialog.pack();
+            tradeDialog.setVisible(true);
         }
     }
 
@@ -1008,7 +1313,7 @@ public class MainWindow extends JFrame implements ActionListener{
             // for (Player player : Monopoly.getPlayers())
             //     System.out.println(player.toString());
             //optionPane telling the player lost
-            ifLostText.setText("You lost. Please precede and click done to get out of the game.");
+            ifLostText.setText("You lost. Please proceed and click done to get out of the game.");
             JOptionPane.showMessageDialog(null, ifLost, "Your state", JOptionPane.PLAIN_MESSAGE); 
             done.setEnabled(true);
             throwDice.setEnabled(false);
@@ -1146,6 +1451,7 @@ public class MainWindow extends JFrame implements ActionListener{
     {
         popUpAuction = new AuctionPopUp();
         popUpTradeSelection = new TradeSelectionPopUp();
+        popUpTrade = new TradePopUp();
         // initializing player sprites
         sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));

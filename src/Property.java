@@ -91,6 +91,6 @@ public class Property extends Buyable
 
     public String toString()
     {
-        return (getCoordinate() + ": " + getTitle() + ". Number of houses: " + houses + ". Mortgaged: " + isMortgaged() + ". Owner: (" + getOwner() + ")");
+        return (getCoordinate() + ": " + getTitle() + ". Houses: " + houses + ". Mortgaged? " + isMortgaged());
     }
 }

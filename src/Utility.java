@@ -32,6 +32,6 @@ public class Utility extends Buyable
 
     public String toString()
     {
-        return (getCoordinate() + ": " + getTitle() + ". Mortgaged: " + isMortgaged() + ". Owner: (" + getOwner() + ")");
+        return (getCoordinate() + ": " + getTitle() + ". Mortgaged? " + isMortgaged());
     }
 }
