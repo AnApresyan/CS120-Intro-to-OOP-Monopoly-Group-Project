@@ -20,12 +20,11 @@ public class Player
         setName(name);
         this.coordinate = 0;
         this.daysInJail = 1;
-        this.money = 1500;        //1500  
+        this.money = 1500;
                 // Al: FOR TESTING
-        if (name.equals("a"))
-            this.getOutOfJail = true;
-        if (name.equals("c"))
-            this.getOutOfJail = true;
+        if (name.equals("bum") || name.equals("bum2") || name.equals("bum3"))
+            this.money = 1;
+        
     }
 
     public boolean state(){
@@ -56,8 +55,8 @@ public class Player
     {
         this.dice[0] = (int)(Math.random() * 6) + 1;
         this.dice[1] = (int)(Math.random() * 6) + 1;
-        // this.dice[0] = 15;
-        // this.dice[1] = 15;
+        // this.dice[0] = 1;
+        // this.dice[1] = 0;
 
         if (holdsDoubles())
             this.doublesInARow++;
