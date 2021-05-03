@@ -1361,7 +1361,10 @@ public class MainWindow extends JFrame implements ActionListener{
         this.setSize(new Dimension(1300, 750));
         this.setLayout(new BorderLayout());
         this.setResizable(false); 
-        this.setLocationRelativeTo(null);                                             //-----------------
+        this.setLocationRelativeTo(null);  
+        
+        ImageIcon icon = new ImageIcon("./images/icon.png");
+        this.setIconImage(icon.getImage());//-----------------
         // this.getContentPane().setBackground(new Color(64, 184, 182));
         //setting up
         //this.board = new JPanel();
@@ -1414,7 +1417,7 @@ public class MainWindow extends JFrame implements ActionListener{
             
             ImageIcon image = new ImageIcon("./images/image" + i + ".png");
             buttons[i].setIcon(image);
-            buttons[i].setHorizontalTextPosition(SwingConstants.CENTER);
+            //buttons[i].setHorizontalTextPosition(SwingConstants.CENTER);
             // if (Board.getSquares()[i].getClass().getName().equals("Property")){
             //     JTextArea text =  new JTextArea(5,10);                      //Exception
             //     text.setOpaque(false);

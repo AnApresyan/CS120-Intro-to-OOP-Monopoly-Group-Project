@@ -10,25 +10,37 @@ public class StartWindow extends JFrame{
     public StartWindow(){
         super("Monopoly");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 700);                 //this.setSize(1300, 750);
+        this.setSize(700, 400);                 //this.setSize(1300, 750);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
 
+
+        
+
         //The images
         ImageIcon image = new ImageIcon("./images/LOGO1.png");
+        ImageIcon icon = new ImageIcon("./images/icon.png");
+        this.setIconImage(icon.getImage());
         //ImageIcon image = new ImageIcon("./images/logo2.png");
         
         
         //The main panel
         JPanel mainMenu = new JPanel();
+        mainMenu.setBackground(new Color(255, 244, 246 ));
+        mainMenu.setOpaque(true);
         // mainMenu.setBackground(new Color(64, 184, 182));
 
         //Labels
         JLabel mainLabel = new JLabel("Welcome to Alexander's and Anahit's Monopoly");
+        //mainLabel.setForeground(Color.white);
         // mainLabel.setFont(font);
         // mainLabel.setFont(new Font("Futura", Font.ROMAN_BASELINE, 14));
         JPanel setUp = new JPanel();        //change
         
+        setUp.setBackground(new Color(255, 244, 246 ));
+        setUp.setOpaque(true);
+
+
         //the array list of players that will be given to the game when it is initialized
         ArrayList<Player> players = new ArrayList<>(); 
         
@@ -36,7 +48,7 @@ public class StartWindow extends JFrame{
         JLabel namesLabel = new JLabel();
         JTextField nameFromField = new JTextField();
         nameFromField.setPreferredSize(new Dimension(80, 40));
-        JButton submitName = new JButton("Submit");
+        GeneralButton submitName = new GeneralButton("Submit");
         
         //int numOfNames = 1;
         submitName.addActionListener(new ActionListener(){
@@ -45,7 +57,7 @@ public class StartWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String name = nameFromField.getText();
                 if (name.equals("")){
-                    namesLabel.setText( "Empty name. " + namesLabel.getText());
+                    namesLabel.setText( "Empty name. Please enter the name of Player " + (players.size() + 1));
                     return;
                 }
                 for (Player player : players) {
@@ -56,8 +68,6 @@ public class StartWindow extends JFrame{
                     }
                 }
                 players.add(new Player(name));
-                
-                /*numberOfPlayers--;*/
                 if (players.size() < numberOfPlayers){  
                     namesLabel.setText("Please enter the name of Player " + (players.size() + 1));
                     
@@ -65,25 +75,8 @@ public class StartWindow extends JFrame{
                 }
                 else
                 {
-                    // setUp.setVisible(false);
-                    // mainMenu.setVisible(false);
                     new MainWindow(players);
                     dispose();
-                    
-                    
-                    
-
-                    // game = new Monopoly(players);
-                    // popUpAuction = new AuctionPopUp();
-                    //         // initializing player sprites
-                    // sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                    // sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                    // if (numOfNames >= 3)
-                    //     sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                    // if (numOfNames >= 4)
-                    //     sprites.add(new JLabel("", new ImageIcon(new ImageIcon("CS120A_Group_Project_Monopoly/images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-                    // setTheFlow();
-
                 }  
             }
 
@@ -97,7 +90,9 @@ public class StartWindow extends JFrame{
         SpinnerModel values = new SpinnerNumberModel(2, 2, 4, 1);
         JSpinner howManyPlayers = new JSpinner(values);
         howManyPlayers.setVisible(false);
-        JButton submitNumberOfPlayers = new JButton("Submit");
+        
+        GeneralButton submitNumberOfPlayers = new GeneralButton("Submit");
+
         submitNumberOfPlayers.setVisible(false);
         submitNumberOfPlayers.addActionListener(new ActionListener(){
 
@@ -107,6 +102,7 @@ public class StartWindow extends JFrame{
                 submitNumberOfPlayers.setVisible(false);
                 howManyPlayers.setVisible(false);
                 namesLabel.setText("Please enter the name of Player 1");
+                //namesLabel.setForeground(Color.white);;
                 namesLabel.setVisible(true);
                 nameFromField.setVisible(true);
                 submitName.setVisible(true);
@@ -115,7 +111,8 @@ public class StartWindow extends JFrame{
         });
 
         //Start button
-        JButton start = new JButton("START");
+        GeneralButton start = new GeneralButton("START");
+        
         start.setVerticalAlignment(JButton.BOTTOM);
         
         start.addActionListener(new ActionListener(){
@@ -145,8 +142,9 @@ public class StartWindow extends JFrame{
         mainMenu.add(mainLabel);
        
         //Adding to the frame
+        
         this.add(mainMenu, BorderLayout.NORTH);
-        this.add(setUp, BorderLayout.CENTER);            //change        mainWindiw.add(setUp)
+        this.add(setUp, BorderLayout.CENTER);            
 
         this.setLocationRelativeTo(null);
         this.setVisible(true);
