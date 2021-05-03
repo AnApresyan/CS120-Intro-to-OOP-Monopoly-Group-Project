@@ -330,6 +330,7 @@ public class Monopoly
             // Al: added a check on throwing the dice to move for if the player's prisoned.
             // if they are, then the dice will not be thrown, and the player won't move.
             
+            moveToJail = false;
             if (!(activePlayer.isPrisoned()))
                 Utility.setDice(activePlayer.throwDice());
             else
@@ -356,6 +357,7 @@ public class Monopoly
             {
                 this.activePlayer.setIsPrisoned(true);
                 this.activePlayer.setDoublesInARow(0);
+                activePlayer.setCoordinate(10);
                 this.moveToJail = true;
                 return ;
             }
@@ -369,12 +371,12 @@ public class Monopoly
             // printHeader();
             // printMap();
             // printFooter();
-            if (activePlayer.getDoublesInARow() == 3)
-            {
-                activePlayer.setIsPrisoned(true);
-                activePlayer.setCoordinate(10);
-                activePlayer.setDoublesInARow(0);
-            }
+            // if (activePlayer.getDoublesInARow() == 3)
+            // {
+            //     activePlayer.setIsPrisoned(true);
+            //     activePlayer.setCoordinate(10);
+            //     activePlayer.setDoublesInARow(0);
+            // }
                 //break;
     //     }
     //     System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
