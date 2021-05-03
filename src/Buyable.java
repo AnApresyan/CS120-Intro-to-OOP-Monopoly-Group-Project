@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public abstract class Buyable extends Square
 {
     private Player      owner;
@@ -45,52 +43,6 @@ public abstract class Buyable extends Square
         }
         return (false);
     }
-
-
-
-    // public void initializeAuction(Player starter)
-    // {
-    //     System.out.println("Auction commenced.");
-        
-    //     // ArrayList<Player> bidders = new ArrayList<>();
-    //     // bidders.add(starter);
-
-    //     // for (Player p : Monopoly.getPlayers())
-    //     //     if (p.equals(starter))
-    //     //         bidders.add(p);
-
-    //     int index = 0;
-    //     int lowEnd = 1;
-    //     int highEnd;
-    //     int choice = starter.getMoney();
-    //     Player activeBidder;
-    //     while (true)
-    //     {
-    //         if (index == bidders.size())
-    //             index = 0;
-    //         activeBidder = bidders.get(index);
-    //         if (activeBidder.getMoney() >= choice)
-    //         {
-    //             highEnd = activeBidder.getMoney();
-    //             System.out.println(activeBidder.getName() + ", please select a value between " + lowEnd + " and " + highEnd + " to bid.");
-    //             // >>> receiving input <<<
-    //             choice = 100;
-    //             //or give up
-                
-    //             // >>> received input <<<
-    //             lowEnd = choice;
-    //             index++;
-    //         }
-    //         else
-    //         {
-    //             bidders.remove(activeBidder);
-    //         }
-    //         if (bidders.size() == 1)
-    //             break ;
-    //     }
-    //     bidders.get(0).receiveMoney(choice);
-    //     bidders.get(0).getBelongings().add(this);
-    // }
 
     public boolean isMortgaged()
     {

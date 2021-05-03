@@ -40,6 +40,8 @@ public class MainWindow extends JFrame implements ActionListener{
     //infoTop
     private ArrayList<JLabel>   playersLabels = new ArrayList<>();
     private JPanel playersInfo;
+    private JPanel diceInfo;
+    private JLabel diceLabel;
 
     //infoCenter
     private Commands commands;
@@ -48,6 +50,7 @@ public class MainWindow extends JFrame implements ActionListener{
     //infoBottom buttons
     private JButton throwDice;
     private JButton done;
+    private JButton trade;
 
     //belongings panel
 
@@ -55,13 +58,169 @@ public class MainWindow extends JFrame implements ActionListener{
     BelongingButton[] belongingButtons;
 
     //pop up window
-    private CustomPopUp     popUpWindow;
-    private AuctionPopUp    popUpAuction;
+    private CustomPopUp         popUpWindow;
+    private AuctionPopUp        popUpAuction;
+    private TradeSelectionPopUp popUpTradeSelection;
+    private TradePopUp          popUpTrade;
+    private JDialog             tradeDialog;
     
     //ifLost or has <0 money
     private JPanel          ifLost;
     private JLabel          ifLostText;
     private JDialog         dialog;
+
+    private class TradePopUp extends JPanel implements ActionListener, ChangeListener
+    {
+        private JPanel  tradeInfoPanel;
+        private JLabel  tradeInfoLabel;
+        private JPanel  lobbyPanel;
+        private JPanel  traderPanel;
+        private JPanel  traderSliderPanel;
+        private JSlider traderSlider;
+        private JLabel  traderSliderValue;
+        private JPanel  traderBelongingsPanel;
+        private JPanel  traderCardPanel;
+        private JPanel  tradeePanel;
+        private JPanel  tradeeSliderPanel;
+        private JSlider tradeeSlider;
+        private JLabel  tradeeSliderValue;
+        private JPanel  tradeeBelongingsPanel;
+        private JPanel  tradeeCardPanel;
+        private JPanel  tradeButtons;
+        private JButton confirmTrade;
+        private JButton cancelTrade;
+        private JButton acceptTrade;
+        private JButton declineTrade;
+
+        private TradePopUp()
+        {
+            this.setLayout(new BorderLayout());
+            this.traderSliderValue = new JLabel();
+            this.tradeeSliderValue = new JLabel();
+            this.tradeInfoPanel = new JPanel();
+            this.tradeInfoLabel = new JLabel();
+            this.tradeInfoPanel.add(this.tradeInfoLabel);
+            this.lobbyPanel = new JPanel();
+            this.lobbyPanel.setLayout(new GridLayout(1, 2));
+            this.traderPanel = new JPanel();
+            this.traderPanel.setLayout(new GridLayout(3, 1));
+            this.tradeePanel = new JPanel();
+            this.tradeePanel.setLayout(new GridLayout(3, 1));
+            this.tradeButtons = new JPanel();
+            this.tradeButtons.setLayout(new GridLayout(1, 2));
+            // lobby components
+            this.traderSliderPanel =  new JPanel();
+            this.traderSliderPanel.setLayout(new GridLayout(2, 1));
+            this.traderSlider = new JSlider();
+            this.traderSlider.addChangeListener(this);
+            this.traderSliderPanel.add(this.traderSliderValue);
+            this.traderSliderPanel.add(this.traderSlider);
+            this.traderBelongingsPanel = new JPanel();
+            this.traderCardPanel = new JPanel();
+
+            this.traderPanel.add(this.traderSliderPanel);
+            this.traderPanel.add(this.traderBelongingsPanel);
+            this.traderPanel.add(this.traderCardPanel);
+
+            this.tradeeSliderPanel =  new JPanel();
+            this.tradeeSliderPanel.setLayout(new GridLayout(2, 1));
+            this.tradeeSlider = new JSlider();
+            this.tradeeSlider.addChangeListener(this);
+            this.tradeeSliderPanel.add(this.tradeeSliderValue);
+            this.tradeeSliderPanel.add(this.tradeeSlider);
+            this.tradeeBelongingsPanel = new JPanel();
+            this.tradeeCardPanel = new JPanel();
+
+            this.tradeePanel.add(this.tradeeSliderPanel);
+            this.tradeePanel.add(this.tradeeBelongingsPanel);
+            this.tradeePanel.add(this.tradeeCardPanel);
+
+            this.confirmTrade = new JButton("Confirm");
+            this.cancelTrade = new JButton("Cancel");
+            this.acceptTrade = new JButton("Accept");
+            this.declineTrade = new JButton("Decline");
+            this.lobbyPanel.add(this.traderPanel);
+            this.lobbyPanel.add(this.tradeePanel);
+            this.add(this.tradeInfoPanel, BorderLayout.NORTH);
+            this.add(this.lobbyPanel, BorderLayout.CENTER);
+            this.add(this.tradeButtons, BorderLayout.SOUTH);
+        }
+
+        private void initTradePopUp()
+        {
+            this.tradeInfoLabel.setText(game.getActivePlayer().getName() + " is trading with " + game.getTradee().getName());
+            //sliders
+            this.traderSlider.setMinimum(0);
+            this.traderSlider.setMaximum(game.getActivePlayer().getMoney());
+            this.tradeeSlider.setMinimum(0);
+            this.tradeeSlider.setMaximum(game.getTradee().getMoney());
+        }
+
+        @Override
+        public void stateChanged(ChangeEvent e) 
+        {
+            
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            
+        }
+        
+    }
+    private class TradeSelectionPopUp extends JPanel implements ActionListener
+    {
+        private JPanel              mainPanel;
+        private ArrayList<JButton>  selectButtons = new ArrayList<>();
+        private JLabel              selectText;
+
+        private TradeSelectionPopUp()
+        {
+            this.setLayout(new BorderLayout());
+            this.mainPanel = new JPanel();
+            this.mainPanel.setLayout(new GridLayout(4, 1));
+            this.selectText = new JLabel();
+            this.selectText.setText("Please select a player to trade with:");
+            this.selectText.setFont(new Font("Futura", Font.PLAIN, 14));
+            this.mainPanel.add(this.selectText);
+            this.add(mainPanel);
+        }
+
+        private void initTradeSelectionPopUp()
+        {
+            for (JButton b : this.selectButtons)
+                this.mainPanel.remove(b);
+            this.selectButtons = new ArrayList<>();
+            for (int i = 0; i < Monopoly.getPlayers().size(); i++)
+            {
+                if (!(Monopoly.getPlayers().get(i).equals(game.getActivePlayer())))
+                    this.selectButtons.add(new JButton(Monopoly.getPlayers().get(i).toString()));
+            }
+            for (JButton b : this.selectButtons)
+            {
+                b.addActionListener(this);
+                this.mainPanel.add(b);
+            }
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            for (JButton b : selectButtons)
+            {
+                if (e.getSource() == b)
+                {
+                    for (Player p : Monopoly.getPlayers())
+                        if (p.toString().equals(b.getText()))
+                        {
+                            game.setTradee(p);
+                            break ;
+                        }
+                }
+            }
+        }
+    }
 
     private class AuctionPopUp extends JPanel implements ActionListener, ChangeListener
     {
@@ -757,6 +916,7 @@ public class MainWindow extends JFrame implements ActionListener{
             else if (e.getSource() == ok){
                 int previousCoordinate = game.getActivePlayerCoordinate();
                 // remove sprite
+                System.out.println("REMOVING THE SPRITE AT " + previousCoordinate + " OF THE PLAYER UNDER INDEX OF " + game.getActivePlayerIndex());
                 buttons[previousCoordinate].remove(sprites.get(game.getActivePlayerIndex()));
                 buttons[previousCoordinate].revalidate();
                 buttons[previousCoordinate].repaint();
@@ -770,6 +930,7 @@ public class MainWindow extends JFrame implements ActionListener{
                         this.setVisible(false);
                 }
                 // put sprite
+                System.out.println("PUTTING A NEW SPRITE AT " + game.getActivePlayerCoordinate() + " OF THE PLAYER UNDER INDEX OF " + game.getActivePlayerIndex());
                 buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
 
             }
@@ -815,20 +976,27 @@ public class MainWindow extends JFrame implements ActionListener{
 
     private void updateBottomButtons(){
         if (!commands.yes.isVisible() && !commands.no.isVisible() && !commands.ok.isVisible() &&
-            !commands.pay.isVisible() && !commands.percent.isVisible() && !commands.useTheCard.isVisible() && !commands.money.isVisible()){
-            if (game.ifPlayerHoldsDoubles() && !game.getActivePlayer().isPrisoned()){      //moved to After doAction is complete
+            !commands.pay.isVisible() && !commands.percent.isVisible() && !commands.useTheCard.isVisible() && !commands.money.isVisible())
+        {
+            if (game.ifPlayerHoldsDoubles() && !game.getActivePlayer().isPrisoned())
+            {      //moved to After doAction is complete
                 //System.out.println("Holds doubles");
                 throwDice.setEnabled(true);
                 done.setEnabled(false);
+                trade.setEnabled(false);
             }
-            else{
+            else
+            {
                 throwDice.setEnabled(false);
                 done.setEnabled(true);
+                trade.setEnabled(true);
             }
         }
-        else{
+        else
+        {
             throwDice.setEnabled(false);
             done.setEnabled(false);
+            trade.setEnabled(false);
         } 
     }
 
@@ -977,6 +1145,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setTheFlow()
     {
         popUpAuction = new AuctionPopUp();
+        popUpTradeSelection = new TradeSelectionPopUp();
         // initializing player sprites
         sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
@@ -1094,9 +1263,15 @@ public class MainWindow extends JFrame implements ActionListener{
         this.playersInfo = new JPanel();
         this.playersInfo.setLayout(new GridLayout(game.getNumberOfPlayers(), 1));      //in order to keep things compact
         setUpBelongings();
+        this.diceInfo = new JPanel();
+        this.diceInfo.setLayout(new GridLayout(1, 1));
+        this.diceLabel = new JLabel();
+        this.diceLabel.setFont(new Font("Futura", Font.PLAIN, 14));
+        this.diceInfo.add(this.diceLabel);
         //containerOfBelongings.add(belongingsPanel);
         infoTop.add(playersInfo, BorderLayout.NORTH);
-        infoTop.add(belongingsPanel, BorderLayout.CENTER);
+        infoTop.add(diceInfo, BorderLayout.CENTER);
+        infoTop.add(belongingsPanel, BorderLayout.SOUTH);
 
 
         // infoTop.setBackground(Color.yellow);        //SOS just added
@@ -1150,7 +1325,8 @@ public class MainWindow extends JFrame implements ActionListener{
         }
         for (JLabel l : playersLabels)
             this.playersInfo.add(l);
-    
+        // update the dice info
+        this.diceLabel.setText("Current roll: " + game.getActivePlayer().getFirstDice() + " and " + game.getActivePlayer().getSecondDice());
         updateBelongingsPane();
         //infoTop.add(belongingsPanel);
     }
@@ -1205,9 +1381,10 @@ public class MainWindow extends JFrame implements ActionListener{
         infoBottom.setLayout(new GridLayout());
         this.throwDice = new JButton("Throw the dice");
         this.done = new JButton("Done");
+        this.trade = new JButton("Trade");
         done.setEnabled(false);
-        throwDice.addActionListener(new ActionListener(){
-            
+        throwDice.addActionListener(new ActionListener()
+        {
             @Override
             public void actionPerformed(ActionEvent e)
             {   
@@ -1254,7 +1431,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 //     done.setEnabled(true);
                 // }   
                 if (game.getMoveToJail()){
-                    return;
+                    return ;
                 }
                 // put the sprite at a new space
                 buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
@@ -1265,11 +1442,20 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             
         });
-
-        done.addActionListener(new ActionListener(){
+        trade.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
-
+            public void actionPerformed(ActionEvent e)
+            {
+                popUpTradeSelection.initTradeSelectionPopUp();
+                JOptionPane.showMessageDialog(null, popUpTradeSelection, "Trade", JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+        done.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
                 if (!game.getActivePlayerState())
                      game.removePlayer();
                 
@@ -1286,7 +1472,8 @@ public class MainWindow extends JFrame implements ActionListener{
                 done.setEnabled(false);
                 titleDeed.setEverything(game.getActivePlayerCoordinate());
                 throwDice.setEnabled(true);
-                if (game.getActivePlayer().isPrisoned()){
+                if (game.getActivePlayer().isPrisoned())
+                {
                     System.out.println("Entered if");
                     setUpInfoCenter();
                     //System.out.println("He is prisoned");
@@ -1295,9 +1482,9 @@ public class MainWindow extends JFrame implements ActionListener{
 
                 //commands.setVisible(false);
             }
-            
         });
         infoBottom.add(throwDice);
+        infoBottom.add(trade);
         infoBottom.add(done);
 
     }
@@ -1368,7 +1555,7 @@ public class MainWindow extends JFrame implements ActionListener{
             {
                 System.out.println("Square coordinate: " + i); 
                 titleDeed.setEverything(i);
-                break;
+                break ;
             }
         }
     }

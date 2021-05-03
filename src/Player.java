@@ -52,10 +52,10 @@ public class Player
 
     public int throwDice()
     {
-        // this.dice[0] = (int)(Math.random() * 6) + 1;
-        // this.dice[1] = (int)(Math.random() * 6) + 1;
-        this.dice[0] = 0;
-        this.dice[1] = 1;
+        this.dice[0] = (int)(Math.random() * 6) + 1;
+        this.dice[1] = (int)(Math.random() * 6) + 1;
+        // this.dice[0] = 0;
+        // this.dice[1] = 30;
 
         if (holdsDoubles())
             this.doublesInARow++;
@@ -629,6 +629,23 @@ public class Player
     {
         return (this.dice[0] + this.dice[1]);
     }
+
+    public int getFirstDice()
+    {
+        return (this.dice[0]);
+    }
+
+    public int getSecondDice()
+    {
+        return (this.dice[1]);
+    }
+
+    public void nullifyDice()
+    {
+        this.dice[0] = 0;
+        this.dice[1] = 0;
+    }
+
     public void setName(String name)
     {
         this.name = name;

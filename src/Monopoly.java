@@ -140,11 +140,11 @@ import java.util.ArrayList;
  * 
  * MONOPOLY 1.0.4           05/01/2021
  * An:
- * 1) implemented a panel for the owned properties
- * 2) a popUpWIndow each time a button from that panel is clicked will show up with different options
- * 3) I don't completely remember the methods I changed, but I commented the 
- *    loops for build/destroy houses and mortgage/liftMortgage
- * 4) Instead, added/changed those methods, as well as the methods canBeImproved, canBeMortgaged and the others
+ * 1) implemented a panel for the owned properties;
+ * 2) a popUpWIndow each time a button from that panel is clicked will show up with different options;
+ * 3) I don't completely remember the methods I changed, but I commented the
+ *    loops for build/destroy houses and mortgage/liftMortgage;
+ * 4) Instead, added/changed those methods, as well as the methods canBeImproved, canBeMortgaged and the others;
  * 5) Moved some of the methods from Player to the Property or Buyable, such as canBeImproved, etc, because it's not 
  *    the player who can be improved, but the property:D
  * 6) Please appreciate my work, thanks:D   // Al: done. you cannot believe what pleasure it is to work with you in a team. love you endlessly <3
@@ -153,7 +153,7 @@ import java.util.ArrayList;
  * 8) fixed an issue causing the title deeds not be refreshed after a button in the pop-ups is pressed;
  * 9) fixed an issue causing Erect House button stay active after 5 houses have been built;
  * 10) numberOfPlayers is now correctly accessed and refreshed;
- * 11) auction pop-up created.
+ * 11) auction pop-up created;
  * An:
  * Thanks for the kind words:D
  * 12) Separated the windows in the beginning from the MainWindow to make it look more organized;
@@ -169,16 +169,27 @@ import java.util.ArrayList;
  * An:
  * 6) fixed an issue causing the players not to get added to bidders when their balance is less than
  *    the price of the property being auctioned;
- * 7) fixed an issue causing the belongings buttons display incorrectly on 42's IMacs;
+ * 7) fixed an issue causing the belongings buttons display incorrectly on School 42's IMacs;
  * Al:
  * 8) fixed an issue causing severe sync problems with the players list in infoTop (now utilizing arraylist
- *    of JLabels instead of an array).
+ *    of JLabels instead of an array);
+ * An:
+ * 9) added winning screen with options to exit and replay;
+ * 10) added basic support for the mortgage loop;
+ * 11) added the removal of a lost player;
+ * 12) fixed an issue allowing Player 1 pass the turn right away because Done is enabled from the beginning;
+ * 13) fixed an issue causing Done stay enabled upon landing on Buyable and receiving YES/NO input;
+ * 14) fixed an issue causing Done stay enabled when OK is prompted during Chance&Chest interaction;
+ * 15) fixed an issue causing action buttons to light up incorrectly during a Jail interaction;
+ * 16) added some visuals to the board.
+ * 
+ * MONOPOLY 1.2.0           05/03/2021
+ * Al:
+ * 1) the dices rolled are now displayed on the playing screen;
+ * 2) added a Trade button which now allows to initialize trade. 
  * 
  * KNOWN ISSUES:
- * 1. Player 1 can pass the turn right away because Done is active from the beginning
- * 2. sometimes sprites disappear after an interaction with Chance&Chest
- * 3. after a Chance&Chest interaction, Done is NOT disabled until confirmation of card is pressed
- * 4. when receiving YES/NO upon landing on a Buyable, Done is NOT disabled
+ * 1. sprites are duplicated after GoToJail interaction
  */
 public class Monopoly 
 {
@@ -190,6 +201,7 @@ public class Monopoly
     private int                         indexOfBidder;
     private boolean                     moveToJail;
     private int                         choice;
+    private Player                      tradee;
     
     public Monopoly(ArrayList<Player> players)
     {
@@ -315,30 +327,32 @@ public class Monopoly
             
             if (!(activePlayer.isPrisoned()))
                 Utility.setDice(activePlayer.throwDice());
-            else{
-                    //System.out.println("You have to throw dices now.");
-                    activePlayer.throwDice();
-                    if (activePlayer.holdsDoubles())
-                    {
-                        
-                        activePlayer.setIsPrisoned(false);
-                        activePlayer.setDaysInJail(1);
-                        //System.out.println("You rolled doubles and are free to go.");
-                        activePlayer.movePlayer(activePlayer.getDice());
-                        Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-                        System.out.println("Player coordinates: " + activePlayer.getCoordinate());
-                        return ;
-                    }
-                    //System.out.println("You failed to roll doubles. See you on the next turn!");
-                    activePlayer.setDaysInJail(activePlayer.getDaysInJail() + 1);
+            else
+            {
+                //System.out.println("You have to throw dices now.");
+                activePlayer.throwDice();
+                if (activePlayer.holdsDoubles())
+                {
+                    
+                    activePlayer.setIsPrisoned(false);
+                    activePlayer.setDaysInJail(1);
+                    //System.out.println("You rolled doubles and are free to go.");
+                    activePlayer.movePlayer(activePlayer.getDice());
+                    Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
+                    System.out.println("Player coordinates: " + activePlayer.getCoordinate());
+                    return ;
                 }
+                //System.out.println("You failed to roll doubles. See you on the next turn!");
+                activePlayer.setDaysInJail(activePlayer.getDaysInJail() + 1);
+            }
            
             System.out.println("Double in a row: " + activePlayer.getDoublesInARow());
-            if (activePlayer.getDoublesInARow() == 3){
+            if (activePlayer.getDoublesInARow() == 3)
+            {
                 this.activePlayer.setIsPrisoned(true);
                 this.activePlayer.setDoublesInARow(0);
                 this.moveToJail = true;
-                return;
+                return ;
             }
             // Al: updated movePlayer() such that if the player's prisoned, the coords do not change.
             activePlayer.movePlayer(activePlayer.getDice());
@@ -356,21 +370,20 @@ public class Monopoly
                 activePlayer.setCoordinate(10);
                 activePlayer.setDoublesInARow(0);
             }
-            
-            
-            
                 //break;
     //     }
     //     System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
-     }
+    }
 
-     public boolean activePlayerWon(){
-        return (players.size() == 1);
-     }
+    public boolean activePlayerWon()
+    {
+       return (players.size() == 1);
+    }
 
-     public boolean getMoveToJail(){
-        return this.moveToJail;
-     }
+    public boolean getMoveToJail()
+    {
+       return this.moveToJail;
+    }
 
 
     public void setPlayers(ArrayList<Player> newplayers)
@@ -395,7 +408,11 @@ public class Monopoly
             activePlayer.setDoublesInARow(0);
         }
         if (indexOfPlayer == players.size())
+        {
             this.indexOfPlayer = 0;
+            for (Player p : players)
+                p.nullifyDice();
+        }
         System.out.println("The index of player: " + indexOfPlayer);            //for testing
         this.activePlayer = players.get(indexOfPlayer);
         this.activeBidder = this.activePlayer;
@@ -489,6 +506,15 @@ public class Monopoly
         return (this.indexOfBidder);
     }
 
+    public Player getTradee()
+    {
+        return (this.tradee);
+    }
+
+    public void setTradee(Player tradee)
+    {
+        this.tradee = tradee;
+    }
     public int  getNumberOfPlayers()
     {
         return (players.size());
