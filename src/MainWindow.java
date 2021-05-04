@@ -290,17 +290,13 @@ public class MainWindow extends JFrame implements ActionListener{
             this.tradeeSliderValue.setText("Money to receive: $" + this.tradeeSlider.getValue());
             this.tradeButtons.add(confirmTrade);
             this.tradeButtons.add(cancelTrade);
-            // System.out.println("Trader: " + game.getActivePlayer() + " and their card is " + game.getActivePlayer().getGetOutOfJail());
-            // System.out.println("Tradee: " + game.getTradee() + " and their card is " + game.getTradee().getGetOutOfJail());
             if (game.getActivePlayer().getGetOutOfJail() && !(game.getTradee().getGetOutOfJail()))
             {
-                // System.out.println("ADDED TO TRADER");
                 this.traderCardPanel.add(this.traderCardLabel);
                 this.traderCardPanel.add(this.traderCard);
             }
             if (!(game.getActivePlayer().getGetOutOfJail()) && game.getTradee().getGetOutOfJail())
             {
-                // System.out.println("ADDED TO TRADEE");
                 this.tradeeCardPanel.add(this.tradeeCardLabel);
                 this.tradeeCardPanel.add(this.tradeeCard);
             }
@@ -668,7 +664,6 @@ public class MainWindow extends JFrame implements ActionListener{
                 dialog.setVisible(false);
                 game.getActiveBidder().getBelongings().add(((Buyable) Board.getSquares()[this.coordinate]));
                 ((Buyable) Board.getSquares()[this.coordinate]).setOwner(game.getActiveBidder());
-                System.out.println("ending with CHOICE equal to " + game.getChoice());
                 if (game.getChoice() != 0)
                     game.getActiveBidder().receiveMoney(-game.getChoice());
                 else
@@ -677,7 +672,6 @@ public class MainWindow extends JFrame implements ActionListener{
                 game.nullifyBidders();
                 this.auctionButtons.remove(cool);
             }
-            // System.out.println("");
             if (game.getBidders() != null)
             {
                 if (game.getBidders().size() == 1)
@@ -1219,7 +1213,6 @@ public class MainWindow extends JFrame implements ActionListener{
                 int previousCoordinate = game.getActivePlayer().getCoordinate();
                 
                 // remove sprite
-                System.out.println("REMOVING THE SPRITE AT " + previousCoordinate + " OF THE PLAYER UNDER INDEX OF " + game.getActivePlayerIndex());
                 buttons[previousCoordinate].remove(sprites.get(game.getActivePlayerIndex()));
                 buttons[previousCoordinate].revalidate();
                 buttons[previousCoordinate].repaint();
@@ -1232,7 +1225,6 @@ public class MainWindow extends JFrame implements ActionListener{
                         this.setVisible(false);
                 }
                 // put sprite
-                System.out.println("PUTTING A NEW SPRITE AT " + game.getActivePlayer().getCoordinate() + " OF THE PLAYER UNDER INDEX OF " + game.getActivePlayerIndex());
                 buttons[game.getActivePlayer().getCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
                 buttons[previousCoordinate].revalidate();
                 buttons[game.getActivePlayer().getCoordinate()].repaint();
@@ -1692,7 +1684,6 @@ public class MainWindow extends JFrame implements ActionListener{
                     buttons[game.getActivePlayer().getCoordinate()].revalidate();
                     buttons[game.getActivePlayer().getCoordinate()].repaint(); 
                     sprites.remove(game.getActivePlayerIndex());
-                    System.out.println("REMOVING A SPRITE AT " + game.getActivePlayer().getCoordinate() + " OF PLAYER " + game.getActivePlayerIndex()/* + game.getDefeated()*/);
                     game.removePlayer();
                 }
                 
