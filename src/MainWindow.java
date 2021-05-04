@@ -545,9 +545,9 @@ public class MainWindow extends JFrame implements ActionListener{
         private JPanel              sliderPanel;
         private JLabel              sliderValue;
         private JPanel              auctionButtons;
-        private JButton             confirm;
-        private JButton             giveUp;
-        private JButton             cool;
+        private GeneralButton       confirm;
+        private GeneralButton       giveUp;
+        private GeneralButton       cool;
         private int                 coordinate;
         private JSlider             slider;
 
@@ -570,9 +570,9 @@ public class MainWindow extends JFrame implements ActionListener{
             this.slider = new JSlider();
             this.slider.addChangeListener(this);
 
-            this.confirm = new JButton("Confirm");
-            this.giveUp = new JButton("Give Up");
-            this.cool = new JButton("Cool");
+            this.confirm = new GeneralButton("Confirm");
+            this.giveUp = new GeneralButton("Give Up");
+            this.cool = new GeneralButton("Cool");
             this.confirm.addActionListener(this);
             this.giveUp.addActionListener(this);
             this.cool.addActionListener(this);
@@ -954,6 +954,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
         private CustomButton(int direction){
             super();
+            this.setFocusable(false);
             this.direction = direction;
         }
 
@@ -1363,6 +1364,12 @@ public class MainWindow extends JFrame implements ActionListener{
             done.setEnabled(false);
             trade.setEnabled(false);
         } 
+
+        if (!game.getActivePlayerState()){
+            throwDice.setEnabled(false);
+            trade.setEnabled(false);
+            done.setEnabled(true);
+        }
     }
 
     private void setTheState()
@@ -1460,8 +1467,9 @@ public class MainWindow extends JFrame implements ActionListener{
                 buttons[i].setColor(new Color(31, 93, 136));
 
             
-            ImageIcon image = new ImageIcon("./images/image" + i + ".png");
-            buttons[i].setIcon(image);
+            
+            buttons[i].setIcon(new ImageIcon("./images/image" + i + ".png"));
+                
             //buttons[i].setHorizontalTextPosition(SwingConstants.CENTER);
             // if (Board.getSquares()[i].getClass().getName().equals("Property")){
             //     JTextArea text =  new JTextArea(5,10);                      //Exception
@@ -1516,12 +1524,15 @@ public class MainWindow extends JFrame implements ActionListener{
         popUpTradeSelection = new TradeSelectionPopUp();
         popUpTrade = new TradePopUp();
         // initializing player sprites
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-        if (Monopoly.getPlayers().size() >= 3)
-            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-        if (Monopoly.getPlayers().size() >= 4)
-            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        for (int i = 0; i < Monopoly.getPlayers().size(); i++){
+            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p" + i + ".png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        }
+        // sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        // sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        // if (Monopoly.getPlayers().size() >= 3)
+        //     sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        // if (Monopoly.getPlayers().size() >= 4)
+        //     sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
         
         this.setButtons();
@@ -1755,6 +1766,7 @@ public class MainWindow extends JFrame implements ActionListener{
         this.done = new GeneralButton("Done");
         this.trade = new GeneralButton("Trade");
         done.setEnabled(false);
+        trade.setEnabled(false);
         throwDice.addActionListener(new ActionListener()
         {
             @Override
@@ -1840,8 +1852,12 @@ public class MainWindow extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (!game.getActivePlayerState())
-                     game.removePlayer();
+                if (!game.getActivePlayerState()){
+                    game.removePlayer();
+                    buttons[game.getActivePlayerCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
+                    buttons[game.getActivePlayerCoordinate()].revalidate();
+                    buttons[game.getActivePlayerCoordinate()].repaint();    
+                }
                 
 
                 commands.setVisible(false);

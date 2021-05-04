@@ -22,7 +22,7 @@ public class WinWindow extends JFrame implements ActionListener{
         this.setSize(600, 200);                 //this.setSize(1300, 750);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
-        this.getContentPane().setBackground(new Color(252, 243, 207));
+        //this.getContentPane().setBackground(new Color(252, 243, 207));
         //this.getContentPane().setOpaque(true);
         
         center = new JLabel();
@@ -30,8 +30,8 @@ public class WinWindow extends JFrame implements ActionListener{
         ImageIcon icon = new ImageIcon("./images/icon.png");
         this.setIconImage(icon.getImage());
 
-        ImageIcon bg = new ImageIcon("./images/try.png");
-        center.setIcon(bg);
+        // ImageIcon bg = new ImageIcon("./images/try.png");
+        // center.setIcon(bg);
 
         buttons = new JPanel();
         text    = new JPanel();

@@ -13,7 +13,7 @@ public class StartWindow extends JFrame{
         this.setSize(700, 400);                 //this.setSize(1300, 750);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
-
+        //this.getContentPane().setBackground(new Color(1, 1, 1));
 
         
 
@@ -26,8 +26,8 @@ public class StartWindow extends JFrame{
         
         //The main panel
         JPanel mainMenu = new JPanel();
-        mainMenu.setBackground(new Color(255, 244, 246 ));
-        mainMenu.setOpaque(true);
+        // mainMenu.setBackground(new Color(255, 244, 246 ));
+        // mainMenu.setOpaque(true);
         // mainMenu.setBackground(new Color(64, 184, 182));
 
         //Labels
@@ -37,8 +37,8 @@ public class StartWindow extends JFrame{
         // mainLabel.setFont(new Font("Futura", Font.ROMAN_BASELINE, 14));
         JPanel setUp = new JPanel();        //change
         
-        setUp.setBackground(new Color(255, 244, 246 ));
-        setUp.setOpaque(true);
+        // setUp.setBackground(new Color(255, 244, 246 ));
+        // setUp.setOpaque(true);
 
 
         //the array list of players that will be given to the game when it is initialized
