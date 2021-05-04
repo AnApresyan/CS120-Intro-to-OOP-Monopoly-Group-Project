@@ -47,10 +47,8 @@ public class Player
 
     public int                  throwDice()
     {
-        // this.dice[0] = (int)(Math.random() * 6) + 1;
-        // this.dice[1] = (int)(Math.random() * 6) + 1;
-        this.dice[0] = 10;
-        this.dice[1] = 2;
+        this.dice[0] = (int)(Math.random() * 6) + 1;
+        this.dice[1] = (int)(Math.random() * 6) + 1;
         if (this.holdsDoubles())
             this.doublesInARow++;
         else
