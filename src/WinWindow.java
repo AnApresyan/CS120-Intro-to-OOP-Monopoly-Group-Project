@@ -52,8 +52,8 @@ public class WinWindow extends JFrame implements ActionListener
        
        
         text.add(message);
-        text.setBackground(new Color(252, 243, 207));
-        text.setOpaque(true);
+        // text.setBackground(new Color(252, 243, 207));
+        // text.setOpaque(true);
         
         
         buttons.add(exit);

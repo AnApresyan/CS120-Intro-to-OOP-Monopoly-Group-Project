@@ -3,6 +3,7 @@ public abstract class Buyable extends Square
     private Player              owner;
     private int                 price;
     private boolean             isMortgaged;
+    
     private boolean             wantsToBuy;
     private String              message;
 
@@ -17,7 +18,6 @@ public abstract class Buyable extends Square
 
     public void         doAction(Player activePlayer)
     {
-        System.out.println("I'M ENTERED!");
         if (this.owner == null)
         {
             if (wantsToBuy)
