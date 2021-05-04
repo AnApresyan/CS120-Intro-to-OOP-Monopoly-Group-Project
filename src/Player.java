@@ -20,7 +20,7 @@ public class Player
         this.money = 1500;
     }
 
-    public boolean state()
+    public boolean              state()
     {
         int sum;
         
@@ -45,10 +45,12 @@ public class Player
         return (false);
     }
 
-    public int throwDice()
+    public int                  throwDice()
     {
-        this.dice[0] = (int)(Math.random() * 6) + 1;
-        this.dice[1] = (int)(Math.random() * 6) + 1;
+        // this.dice[0] = (int)(Math.random() * 6) + 1;
+        // this.dice[1] = (int)(Math.random() * 6) + 1;
+        this.dice[0] = 10;
+        this.dice[1] = 2;
         if (this.holdsDoubles())
             this.doublesInARow++;
         else
@@ -56,14 +58,14 @@ public class Player
         return (this.dice[0] + this.dice[1]);
     }
 
-    public boolean holdsDoubles()
+    public boolean              holdsDoubles()
     {
         if (this.dice[0] == 0)
             return (false);
         return (this.dice[0] == this.dice[1]);
     }
 
-    public void movePlayer(int move)
+    public void                 movePlayer(int move)
     {
         if (!(this.isPrisoned))
         {
@@ -73,7 +75,7 @@ public class Player
         }
     }
 
-    public boolean owns(int coordinate)
+    public boolean              owns(int coordinate)
     {
         for (Buyable property : belongings)
             if (property.getCoordinate() == coordinate)
@@ -81,7 +83,7 @@ public class Player
         return (false);
     }
 
-    public void liftMortgage(Buyable property)
+    public void                 liftMortgage(Buyable property)
     {
         if (property.isMortgaged())
         {
@@ -90,13 +92,13 @@ public class Player
         }
     }
 
-    public void   erectHouse(Property property)
+    public void                 erectHouse(Property property)
     {
         if (property.canBeImproved())
             property.buildHouse();
     }
 
-    public boolean  hasMortgagedPropertydInASet(Buyable property)
+    public boolean              hasMortgagedPropertydInASet(Buyable property)
     {
         int colorIndex;
 
@@ -107,7 +109,7 @@ public class Player
         return (false);
     }
 
-    public boolean allowedToBuild(Buyable property)
+    public boolean              allowedToBuild(Buyable property)
     {
         int colorIndex;
         int currentHouses;
@@ -120,7 +122,7 @@ public class Player
         return (true);
     }
 
-    public boolean allowedToDegrade(Buyable property)
+    public boolean              allowedToDegrade(Buyable property)
     {
         int colorIndex;
         int currentHouses;
@@ -133,12 +135,12 @@ public class Player
         return (true);
     }
 
-    public boolean doesOwnAllProps(Buyable property)
+    public boolean              doesOwnAllProps(Buyable property)
     {
         return (Buyable.COLORS[ft_searchintinmatrix(property.getCoordinate(), Buyable.COLORS)].length == this.ownsOfThisColor(property) ? true : false);
     }
 
-    public int  ownsOfThisColor(Buyable property)
+    public int                  ownsOfThisColor(Buyable property)
     {
         int     props;
         int[]   owned;
@@ -155,7 +157,7 @@ public class Player
         return (props);
     }
     
-    public int ownsUnmortgagedProps()
+    public int                  ownsUnmortgagedProps()
     {
         int res;
 
@@ -166,7 +168,7 @@ public class Player
         return (res);
     }
 
-    public static boolean  ft_searchintinarray(int num, int[] nums)
+    public static boolean       ft_searchintinarray(int num, int[] nums)
     {
         for (int i = 0; i < nums.length; i++)
             if (num == nums[i])
@@ -174,7 +176,7 @@ public class Player
         return (false);
     }
 
-    public static int      ft_searchintinmatrix(int num, int[][] nums)
+    public static int           ft_searchintinmatrix(int num, int[][] nums)
     {
         for (int i = 0; i < nums.length; i++)
             if (ft_searchintinarray(num, nums[i]))
@@ -182,7 +184,7 @@ public class Player
         return (-1);
     }
 
-    public void buyProperty(Buyable property)
+    public void                 buyProperty(Buyable property)
     {
         if (this.money > property.getPrice())
         {
@@ -192,12 +194,12 @@ public class Player
         }
     }
 
-    public void rentProperty(Buyable property)
+    public void                 rentProperty(Buyable property)
     {
         this.money -= property.getRent();
     }
 
-    public void mortgageProperty(Buyable property)
+    public void                 mortgageProperty(Buyable property)
     {
         if (property.getOwner().equals(this))
             if (property.canBeMortgaged())
@@ -207,35 +209,123 @@ public class Player
             }
     }
 
-    public void degradeProperty(Property property)
+    public void                 degradeProperty(Property property)
     {
         if (property.getOwner().equals(this))
             if (property.getHouses() > 0)
                 property.sellHouse();
     }
 
-    public void receiveMoney(int mon)
+    public void                 receiveMoney(int mon)
     {
         this.money += mon;
     }
 
-    public boolean canBeDegraded(Buyable belonging)
+    public void                 nullifyDice()
     {
-        return (belonging.getClass().getName().equals("Property") && ((Property)belonging).getHouses() >= 1);
+        this.dice[0] = 0;
+        this.dice[1] = 0;
     }
 
-    public boolean canBeDegraded(int coordinate)
+    public ArrayList<Buyable>   getBelongings()
     {
-        for (Buyable belonging : belongings)
-        {
-            if (belonging.getCoordinate() == coordinate && canBeDegraded(belonging))
-                return (true);
-        }
-        return (false);
+        return (this.belongings);
     }
 
-    // TESTED by An
-    public boolean equals(Object obj)
+    public String               getName()
+    {
+        return (this.name);
+    }
+
+    public int                  getCoordinate()
+    {
+        return (this.coordinate);
+    }
+
+    public int                  getMoney()
+    {
+        return (this.money);
+    }
+
+    public boolean              isPrisoned()
+    {
+        return (this.isPrisoned);
+    }
+
+    public boolean              getGetOutOfJail()
+    {
+        return (this.getOutOfJail);
+    }
+
+    public int                  getDoublesInARow()
+    {
+        return (this.doublesInARow);
+    }
+    
+    public int                  getDaysInJail()
+    {
+        return (this.daysInJail);
+    }
+    
+    public int                  getDice()
+    {
+        return (this.dice[0] + this.dice[1]);
+    }
+
+    public int                  getFirstDice()
+    {
+        return (this.dice[0]);
+    }
+
+    public int                  getSecondDice()
+    {
+        return (this.dice[1]);
+    }
+
+    public void                 setName(String name)
+    {
+        this.name = name;
+    }
+    
+    public void                 setIsPrisoned(boolean bool)
+    {
+        this.isPrisoned = bool;
+    }
+
+    public void                 setGetOutOfJail(boolean bool)
+    {
+        this.getOutOfJail = bool;
+    }
+    
+    public void                 setCoordinate(int coordinate)
+    {
+        if (coordinate > 39)
+            this.coordinate = coordinate - 40;
+        else
+            this.coordinate = coordinate;
+    }
+
+    public void                 setMoney(int money)
+    {
+        this.money = money;
+    }
+
+    public void                 setDaysInJail(int daysInJail)
+    {
+        this.daysInJail = daysInJail;
+    }
+
+    public void                 setDoublesInARow(int doublesInARow)
+    {
+        this.doublesInARow = doublesInARow;
+    }
+
+    public String               toString()
+    {
+        return ("Player: " + this.name + " Balance: " + this.money + " Coordinate: " + this.coordinate + " Card: " + this.getGetOutOfJail());
+    }
+    
+    public boolean              equals(Object obj)
     {
         if (obj == null)
             return (false);
@@ -246,109 +336,5 @@ public class Player
             Player second = (Player) obj;
             return (this.name.equalsIgnoreCase(second.name));
         }
-    }
-
-    public ArrayList<Buyable> getBelongings()
-    {
-        return (this.belongings);
-    }
-
-    public String getName()
-    {
-        return (this.name);
-    }
-
-    public int getCoordinate()
-    {
-        return (this.coordinate);
-    }
-
-    public int getMoney()
-    {
-        return (this.money);
-    }
-
-    public boolean isPrisoned()
-    {
-        return (this.isPrisoned);
-    }
-
-    public boolean getGetOutOfJail()
-    {
-        return (this.getOutOfJail);
-    }
-
-    public int      getDoublesInARow()
-    {
-        return (this.doublesInARow);
-    }
-    
-    public int getDaysInJail()
-    {
-        return (this.daysInJail);
-    }
-    
-    public int getDice()
-    {
-        return (this.dice[0] + this.dice[1]);
-    }
-
-    public int getFirstDice()
-    {
-        return (this.dice[0]);
-    }
-
-    public int getSecondDice()
-    {
-        return (this.dice[1]);
-    }
-
-    public void nullifyDice()
-    {
-        this.dice[0] = 0;
-        this.dice[1] = 0;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-    
-    public void setIsPrisoned(boolean bool)
-    {
-        this.isPrisoned = bool;
-    }
-
-    public void setGetOutOfJail(boolean bool)
-    {
-        this.getOutOfJail = bool;
-    }
-    
-    public void setCoordinate(int coordinate)
-    {
-        if (coordinate > 39)
-            this.coordinate = coordinate - 40;
-        else
-            this.coordinate = coordinate;
-    }
-
-    public void setMoney(int money)
-    {
-        this.money = money;
-    }
-
-    public void setDaysInJail(int daysInJail)
-    {
-        this.daysInJail = daysInJail;
-    }
-
-    public void setDoublesInARow(int doublesInARow)
-    {
-        this.doublesInARow = doublesInARow;
-    }
-
-    public String toString()
-    {
-        return ("Player: " + this.name + " Balance: " + this.money + " Coordinate: " + this.coordinate + " Card: " + this.getGetOutOfJail());
     }
 }

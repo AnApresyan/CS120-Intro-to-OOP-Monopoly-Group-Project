@@ -2,12 +2,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import java.awt.*;
 import java.awt.event.*;
 
 
-public class WinWindow extends JFrame implements ActionListener{
+public class WinWindow extends JFrame implements ActionListener
+{
     private JLabel          message;
     private GeneralButton   exit;
     private GeneralButton   playAgain;
@@ -15,7 +15,8 @@ public class WinWindow extends JFrame implements ActionListener{
     private JPanel          text;
     private JLabel          center;
 
-    public WinWindow(Player player){
+    public WinWindow(Player player)
+    {
         super("Monopoly");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(600, 200);                 //this.setSize(1300, 750);
@@ -67,10 +68,10 @@ public class WinWindow extends JFrame implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         if (e.getSource() == playAgain)
             new StartWindow();
         this.dispose(); 
     }
-    
 }

@@ -1,21 +1,19 @@
 import java.util.ArrayList;
 import java.awt.event.*;
-//import java.util.concurrent.Flow;
 import java.awt.*;
 import javax.swing.*;
 
-public class StartWindow extends JFrame{
+public class StartWindow extends JFrame
+{
     private int numberOfPlayers;
 
-    public StartWindow(){
+    public StartWindow()
+    {
         super("Monopoly");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(700, 400);                 //this.setSize(1300, 750);
+        this.setSize(700, 400);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
-        //this.getContentPane().setBackground(new Color(1, 1, 1));
-
-        
 
         //The images
         ImageIcon image = new ImageIcon("./images/LOGO1.png");
@@ -149,5 +147,4 @@ public class StartWindow extends JFrame{
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
-    
 }

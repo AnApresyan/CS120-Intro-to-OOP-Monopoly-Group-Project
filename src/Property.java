@@ -7,81 +7,64 @@ public class Property extends Buyable
     public Property(int coordinate, String title, int price, int[] rents, int housePrice)
     {
         super(coordinate);
-        setPrice(price);
         this.rents = rents;
         this.housePrice = housePrice;
+        setPrice(price);
         setTitle(title);
     }
 
-    public boolean isImproved()
+    public boolean  isImproved()
     {
         if (this.getOwner().doesOwnAllProps(this))
         {
             int colorIndex = Player.ft_searchintinmatrix(this.getCoordinate(), Buyable.COLORS);
             for (int propertyCord : Buyable.COLORS[colorIndex])
-            {
                 for (Buyable property : this.getOwner().getBelongings())
-                {
                     if (property.getCoordinate() == propertyCord && ((Property) property).getHouses() >= 1)
                         return (true);
-                }
-                
-            }
         }
         return (false);
     }
 
-
-
-    public int getRent()
+    public int      getRent()
     {
-        if (isMortgaged())
+        if (this.isMortgaged())
             return (0);
         if (this.getOwner() != null)
         {
-            if (houses == 0 & getOwner().doesOwnAllProps(this))
-            return (2 * rents[0]);
+            if (this.houses == 0 & this.getOwner().doesOwnAllProps(this))
+            return (2 * this.rents[0]);
         }
-        return (this.rents[houses]);
+        return (this.rents[this.houses]);
     }
 
-    public void buildHouse()
+    public void     buildHouse()
     {
-        if (houses <= 4)
+        if (this.houses <= 4)
         {
             this.houses += 1;
-            this.getOwner().receiveMoney(-housePrice);
-            System.out.println("Bought a home");
+            this.getOwner().receiveMoney(-this.housePrice);
         }
     }
 
-    public void sellHouse()
+    public void     sellHouse()
     {
         if (houses >= 1)
         {
             this.houses -= 1;
-            this.getOwner().receiveMoney(housePrice / 2);
-            System.out.println("Sold a home");
+            this.getOwner().receiveMoney(this.housePrice / 2);
         }
     }
 
-    public int getHouses()
+    public boolean  canBeDegraded()
     {
-        return (houses);
+        if (houses > 0 && this.getOwner().allowedToDegrade(this))
+            return (true);
+        return (false);
     }
 
-    public void setHouses(int houses)
+    public boolean  canBeImproved()
     {
-        this.houses = houses;
-    }
-
-    public int  getHousePrice()
-    {
-        return (housePrice);
-    }
-
-    public boolean canBeImproved()
-    {                                                     //JUST ADDED
         if (this.getOwner() == null)
             return (false);
         if (this.getOwner().doesOwnAllProps(this) && !(this.getOwner().hasMortgagedPropertydInASet(this)) && houses < 5 && this.getOwner().allowedToBuild(this))
@@ -89,14 +72,22 @@ public class Property extends Buyable
         return (false);
     }
 
-    public boolean canBeDegraded()
+    public int      getHouses()
     {
-        if (houses > 0 && this.getOwner().allowedToDegrade(this))
-            return (true);
-        return (false);
+        return (this.houses);
     }
 
-    public String toString()
+    public int      getHousePrice()
+    {
+        return (this.housePrice);
+    }
+
+    public void     setHouses(int houses)
+    {
+        this.houses = houses;
+    }
+
+    public String   toString()
     {
         return (getCoordinate() + ": " + getTitle() + ". Houses: " + houses + ". Mortgaged? " + isMortgaged());
     }

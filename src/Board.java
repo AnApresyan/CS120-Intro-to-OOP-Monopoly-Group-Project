@@ -1,12 +1,18 @@
+/**
+ * A class that sets up the board as soon as an instance is created. Holds all
+ * objects of type Square in a fixed array with 40 elements, and allows access
+ * through a getter method. Handing over the original addresses of the objects
+ * is intended.
+ */
 public class    Board
 {
     private static Square[] squares = new Square[40];
 
+    /**
+     * Initializes the objects.
+     */
     public  Board()
     {
-        /**
-         * Setting up the board:
-         */
         squares[0] = new GOTaxFree(0);
         squares[1] = new Property(1, "Mediterranean Avenue", 60, new int[]{2, 10, 30, 90, 160, 250}, 50);
         squares[2] = new CommunityChest(2);
@@ -49,6 +55,10 @@ public class    Board
         squares[39] = new Property(39, "Boardwalk", 400, new int[]{50, 200, 600, 1400, 1700, 2000}, 200);
     }
 
+    /**
+     * Grants access to the squares.
+     * @return address to the array of squares
+     */
     public static Square[]  getSquares()
     {
         return (squares);

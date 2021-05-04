@@ -1,8 +1,8 @@
 public class Utility extends Buyable
 {
-    private static int diceValue;
+    private static int  diceValue;
 
-    public Utility(int coordinate, String title)
+    public  Utility(int coordinate, String title)
     {
         super(coordinate);
         if (coordinate % 5 == 0)
@@ -12,9 +12,9 @@ public class Utility extends Buyable
         setTitle(title);
     }
 
-    public int getRent() 
+    public int          getRent() 
     {
-        if (isMortgaged())
+        if (this.isMortgaged())
             return (0);
         if (this.getOwner() != null)
         {
@@ -24,14 +24,14 @@ public class Utility extends Buyable
         return (diceValue * 10);
     }
 
-    public static int setDice(int dice)
+    public static int   setDice(int dice)
     {
         diceValue = dice;
         return (diceValue);
     }
 
-    public String toString()
+    public String       toString()
     {
-        return (getCoordinate() + ": " + getTitle() + ". Mortgaged? " + isMortgaged());
+        return (getCoordinate() + ": " + getTitle() + ". Mortgaged? " + this.isMortgaged());
     }
 }
