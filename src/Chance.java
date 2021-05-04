@@ -1,85 +1,71 @@
-
 public class Chance extends Deck
 {
-    enum CardMessages
+    enum    CardMessages
     {
-        CARD0 ("Advance to GO (Collect $200)."),
-        CARD1 ("Advance to Illinois Ave."),
-        CARD2 ("Advance to St. Charles Place. If you pass GO, collect $200."),
-        CARD3 ("Advance to the nearest utility. If unowned, you may buy it from the bank. If owned, throw dice and pay owner a total 10 times the amount thrown."),
-        CARD4 ("Advance to the nearest railroad. If unowned you may buy it from the bank. If owned, pay owner twice the retail to which they are otherwise entitled."),
-        CARD5 ("Bank pays you dividend of $50."),
-        CARD6 ("Get out of jail free. This card may be kept until needed, or traded/sold."),
-        CARD7 ("Go back 3 spaces."),
-        CARD8 ("Go directly to jail. Do not pass go. Do not collect $200."),
-        CARD9 ("Make general repairs on all your property: for each house pay $25, for each hotel $100."),
-        CARD10 ("Pay poor tax of $15."),
-        CARD11 ("Take a trip to reading railroad. If you pass go, collect $200."),
-        CARD12 ("Take a walk on the boardwalk. Advance token to boardwalk."),
-        CARD13 ("You have been elected chairman of the board. Pay each player $50."),
-        CARD14 ("Your building and loan matures. Receive $150."),
-        CARD15 ("You have won a crossword competition. Collect $100.");
+        CARD0   ("Advance to GO (Collect $200)."),
+        CARD1   ("Advance to Illinois Ave."),
+        CARD2   ("Advance to St. Charles Place. If you pass GO, collect $200."),
+        CARD3   ("Advance to the nearest utility. If unowned, you may buy it from the bank. If owned, throw dice and pay owner a total 10 times the amount thrown."),
+        CARD4   ("Advance to the nearest railroad. If unowned you may buy it from the bank. If owned, pay owner twice the retail to which they are otherwise entitled."),
+        CARD5   ("Bank pays you dividend of $50."),
+        CARD6   ("Get out of jail free. This card may be kept until needed, or traded/sold."),
+        CARD7   ("Go back 3 spaces."),
+        CARD8   ("Go directly to jail. Do not pass go. Do not collect $200."),
+        CARD9   ("Make general repairs on all your property: for each house pay $25, for each hotel $100."),
+        CARD10  ("Pay poor tax of $15."),
+        CARD11  ("Take a trip to reading railroad. If you pass go, collect $200."),
+        CARD12  ("Take a walk on the boardwalk. Advance token to boardwalk."),
+        CARD13  ("You have been elected chairman of the board. Pay each player $50."),
+        CARD14  ("Your building and loan matures. Receive $150."),
+        CARD15  ("You have won a crossword competition. Collect $100.");
 
-        private String message;
+        private String  message;
+
         private CardMessages(String message)
         {
             this.message = message;
         }
 
-        private String getMessage()
+        private String  getMessage()
         {
             return (this.message);
         }
     }
 
-    private CardMessages card;
-    private boolean callDoAction;
+    private CardMessages    card;
+    private boolean         callDoAction;
 
-    public boolean ifcallDoAction(){
-        return callDoAction;
-    }
-
-    public Chance (int coordinate)
+    public Chance(int coordinate)
     {
         super(coordinate);
         setTitle("Chance");
     }
 
-    // TESTED by Al
-    public void doAction(Player activePlayer)
+    public void     doAction(Player activePlayer)
     {
-
         callDoAction = true;
         if (getChance() == 0)
         {
-            //System.out.println("ADVANCE TO GO (COLLECT $200).");
             while (activePlayer.getCoordinate() != 0)
                 activePlayer.movePlayer(1);
             callDoAction = false;
         }
         else if (getChance() == 1)
         {
-            //System.out.println("ADVANCE TO ILLINOIS AVE.");
             while (activePlayer.getCoordinate() != 24)
                 activePlayer.movePlayer(1);
-            //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
         else if (getChance() == 2)
         {
-            //System.out.println("ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.");
             while (activePlayer.getCoordinate() != 11)
                 activePlayer.movePlayer(1);
-            //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
         }
         else if (getChance() == 3)
-        {
-            //System.out.println("ADVANCE TO the NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL 10 TIMES the AMOUNT THROWN.");            
+        {            
             while (activePlayer.getCoordinate() != 12 && activePlayer.getCoordinate() != 28)
                 activePlayer.movePlayer(1);
-            if (((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null){
-            //     Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-            // else
-            // {
+            if (((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null)
+            {
                 activePlayer.receiveMoney(-(Utility.setDice(activePlayer.throwDice()) * 10));
                 ((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner().receiveMoney((activePlayer.getDice() * 10));
                 callDoAction = false;
@@ -87,13 +73,10 @@ public class Chance extends Deck
         }
         else if (getChance() == 4)
         {
-            //System.out.println("ADVANCE TO the NEAREST RAILROAD. IF UNOWNED YOU MAY BUY IT FROM the BANK. IF OWNED, PAY OWNER TWICE the RETAIL TO WHICH theY ARE OtheRWISE ENTITLED.");
             while (activePlayer.getCoordinate() != 5 && activePlayer.getCoordinate() != 15 && activePlayer.getCoordinate() != 25 && activePlayer.getCoordinate() != 35)
                 activePlayer.movePlayer(1);
-            if (((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null){
-            //     Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-            // else
-            // {
+            if (((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null)
+            {
                 activePlayer.receiveMoney(-(((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getRent() * 2));
                 ((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getOwner().receiveMoney(((Buyable) Board.getSquares()[activePlayer.getCoordinate()]).getRent() * 2);
                 callDoAction = false;
@@ -101,32 +84,24 @@ public class Chance extends Deck
         }
         else if (getChance() == 5)
         {
-            //System.out.println("BANK PAYS YOU DIVIDEND OF $50.");
             activePlayer.receiveMoney(50);
             callDoAction = false;
         }
         else if (getChance() == 6)
         {
-            //System.out.println("GET OUT OF JAIL FREE. THIS CARD MAY BE KEPT UNTIL NEEDED, OR TRADED/SOLD.");
             activePlayer.setGetOutOfJail(true);
             callDoAction = false;
         }
         else if (getChance() == 7)
-        {
-            //System.out.println("GO BACK 3 SPACES.");
             activePlayer.setCoordinate(activePlayer.getCoordinate() - 3);
-            //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-        }
         else if (getChance() == 8)
         {
-            //System.out.println("GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.");
             activePlayer.setCoordinate(10);
             activePlayer.setIsPrisoned(true);
             callDoAction = false;
         }
         else if (getChance() == 9)
         {
-            //System.out.println("MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY: FOR EACH HOUSE PAY $25, FOR EACH HOTEL $100.");
             int loss;
 
             loss = 0;
@@ -145,29 +120,19 @@ public class Chance extends Deck
         }
         else if (getChance() == 10)
         {
-            //System.out.println("PAY POOR TAX OF $15.");
             activePlayer.receiveMoney(-15);
             callDoAction = false;
         }
         else if (getChance() == 11)
-        {
-            //System.out.println("TAKE A TRIP TO READING RAILROAD. IF YOU PASS GO, COLLECT $200.");
             while (activePlayer.getCoordinate() != 5)
                 activePlayer.movePlayer(1);
-            //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-        }
         else if (getChance() == 12)
-        {
-            //System.out.println("TAKE A WALK ON the BOARDWALK. ADVANCE TOKEN TO BOARDWALK.");
             while (activePlayer.getCoordinate() != 39)
                 activePlayer.movePlayer(1);
-            //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-        }
         else if (getChance() == 13)
         {
             int i;
 
-            //System.out.println("YOU HAVE BEEN ELECTED CHAIRMAN OF the BOARD. PAY EACH PLAYER $50.");
             i = 0;
             while (i < Monopoly.getPlayers().size())
             {
@@ -182,31 +147,30 @@ public class Chance extends Deck
         }
         else if (getChance() == 14)
         {
-            //System.out.println("YOUR BUILDING AND LOAN MATURES. RECEIVE $150.");
             activePlayer.receiveMoney(150);
             callDoAction = false;
         } 
         else if (getChance() == 15) 
         {
-            //System.out.println("YOU HAVE WON A CROSSWORD COMPETITION. COLLECT $100.");
             activePlayer.receiveMoney(100);
             callDoAction = false;
         }
-        //activePlayer.enterMortgageLoop(null);
-
     }
 
-
-    public void         setCard(int chance)
+    public boolean  ifcallDoAction()
     {
-        
-        this.card = CardMessages.values()[getChance()];
+        return (this.callDoAction);
     }
-    public String getMessage()
+
+    public String   getMessage()
     {
         drawCard();
         setCard(getChance());
-        return card.getMessage();
+        return (this.card.getMessage());
     }
 
+    public void     setCard(int chance)
+    {
+        this.card = CardMessages.values()[getChance()];
+    }
 }

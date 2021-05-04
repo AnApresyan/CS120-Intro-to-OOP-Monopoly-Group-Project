@@ -1,4 +1,4 @@
-public class Board
+public class    Board
 {
     private static Square[] squares = new Square[40];
 

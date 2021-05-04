@@ -195,11 +195,23 @@ import java.util.ArrayList;
  * 6) fixed an issue causing the tradee automatically accept a trade offer;
  * 7) fixed an issue causing the trade slider to have a wrong range when a player's balance is beyond zero;
  * 
+ * MONOPOLY 1.3.0           05/04/2021
+ * An:
+ * 1) added the rest of the visuals;
+ * 2) improved greatly UI and the winning screen;
+ * Al:
+ * 3) fixed an issue allowing the players to erect and destroy houses unevenly;
+ * 4) fixed an issue allowing a player with negative balance to pass the turn without paying off the debt;
+ * 5) fixed an issue causing severe sync problems with sprites after player removal;
+ * 6) removed chunks of comments throughout the code;
+ * 7) formatted the code to comply with School 42's coding norm (because it's beautiful!)
+ * 
  * KNOWN ISSUES:
- * 2. change the layouts of trade
- * 3. change the winnding window
- * 4. DONE is active and a player with negative balance can proceed to play without paying off the debt
- * 5. the sprites of defeated players remain on the board
+ * 1. the layout of trade may not contain escape buttons such as Cancel, Confirm, Accept, Decline
+ *    when there's too many belongings of either the trader or the tradee
+ * 2. the Accept/Decline mode of trade pop-up doesn't hide lobbyPanel during the very first trade
+ * 3. the sprites land on the top of each other upon entering Jail and Free Parking, even though 
+ *    their layout is set to be a FlowLayout (which is not the case for GO, oddly enough)
  */
 public class Monopoly 
 {
@@ -217,261 +229,159 @@ public class Monopoly
     private ArrayList<Buyable>          propsToReceive;
     private ArrayList<Buyable>          selectedPropsToReceive;
     
-    public Monopoly(ArrayList<Player> players)
+    public  Monopoly(ArrayList<Player> players)
     {
         new Board();
-        setPlayers(players);
-        // for (Player p : players)
-        // {
-        //     if (p.getName().equals("bum"))
-        //     {
-        //         p.getBelongings().add((Buyable)Board.getSquares()[12]);
-        //         ((Buyable)Board.getSquares()[12]).setOwner(p);
-        //         p.getBelongings().add((Buyable)Board.getSquares()[28]);
-        //         ((Buyable)Board.getSquares()[28]).setOwner(p);
-        //     }
-        // }
-        indexOfPlayer = 0;
-        indexOfBidder = 0;
+        this.setPlayers(players);
+        this.indexOfPlayer = 0;
+        this.indexOfBidder = 0;
         this.activePlayer = players.get(0);
         this.activeBidder = this.activePlayer;
         this.choice = 0; 
-        
-        players.get(1).setMoney(1);
-        players.get(1).getBelongings().add((Buyable)Board.getSquares()[3]);
-        ((Buyable)Board.getSquares()[3]).setOwner(players.get(1));
-        ((Buyable)Board.getSquares()[3]).setIsMortgaged(true);
     }
-                                                    // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
-                                                    // Al: good idea, but let's leave it for later, if we have time 
     
-
-
-    public boolean getActivePlayerState(){
-        return this.activePlayer.state();
-    }
-
-    public void build(Square property){
-        if (property.getClass().getName().equals("Property")){
-            activePlayer.erectHouse((Property)property);  
-        }
-        
-    }
-
-    public void destroy(Square property){
-        if (property.getClass().getName().equals("Property")){
-            activePlayer.degradeProperty((Property)property);
-        }
-    }
-
-    public void mortgage(Square property){
-        if (property instanceof Buyable){
-            activePlayer.mortgageProperty((Buyable)property);
-        }
-    }
-
-    public void liftMortgage(Square property){
-        if(property instanceof Buyable){
-            activePlayer.liftMortgage((Buyable)property);
-        }
-    }
-
-    public void play(){
-        setMessage();   //just added
-        
-        Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-        System.out.println("Player coordinates: " + activePlayer.getCoordinate());
-    }
-
-    public void play(boolean bool)
+    public void                     build(Square property)
     {
-        if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable)
-            ((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).setWantsToBuy(bool);
+        if (property.getClass().getName().equals("Property"))
+            this.activePlayer.erectHouse((Property)property);  
+    }
+
+    public void                     destroy(Square property)
+    {
+        if (property.getClass().getName().equals("Property"))
+            this.activePlayer.degradeProperty((Property)property);
+    }
+
+    public void                     mortgage(Square property)
+    {
+        if (property instanceof Buyable)
+            this.activePlayer.mortgageProperty((Buyable)property);
+    }
+
+    public void                     liftMortgage(Square property)
+    {
+        if (property instanceof Buyable)
+            this.activePlayer.liftMortgage((Buyable)property);
+    }
+
+    public void                     play()
+    {
+        setMessage();    
+        Board.getSquares()[this.activePlayer.getCoordinate()].doAction(this.activePlayer);
+    }
+
+    public void                     play(boolean bool)
+    {
+        if (Board.getSquares()[this.activePlayer.getCoordinate()] instanceof Buyable)
+            ((Buyable)Board.getSquares()[this.activePlayer.getCoordinate()]).setWantsToBuy(bool);
         play();
     }
 
-    public void play(int choice){
-        if (Board.getSquares()[activePlayer.getCoordinate()].getClass().getName().equals("Jail") ){
-            ((Jail)Board.getSquares()[activePlayer.getCoordinate()]).setUserChoice(choice);
-        }
+    public void                     play(int choice)
+    {
+        if (Board.getSquares()[this.activePlayer.getCoordinate()].getClass().getName().equals("Jail"))
+            ((Jail)Board.getSquares()[this.activePlayer.getCoordinate()]).setUserChoice(choice);
         play();
     }
 
-
-
-    public boolean ifPlayerIsPrisoned()
+    public void                     setMessage()
     {
-        System.out.println(activePlayer.isPrisoned());
-        return activePlayer.isPrisoned();
+        if (this.activePlayer.getCoordinate() == 10)
+            ((Jail)Board.getSquares()[this.activePlayer.getCoordinate()]).checkTheStateSetMessage(this.activePlayer);
+        else if (Board.getSquares()[this.activePlayer.getCoordinate()] instanceof Buyable)
+            ((Buyable)Board.getSquares()[this.activePlayer.getCoordinate()]).setMessage(this.activePlayer);
     }
 
-    public void setMessage(){
-        if (activePlayer.getCoordinate() == 10){
-            ((Jail)Board.getSquares()[activePlayer.getCoordinate()]).checkTheStateSetMessage(activePlayer);
-            System.out.println("setMessageOfJail");
-        }
-        else if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable){
-            ((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).setMessage(activePlayer);
-        }
-    }
-
-    public void removePlayer(){
-        if (Board.getSquares()[activePlayer.getCoordinate()] instanceof Buyable){
-            if (((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).getOwner() != null){
-                for (Buyable belonging : activePlayer.getBelongings()){
-                    ((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).getOwner().getBelongings().add(belonging);
-                    belonging.setOwner(((Buyable)Board.getSquares()[activePlayer.getCoordinate()]).getOwner());
+    public void                     removePlayer()
+    {
+        if (Board.getSquares()[this.activePlayer.getCoordinate()] instanceof Buyable)
+        {
+            if (((Buyable)Board.getSquares()[this.activePlayer.getCoordinate()]).getOwner() != null){
+                for (Buyable belonging : this.activePlayer.getBelongings())
+                {
+                    ((Buyable)Board.getSquares()[this.activePlayer.getCoordinate()]).getOwner().getBelongings().add(belonging);
+                    belonging.setOwner(((Buyable)Board.getSquares()[this.activePlayer.getCoordinate()]).getOwner());
                 }
             }
-            else{
-                for (Buyable belonging : activePlayer.getBelongings())
+            else
+                for (Buyable belonging : this.activePlayer.getBelongings())
                     belonging.setOwner(null);
-            }
         }
-    
-        for (Player player : players){
-            if (player.equals(activePlayer)){
+        for (Player player : players)
+            if (player.equals(this.activePlayer))
+            {
                 players.remove(player);
                 this.indexOfPlayer--;
                 break;
             }
-        }
     }
-    public void startGame(){
-        // printHeader();
-        // printMap();
-        // printFooter();
-        // while (true)
-        // {
-            // if (indexOfPlayer == players.size())
-            //     this.indexOfPlayer = 0;
-            // this.activePlayer = players.get(indexOfPlayer);
-            // Al: added a check on throwing the dice to move for if the player's prisoned.
-            // if they are, then the dice will not be thrown, and the player won't move.
-            
-            moveToJail = false;
-            if (!(activePlayer.isPrisoned()))
-                Utility.setDice(activePlayer.throwDice());
-            else
+
+    public void                     startGame()
+    {
+        this.moveToJail = false;
+        if (!(this.activePlayer.isPrisoned()))
+            Utility.setDice(this.activePlayer.throwDice());
+        else
+        {
+            this.activePlayer.throwDice();
+            if (this.activePlayer.holdsDoubles())
             {
-                //System.out.println("You have to throw dices now.");
-                activePlayer.throwDice();
-                if (activePlayer.holdsDoubles())
-                {
-                    
-                    activePlayer.setIsPrisoned(false);
-                    activePlayer.setDaysInJail(1);
-                    //System.out.println("You rolled doubles and are free to go.");
-                    activePlayer.movePlayer(activePlayer.getDice());
-                    Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-                    System.out.println("Player coordinates: " + activePlayer.getCoordinate());
-                    return ;
-                }
-                //System.out.println("You failed to roll doubles. See you on the next turn!");
-                activePlayer.setDaysInJail(activePlayer.getDaysInJail() + 1);
-            }
-           
-            System.out.println("Double in a row: " + activePlayer.getDoublesInARow());
-            if (activePlayer.getDoublesInARow() == 3)
-            {
-                this.activePlayer.setIsPrisoned(true);
-                this.activePlayer.setDoublesInARow(0);
-                activePlayer.setCoordinate(10);
-                this.moveToJail = true;
+                
+                this.activePlayer.setIsPrisoned(false);
+                this.activePlayer.setDaysInJail(1);
+                this.activePlayer.movePlayer(this.activePlayer.getDice());
+                Board.getSquares()[this.activePlayer.getCoordinate()].doAction(this.activePlayer);
                 return ;
             }
-            // Al: updated movePlayer() such that if the player's prisoned, the coords do not change.
-            activePlayer.movePlayer(activePlayer.getDice());
-            // Al: having the dice not thrown, the player not moved, and the coords = 10 after landing 
-            // on "Go To Jail", the jail's doAction() will fire asking for more options 
-            //Board.getSquares()[activePlayer.getCoordinate()].doAction(activePlayer);
-            // if (!(activePlayer.holdsDoubles()))
-            //     indexOfPlayer++;
-            // printHeader();
-            // printMap();
-            // printFooter();
-            // if (activePlayer.getDoublesInARow() == 3)
-            // {
-            //     activePlayer.setIsPrisoned(true);
-            //     activePlayer.setCoordinate(10);
-            //     activePlayer.setDoublesInARow(0);
-            // }
-                //break;
-    //     }
-    //     System.out.println("Congratulations, " + players.get(0).getName() + "! You are the ultimate monopolist!");
-    }
-
-    public boolean activePlayerWon()
-    {
-       return (players.size() == 1);
-    }
-
-    public boolean getMoveToJail()
-    {
-       return this.moveToJail;
-    }
-
-
-    public void setPlayers(ArrayList<Player> newplayers)
-    {
-        players = newplayers;             
-    }
-
-    public static ArrayList<Player> getPlayers()
-    {
-        return (players);
-    }
-
-    public boolean ifPlayerHoldsDoubles(){
-        return this.activePlayer.holdsDoubles();
-    }
-
-    public void changePlayer()
-    {
-        if (activePlayer.getDoublesInARow() == 0 || (activePlayer.getDoublesInARow() != 0 && activePlayer.isPrisoned()))
-        {
-            indexOfPlayer++;
-            activePlayer.setDoublesInARow(0);
+            this.activePlayer.setDaysInJail(this.activePlayer.getDaysInJail() + 1);
         }
-        //else if (activePlayer.getDoublesInARow() != 0 && activePlayer.)
-        if (indexOfPlayer == players.size())
+        if (this.activePlayer.getDoublesInARow() == 3)
+        {
+            this.activePlayer.setIsPrisoned(true);
+            this.activePlayer.setDoublesInARow(0);
+            this.activePlayer.setCoordinate(10);
+            this.moveToJail = true;
+            return ;
+        }
+        this.activePlayer.movePlayer(this.activePlayer.getDice());
+    }
+
+    public void                     changePlayer()
+    {
+        if (this.activePlayer.getDoublesInARow() == 0 || (this.activePlayer.getDoublesInARow() != 0 && activePlayer.isPrisoned()))
+        {
+            this.indexOfPlayer++;
+            this.activePlayer.setDoublesInARow(0);
+        }
+        if (this.indexOfPlayer == players.size())
         {
             this.indexOfPlayer = 0;
             for (Player p : players)
                 p.nullifyDice();
         }
-        System.out.println("The index of player: " + indexOfPlayer);            //for testing
-        this.activePlayer = players.get(indexOfPlayer);
+        this.activePlayer = players.get(this.indexOfPlayer);
         this.activeBidder = this.activePlayer;
         this.indexOfBidder = this.indexOfPlayer;
     }
 
-    public void changeBidder()
+    public void                     changeBidder()
     {
-        System.out.println("STARTED CHANGING BIDDER. INDEX OF BIDDER: " + this.indexOfBidder);
         this.indexOfBidder++;
         if (indexOfBidder == bidders.size())
             this.indexOfBidder = 0;
-        this.activeBidder = bidders.get(indexOfBidder);
-        System.out.println("bidder now: " + this.activeBidder.toString());
-        System.out.println("ENDED CHANGING BIDDER. INDEX OF BIDDER: " + this.indexOfBidder);
+        this.activeBidder = bidders.get(this.indexOfBidder);
     }
 
-    public void setBidders(int coordinate)
+    public void                     setBidders(int coordinate)
     {
         bidders = new ArrayList<>();
-        //if (this.activeBidder.getMoney() >= ((Buyable) Board.getSquares()[coordinate]).getPrice())
         bidders.add(this.activeBidder);
         for (Player p : players)
             if (!(p.equals(this.activeBidder)))
                 bidders.add(p);
-        // Al: testing
-        System.out.println("the bidders:");
-        for (Player b : bidders)
-            System.out.println(b);
     }
 
-    public void setPropsToGive()
+    public void                     setPropsToGive()
     {
         this.selectedPropsToGive = new ArrayList<>();
         this.propsToGive = new ArrayList<>();
@@ -479,7 +389,7 @@ public class Monopoly
             this.propsToGive.add(b);
     }
 
-    public void setPropsToReceive()
+    public void                     setPropsToReceive()
     {
         this.selectedPropsToReceive = new ArrayList<>();
         this.propsToReceive = new ArrayList<>();
@@ -487,13 +397,13 @@ public class Monopoly
             this.propsToReceive.add(b);
     }
 
-    public void setTradeLists()
+    public void                     setTradeLists()
     {
         this.setPropsToGive();
         this.setPropsToReceive();
     }
 
-    public void nullifyTradeProps()
+    public void                     nullifyTradeProps()
     {
         this.propsToGive = null;
         this.propsToReceive = null;
@@ -501,99 +411,110 @@ public class Monopoly
         this.selectedPropsToReceive = null;
     }
 
-    public ArrayList<Buyable>   getPropsToReceive()
-    {
-        return (this.propsToReceive);
-    }
-
-    public ArrayList<Buyable>   getPropsToGive()
-    {
-        return (this.propsToGive);
-    }
-
-    public ArrayList<Buyable>   getSelectedPropsToReceive()
-    {
-        return (this.selectedPropsToReceive);
-    }
-
-    public ArrayList<Buyable>   getSelectedPropsToGive()
-    {
-        return (this.selectedPropsToGive);
-    }
-
-    public void removeActiveBidder()
+    public void                     removeActiveBidder()
     {
         for (Player b : bidders)
-            if (b.equals(activeBidder))
+            if (b.equals(this.activeBidder))
             {
-                System.out.println("Removed " + b + " from bidders");
                 bidders.remove(b);
                 break ;
             }
         this.indexOfBidder--;
-        // Al: testing
-        System.out.println("the bidders after removal:");
-        for (Player b : bidders)
-            System.out.println(b);
         changeBidder();
     }
 
-    public void nullifyBidders()
+    public void                     nullifyBidders()
     {
         bidders = null;
     }
 
-    public ArrayList<Player> getBidders()
+    public boolean                  activePlayerWon()
+    {
+        return (players.size() == 1);
+    }
+
+    public ArrayList<Buyable>       getPropsToReceive()
+    {
+        return (this.propsToReceive);
+    }
+
+    public ArrayList<Buyable>       getPropsToGive()
+    {
+        return (this.propsToGive);
+    }
+
+    public ArrayList<Buyable>       getSelectedPropsToReceive()
+    {
+        return (this.selectedPropsToReceive);
+    }
+
+    public ArrayList<Buyable>       getSelectedPropsToGive()
+    {
+        return (this.selectedPropsToGive);
+    }
+
+    public boolean                  getMoveToJail()
+    {
+        return (this.moveToJail);
+    }
+
+    public ArrayList<Player>        getBidders()
     {
         return (bidders);
     }
 
-    public int getActivePlayerCoordinate()
+    public static ArrayList<Player> getPlayers()
     {
-        return (this.activePlayer.getCoordinate());
+        return (players);
     }
 
-    public Player getActivePlayer()
+    public Player                   getActivePlayer()
     {
         return (this.activePlayer);
     }
 
-    public Player getActiveBidder()
+    public Player                   getActiveBidder()
     {
         return (this.activeBidder);
     }
 
-    public int getChoice()
+    public int                      getChoice()
     {
         return (this.choice);
     }
 
-    public void setChoice(int choice)
-    {
-        this.choice = choice;
-    }
-
-    public int getActivePlayerIndex()
+    public int                      getActivePlayerIndex()
     {
         return (this.indexOfPlayer);
     }
 
-    public int getActiveBidderIndex()
+    public int                      getActiveBidderIndex()
     {
         return (this.indexOfBidder);
     }
 
-    public Player getTradee()
+    public Player                   getTradee()
     {
         return (this.tradee);
     }
 
-    public void setTradee(Player tradee)
+    public int                      getNumberOfPlayers()
+    {
+        return (players.size());
+    }
+
+    public void                     setTradee(Player tradee)
     {
         this.tradee = tradee;
     }
-    public int  getNumberOfPlayers()
+
+    public void                     setPlayers(ArrayList<Player> newplayers)
     {
-        return (players.size());
+        players = newplayers;             
+    }
+
+    public void                     setChoice(int choice)
+    {
+        this.choice = choice;
     }
 }

@@ -84,7 +84,14 @@ public class Property extends Buyable
     {                                                     //JUST ADDED
         if (this.getOwner() == null)
             return (false);
-        if (this.getOwner().doesOwnAllProps(this) && !(this.getOwner().hasMortgagedPropertydInASet(this)) && houses < 5)
+        if (this.getOwner().doesOwnAllProps(this) && !(this.getOwner().hasMortgagedPropertydInASet(this)) && houses < 5 && this.getOwner().allowedToBuild(this))
+            return (true);
+        return (false);
+    }
+
+    public boolean canBeDegraded()
+    {
+        if (houses > 0 && this.getOwner().allowedToDegrade(this))
             return (true);
         return (false);
     }

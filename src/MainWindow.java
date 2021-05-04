@@ -84,8 +84,8 @@ public class MainWindow extends JFrame implements ActionListener{
         private JLabel              youGive;
         private JPanel              propsToGivePanel;
         private JPanel              selectedPropsToGivePanel;
-        private ArrayList<JButton>  propsToGive = new ArrayList<>();
-        private ArrayList<JButton>  selectedPropsToGive = new ArrayList<>();
+        private ArrayList<GeneralButton>  propsToGive = new ArrayList<>();
+        private ArrayList<GeneralButton>  selectedPropsToGive = new ArrayList<>();
         private JPanel              traderCardPanel;
         private JLabel              traderCardLabel;
         private JComboBox<String>   traderCard;
@@ -99,18 +99,18 @@ public class MainWindow extends JFrame implements ActionListener{
         private JLabel              theyGive;
         private JPanel              propsToReceivePanel;
         private JPanel              selectedPropsToReceivePanel;
-        private ArrayList<JButton>  propsToReceive = new ArrayList<>();
-        private ArrayList<JButton>  selectedPropsToReceive = new ArrayList<>();    
+        private ArrayList<GeneralButton>  propsToReceive = new ArrayList<>();
+        private ArrayList<GeneralButton>  selectedPropsToReceive = new ArrayList<>();    
         private JPanel              tradeeCardPanel;
         private JLabel              tradeeCardLabel;
         private JComboBox<String>   tradeeCard;
 
         private JPanel              tradeButtons;
 
-        private JButton             confirmTrade;
-        private JButton             cancelTrade;
-        private JButton             acceptTrade;
-        private JButton             declineTrade;
+        private GeneralButton             confirmTrade;
+        private GeneralButton             cancelTrade;
+        private GeneralButton             acceptTrade;
+        private GeneralButton             declineTrade;
 
         private JLabel              confirmation;
         private JPanel              confirmationPanel;
@@ -198,10 +198,10 @@ public class MainWindow extends JFrame implements ActionListener{
             this.tradeePanel.add(this.tradeeBelongingsPanel);
             this.tradeePanel.add(this.tradeeCardPanel);
 
-            this.confirmTrade = new JButton("Confirm");
-            this.cancelTrade = new JButton("Cancel");
-            this.acceptTrade = new JButton("Accept");
-            this.declineTrade = new JButton("Decline");
+            this.confirmTrade = new GeneralButton("Confirm");
+            this.cancelTrade = new GeneralButton("Cancel");
+            this.acceptTrade = new GeneralButton("Accept");
+            this.declineTrade = new GeneralButton("Decline");
             this.confirmTrade.addActionListener(this);
             this.cancelTrade.addActionListener(this);
             this.acceptTrade.addActionListener(this);
@@ -222,19 +222,19 @@ public class MainWindow extends JFrame implements ActionListener{
         private void refreshBelongingsPanel()
         {
             // deleting old buttons
-            for (JButton b : this.propsToGive)
+            for (GeneralButton b : this.propsToGive)
                 this.propsToGivePanel.remove(b);
             this.propsToGivePanel.revalidate();
             this.propsToGivePanel.repaint();
-            for (JButton b : this.selectedPropsToGive)
+            for (GeneralButton b : this.selectedPropsToGive)
                 this.selectedPropsToGivePanel.remove(b);
             this.selectedPropsToGivePanel.revalidate();
             this.selectedPropsToGivePanel.repaint();
-            for (JButton b : this.propsToReceive)
+            for (GeneralButton b : this.propsToReceive)
                 this.propsToReceivePanel.remove(b);
             this.propsToReceivePanel.revalidate();
             this.propsToReceivePanel.repaint();
-            for (JButton b : this.selectedPropsToReceive)
+            for (GeneralButton b : this.selectedPropsToReceive)
                 this.selectedPropsToReceivePanel.remove(b);
             this.selectedPropsToReceivePanel.revalidate();
             this.selectedPropsToReceivePanel.repaint();
@@ -245,34 +245,34 @@ public class MainWindow extends JFrame implements ActionListener{
             this.selectedPropsToReceive = new ArrayList<>();
             // creating new buttons
             for (int i = 0; i < game.getPropsToGive().size(); i++)
-                this.propsToGive.add(new JButton(game.getPropsToGive().get(i).toString()));
+                this.propsToGive.add(new GeneralButton(game.getPropsToGive().get(i).toString()));
             for (int i = 0; i < game.getSelectedPropsToGive().size(); i++)
-                this.selectedPropsToGive.add(new JButton(game.getSelectedPropsToGive().get(i).toString()));
+                this.selectedPropsToGive.add(new GeneralButton(game.getSelectedPropsToGive().get(i).toString()));
             for (int i = 0; i < game.getPropsToReceive().size(); i++)
-                this.propsToReceive.add(new JButton(game.getPropsToReceive().get(i).toString()));
+                this.propsToReceive.add(new GeneralButton(game.getPropsToReceive().get(i).toString()));
             for (int i = 0; i < game.getSelectedPropsToReceive().size(); i++)
-                this.selectedPropsToReceive.add(new JButton(game.getSelectedPropsToReceive().get(i).toString()));
+                this.selectedPropsToReceive.add(new GeneralButton(game.getSelectedPropsToReceive().get(i).toString()));
             // adding new buttons
             this.propsToGivePanel.setLayout(new GridLayout(game.getPropsToGive().size(), 1));
-            for (JButton b : this.propsToGive)
+            for (GeneralButton b : this.propsToGive)
             {
                 b.addActionListener(this);
                 this.propsToGivePanel.add(b);
             }
             this.selectedPropsToGivePanel.setLayout(new GridLayout(game.getSelectedPropsToGive().size(), 1));
-            for (JButton b : this.selectedPropsToGive)
+            for (GeneralButton b : this.selectedPropsToGive)
             {
                 b.addActionListener(this);
                 this.selectedPropsToGivePanel.add(b);
             }
             this.propsToReceivePanel.setLayout(new GridLayout(game.getPropsToReceive().size(), 1));
-            for (JButton b : this.propsToReceive)
+            for (GeneralButton b : this.propsToReceive)
             {
                 b.addActionListener(this);
                 this.propsToReceivePanel.add(b);
             }
             this.selectedPropsToReceivePanel.setLayout(new GridLayout(game.getSelectedPropsToReceive().size(), 1));
-            for (JButton b : this.selectedPropsToReceive)
+            for (GeneralButton b : this.selectedPropsToReceive)
             {
                 b.addActionListener(this);
                 this.selectedPropsToReceivePanel.add(b);
@@ -412,7 +412,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 game.nullifyTradeProps();
             }
 
-            for (JButton button : this.propsToGive)
+            for (GeneralButton button : this.propsToGive)
             {
                 if (e.getSource() == button)
                 {
@@ -426,7 +426,7 @@ public class MainWindow extends JFrame implements ActionListener{
                         }
                 }
             }
-            for (JButton button : this.selectedPropsToGive)
+            for (GeneralButton button : this.selectedPropsToGive)
             {
                 if (e.getSource() == button)
                 {
@@ -441,7 +441,7 @@ public class MainWindow extends JFrame implements ActionListener{
                         }
                 }
             }
-            for (JButton button : this.propsToReceive)
+            for (GeneralButton button : this.propsToReceive)
             {
                 if (e.getSource() == button)
                 {
@@ -457,7 +457,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     }
                 }
             }
-            for (JButton button : this.selectedPropsToReceive)
+            for (GeneralButton button : this.selectedPropsToReceive)
             {
                 if (e.getSource() == button)
                 {
@@ -479,7 +479,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private class TradeSelectionPopUp extends JPanel implements ActionListener
     {
         private JPanel              mainPanel;
-        private ArrayList<JButton>  selectButtons = new ArrayList<>();
+        private ArrayList<GeneralButton>  selectButtons = new ArrayList<>();
         private JLabel              selectText;
 
         private TradeSelectionPopUp()
@@ -496,15 +496,15 @@ public class MainWindow extends JFrame implements ActionListener{
 
         private void initTradeSelectionPopUp()
         {
-            for (JButton b : this.selectButtons)
+            for (GeneralButton b : this.selectButtons)
                 this.mainPanel.remove(b);
             this.selectButtons = new ArrayList<>();
             for (int i = 0; i < Monopoly.getPlayers().size(); i++)
             {
                 if (!(Monopoly.getPlayers().get(i).equals(game.getActivePlayer())))
-                    this.selectButtons.add(new JButton(Monopoly.getPlayers().get(i).toString()));
+                    this.selectButtons.add(new GeneralButton(Monopoly.getPlayers().get(i).toString()));
             }
-            for (JButton b : this.selectButtons)
+            for (GeneralButton b : this.selectButtons)
             {
                 b.addActionListener(this);
                 this.mainPanel.add(b);
@@ -514,7 +514,7 @@ public class MainWindow extends JFrame implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            for (JButton b : this.selectButtons)
+            for (GeneralButton b : this.selectButtons)
             {
                 if (e.getSource() == b)
                 {
@@ -695,13 +695,13 @@ public class MainWindow extends JFrame implements ActionListener{
 
     private class CustomPopUp extends JPanel implements ActionListener
     {
-        private TitleDeed   titleDeedPopUp;
-        private JPanel      popUpButtons;
-        private GeneralButton     build;
-        private GeneralButton     destroy;
-        private GeneralButton     mortgage;
-        private GeneralButton     liftMortgage;
-        private int               coordinate;
+        private TitleDeed       titleDeedPopUp;
+        private JPanel          popUpButtons;
+        private GeneralButton   build;
+        private GeneralButton   destroy;
+        private GeneralButton   mortgage;
+        private GeneralButton   liftMortgage;
+        private int             coordinate;
         
         private CustomPopUp()
         {
@@ -752,7 +752,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     build.setEnabled(true);
                 else
                     build.setEnabled(false);
-                if (((Property)Board.getSquares()[coordinate]).getHouses() > 0)
+                if (((Property)Board.getSquares()[coordinate]).canBeDegraded())
                     destroy.setEnabled(true);
                 else
                     destroy.setEnabled(false);
@@ -945,7 +945,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
     }
    
-    private class CustomButton extends JButton
+    private class CustomButton extends GeneralButton
     {
         protected Color color;
         protected int direction;
@@ -1170,19 +1170,19 @@ public class MainWindow extends JFrame implements ActionListener{
 
         private void setBuyable()
         {
-            if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable))
+            if (!(Board.getSquares()[game.getActivePlayer().getCoordinate()] instanceof Buyable))
                 return;
             
             //game.setMessage();  
             game.play(); //just added 
-            this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            this.message.setText((Board.getSquares()[game.getActivePlayer().getCoordinate()]).getMessage());
             this.message.setVisible(true);
             //game.play();
-            if (((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getOwner() == null)
+            if (((Buyable)Board.getSquares()[game.getActivePlayer().getCoordinate()]).getOwner() == null)
             {
                 this.yes.setVisible(true);
                 this.no.setVisible(true);
-                if (game.getActivePlayer().getMoney() < ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).getPrice())
+                if (game.getActivePlayer().getMoney() < ((Buyable)Board.getSquares()[game.getActivePlayer().getCoordinate()]).getPrice())
                     this.yes.setEnabled(false);
                 else   
                     this.yes.setEnabled(true);
@@ -1196,25 +1196,25 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         private void setCustomCards(){
-            if (!(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck)){
+            if (!(Board.getSquares()[game.getActivePlayer().getCoordinate()] instanceof Deck)){
                 return;
             }
-            this.message.setText((Board.getSquares()[game.getActivePlayerCoordinate()]).getMessage());
+            this.message.setText((Board.getSquares()[game.getActivePlayer().getCoordinate()]).getMessage());
             this.message.setVisible(true);
             this.ok.setVisible(true);
         }
 
         private void setGoTaxFree(){
-            if (!Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("GOTaxFree")){
+            if (!Board.getSquares()[game.getActivePlayer().getCoordinate()].getClass().getName().equals("GOTaxFree")){
                 return;
             }
-            this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
+            this.message.setText(Board.getSquares()[game.getActivePlayer().getCoordinate()].getMessage());
             this.message.setVisible(true);
-            if (game.getActivePlayerCoordinate() == 4){
+            if (game.getActivePlayer().getCoordinate() == 4){
                 this.money.setVisible(true);
                 this.percent.setVisible(true);
             }
-            if (game.getActivePlayerCoordinate() == 30){
+            if (game.getActivePlayer().getCoordinate() == 30){
                 throwDice.setEnabled(false);
                 ok.setVisible(true);
                 done.setEnabled(false);         //------------------------
@@ -1225,7 +1225,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
 
         private void setJail(){
-            if (!(Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("Jail"))){
+            if (!(Board.getSquares()[game.getActivePlayer().getCoordinate()].getClass().getName().equals("Jail"))){
                 System.out.println("Checked Jail");
                 return;
             }
@@ -1233,12 +1233,12 @@ public class MainWindow extends JFrame implements ActionListener{
             game.setMessage();//game.play();
             setTheState();
             this.message.setVisible(true);
-            this.message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
-            if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowCard())
+            this.message.setText(Board.getSquares()[game.getActivePlayer().getCoordinate()].getMessage());
+            if (((Jail)Board.getSquares()[game.getActivePlayer().getCoordinate()]).allowCard())
                 this.useTheCard.setVisible(true);
-            //if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowPay())
+            //if (((Jail)Board.getSquares()[game.getActivePlayer().getCoordinate()]).allowPay())
                 this.pay.setVisible(true);
-            if (((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).allowThrow()){
+            if (((Jail)Board.getSquares()[game.getActivePlayer().getCoordinate()]).allowThrow()){
                 throwDice.setEnabled(true);
             }
             else{
@@ -1253,19 +1253,19 @@ public class MainWindow extends JFrame implements ActionListener{
             setAllButtonsVisible(false);
             if (e.getSource() == yes)
             {
-                //((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(true);  JUST REMOVED FOR TESTING
+                //((Buyable)Board.getSquares()[game.getActivePlayer().getCoordinate()]).setWantsToBuy(true);  JUST REMOVED FOR TESTING
                 
-                //Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
+                //Board.getSquares()[game.getActivePlayer().getCoordinate()]).doAction(game.activePlayer);
                 game.play(true);
                 this.setVisible(false);
             }
             else if (e.getSource() == no)
             {
-               // ((Buyable)Board.getSquares()[game.getActivePlayerCoordinate()]).setWantsToBuy(false);     //JUST REMOVED FOR TESTING
-                //Board.getSquares()[game.getActivePlayerCoordinate()]).doAction(game.activePlayer);
+               // ((Buyable)Board.getSquares()[game.getActivePlayer().getCoordinate()]).setWantsToBuy(false);     //JUST REMOVED FOR TESTING
+                //Board.getSquares()[game.getActivePlayer().getCoordinate()]).doAction(game.activePlayer);
                 ///need to open the auction part
                 this.setVisible(false);
-                popUpAuction.initAuctionPopUp(game.getActivePlayerCoordinate());
+                popUpAuction.initAuctionPopUp(game.getActivePlayer().getCoordinate());
                 JOptionPane popAuction = new JOptionPane(popUpAuction, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
                 dialog = new JDialog();
                 dialog.setTitle("Auction");
@@ -1276,13 +1276,13 @@ public class MainWindow extends JFrame implements ActionListener{
                 dialog.setVisible(true);
             }
             else if (e.getSource() == ok){
-                int previousCoordinate = game.getActivePlayerCoordinate();
+                int previousCoordinate = game.getActivePlayer().getCoordinate();
                 // remove sprite
                 System.out.println("REMOVING THE SPRITE AT " + previousCoordinate + " OF THE PLAYER UNDER INDEX OF " + game.getActivePlayerIndex());
                 buttons[previousCoordinate].remove(sprites.get(game.getActivePlayerIndex()));
                 buttons[previousCoordinate].revalidate();
                 buttons[previousCoordinate].repaint();
-                //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                //Board.getSquares()[game.getActivePlayer().getCoordinate()].doAction(game.activePlayer);
                 game.play();
                 setVisible(false);
                 if (Board.getSquares()[previousCoordinate].getClass().getName().equals("Chance")){
@@ -1292,46 +1292,46 @@ public class MainWindow extends JFrame implements ActionListener{
                         this.setVisible(false);
                 }
                 // put sprite
-                System.out.println("PUTTING A NEW SPRITE AT " + game.getActivePlayerCoordinate() + " OF THE PLAYER UNDER INDEX OF " + game.getActivePlayerIndex());
-                buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+                System.out.println("PUTTING A NEW SPRITE AT " + game.getActivePlayer().getCoordinate() + " OF THE PLAYER UNDER INDEX OF " + game.getActivePlayerIndex());
+                buttons[game.getActivePlayer().getCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
                 buttons[previousCoordinate].revalidate();
-                buttons[game.getActivePlayerCoordinate()].repaint();
+                buttons[game.getActivePlayer().getCoordinate()].repaint();
             }
             else if (e.getSource() == money){
-                ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(1);
-                //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                ((GOTaxFree)Board.getSquares()[game.getActivePlayer().getCoordinate()]).setChoice(1);
+                //Board.getSquares()[game.getActivePlayer().getCoordinate()].doAction(game.activePlayer);
                 game.play();
                 this.setVisible(false);
             }
 
             else if (e.getSource() == percent){
-                ((GOTaxFree)Board.getSquares()[game.getActivePlayerCoordinate()]).setChoice(2);
-                //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                ((GOTaxFree)Board.getSquares()[game.getActivePlayer().getCoordinate()]).setChoice(2);
+                //Board.getSquares()[game.getActivePlayer().getCoordinate()].doAction(game.activePlayer);
                 game.play();
                 this.setVisible(false);
             }
             else if (e.getSource() == pay || e.getSource() == useTheCard){
                 if (e.getSource() == pay){
-                    //((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).setUserChoice(1);        //JUST CHANGED
+                    //((Jail)Board.getSquares()[game.getActivePlayer().getCoordinate()]).setUserChoice(1);        //JUST CHANGED
                     game.play(1);
                 }
                 else
-                    game.play(2);//((Jail)Board.getSquares()[game.getActivePlayerCoordinate()]).setUserChoice(2);
+                    game.play(2);//((Jail)Board.getSquares()[game.getActivePlayer().getCoordinate()]).setUserChoice(2);
                 
                 //throwDice.setEnabled(true);
-                //Board.getSquares()[game.getActivePlayerCoordinate()].doAction(game.activePlayer);
+                //Board.getSquares()[game.getActivePlayer().getCoordinate()].doAction(game.activePlayer);
                 //game.play();      //JUST CHANGED
-                if (!game.getActivePlayerState())
+                if (!game.getActivePlayer().state())
                     message.setText("You lost :(");
                 else
-                    message.setText(Board.getSquares()[game.getActivePlayerCoordinate()].getMessage());
+                    message.setText(Board.getSquares()[game.getActivePlayer().getCoordinate()].getMessage());
             }
             
             if (e.getSource() != pay && e.getSource() != useTheCard)
                 updateBottomButtons();
 
 
-            titleDeed.setEverything(game.getActivePlayerCoordinate());
+            titleDeed.setEverything(game.getActivePlayer().getCoordinate());
             setUpInfoTop();
             setTheState();
         }
@@ -1341,7 +1341,7 @@ public class MainWindow extends JFrame implements ActionListener{
         if (!commands.yes.isVisible() && !commands.no.isVisible() && !commands.ok.isVisible() &&
             !commands.pay.isVisible() && !commands.percent.isVisible() && !commands.useTheCard.isVisible() && !commands.money.isVisible())
         {
-            if (game.ifPlayerHoldsDoubles() && !game.getActivePlayer().isPrisoned())
+            if (game.getActivePlayer().holdsDoubles() && !game.getActivePlayer().isPrisoned())
             {      //moved to After doAction is complete
                 //System.out.println("Holds doubles");
                 System.out.println("first");
@@ -1353,7 +1353,10 @@ public class MainWindow extends JFrame implements ActionListener{
             {
                 System.out.println("Second");
                 throwDice.setEnabled(false);
-                done.setEnabled(true);
+                if (game.getActivePlayer().getMoney() >= 0)
+                    done.setEnabled(true);
+                else
+                    done.setEnabled(false);
                 trade.setEnabled(true);
             }
         }
@@ -1365,7 +1368,8 @@ public class MainWindow extends JFrame implements ActionListener{
             trade.setEnabled(false);
         } 
 
-        if (!game.getActivePlayerState()){
+        if (!(game.getActivePlayer().state()))
+        {
             throwDice.setEnabled(false);
             trade.setEnabled(false);
             done.setEnabled(true);
@@ -1374,7 +1378,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
     private void setTheState()
     {
-        if (!game.getActivePlayerState()){
+        if (!game.getActivePlayer().state()){
             // System.out.println("Player removed");
             // game.removePlayer();
             // for (Player player : Monopoly.getPlayers())
@@ -1385,10 +1389,10 @@ public class MainWindow extends JFrame implements ActionListener{
             done.setEnabled(true);
             throwDice.setEnabled(false);
         }
-        else if (game.getActivePlayer().getMoney() < 0 && game.getActivePlayerState()){
+        else if (game.getActivePlayer().getMoney() < 0 && game.getActivePlayer().state()){
             ifLostText.setText("Please mortgage any of your properties or destroy the houses to pay your debts");
             JOptionPane.showMessageDialog(null, ifLost, "Your state", JOptionPane.PLAIN_MESSAGE); 
-            if (game.getActivePlayerState() && game.getActivePlayer().getMoney() < 0){
+            if (game.getActivePlayer().state() && game.getActivePlayer().getMoney() < 0){
                 throwDice.setEnabled(false);
                 throwDice.setEnabled(false);
             }
@@ -1731,18 +1735,17 @@ public class MainWindow extends JFrame implements ActionListener{
         
 
         commands.message.setVisible(false);
-        titleDeed.setEverything(game.getActivePlayerCoordinate());
-        if(Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Buyable){
+        titleDeed.setEverything(game.getActivePlayer().getCoordinate());
+        if (Board.getSquares()[game.getActivePlayer().getCoordinate()] instanceof Buyable)
             this.commands.setBuyable();
-        }
-        else if (Board.getSquares()[game.getActivePlayerCoordinate()] instanceof Deck){
+        else if (Board.getSquares()[game.getActivePlayer().getCoordinate()] instanceof Deck){
             this.commands.setCustomCards();
         }
-        else if (Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("GOTaxFree")){
+        else if (Board.getSquares()[game.getActivePlayer().getCoordinate()].getClass().getName().equals("GOTaxFree")){
             this.commands.setGoTaxFree();
         }
-        else if (Board.getSquares()[game.getActivePlayerCoordinate()].getClass().getName().equals("Jail")){
-            if (game.ifPlayerIsPrisoned()){
+        else if (Board.getSquares()[game.getActivePlayer().getCoordinate()].getClass().getName().equals("Jail")){
+            if (game.getActivePlayer().isPrisoned()){
                 System.out.println("the if of setUpInfoCenter");
                 this.commands.setJail();
             }
@@ -1775,13 +1778,13 @@ public class MainWindow extends JFrame implements ActionListener{
                 //throwDice.setEnabled(false);
                 
                 // remove the old sprite
-                buttons[game.getActivePlayerCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
-                buttons[game.getActivePlayerCoordinate()].revalidate();
-                buttons[game.getActivePlayerCoordinate()].repaint();
+                buttons[game.getActivePlayer().getCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
+                buttons[game.getActivePlayer().getCoordinate()].revalidate();
+                buttons[game.getActivePlayer().getCoordinate()].repaint();
 
-                if (game.ifPlayerIsPrisoned()){
+                if (game.getActivePlayer().isPrisoned()){
                     game.startGame();
-                    // if (!game.ifPlayerHoldsDoubles() || game.ifPlayerIsPrisoned()){      //moved to After doAction is complete
+                    // if (!game.ifPlayerHoldsDoubles() || game.getActivePlayer().isPrisoned()){      //moved to After doAction is complete
                     //     //System.out.println("Holds doubles");
                     //     throwDice.setEnabled(false);
                     //     done.setEnabled(true);
@@ -1789,7 +1792,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
                     commands.setAllButtonsVisible(false);
-                    if (!game.ifPlayerIsPrisoned()){
+                    if (!game.getActivePlayer().isPrisoned()){
                 
                         commands.message.setText("You rolled doubles and are free to go.");
                         setUpInfoCenter();
@@ -1804,9 +1807,9 @@ public class MainWindow extends JFrame implements ActionListener{
                     done.setEnabled(true);
                     commands.message.setVisible(true);
                     setUpInfoTop();
-                    buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
-                    buttons[game.getActivePlayerCoordinate()].revalidate();
-                    buttons[game.getActivePlayerCoordinate()].repaint();
+                    buttons[game.getActivePlayer().getCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+                    buttons[game.getActivePlayer().getCoordinate()].revalidate();
+                    buttons[game.getActivePlayer().getCoordinate()].repaint();
                     return;
                 }
                 game.startGame();
@@ -1820,9 +1823,9 @@ public class MainWindow extends JFrame implements ActionListener{
                 //     done.setEnabled(true);
                 // }   
                 setUpInfoTop(); 
-                buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
-                buttons[game.getActivePlayerCoordinate()].revalidate();
-                buttons[game.getActivePlayerCoordinate()].repaint();
+                buttons[game.getActivePlayer().getCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+                buttons[game.getActivePlayer().getCoordinate()].revalidate();
+                buttons[game.getActivePlayer().getCoordinate()].repaint();
                 updateBottomButtons();
                 if (game.getMoveToJail()){
                     commands.message.setText("You rolled doubles 3 times in a row. GO to Jail");
@@ -1852,17 +1855,20 @@ public class MainWindow extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (!game.getActivePlayerState()){
+                if (!game.getActivePlayer().state())
+                {
+                    buttons[game.getActivePlayer().getCoordinate()].remove(sprites.get(game.getActivePlayerIndex()/* + game.getDefeated()*/));
+                    buttons[game.getActivePlayer().getCoordinate()].revalidate();
+                    buttons[game.getActivePlayer().getCoordinate()].repaint(); 
+                    sprites.remove(game.getActivePlayerIndex());
+                    System.out.println("REMOVING A SPRITE AT " + game.getActivePlayer().getCoordinate() + " OF PLAYER " + game.getActivePlayerIndex()/* + game.getDefeated()*/);
                     game.removePlayer();
-                    buttons[game.getActivePlayerCoordinate()].remove(sprites.get(game.getActivePlayerIndex()));
-                    buttons[game.getActivePlayerCoordinate()].revalidate();
-                    buttons[game.getActivePlayerCoordinate()].repaint();    
                 }
                 
 
                 commands.setVisible(false);
                 // put the sprite at a new space
-                //buttons[game.getActivePlayerCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
+                //buttons[game.getActivePlayer().getCoordinate()].add(sprites.get(game.getActivePlayerIndex()));
                 
                 game.changePlayer();
                 if (game.activePlayerWon()){
@@ -1870,7 +1876,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     dispose();
                 }
                 done.setEnabled(false);
-                titleDeed.setEverything(game.getActivePlayerCoordinate());
+                titleDeed.setEverything(game.getActivePlayer().getCoordinate());
                 System.out.println(game.getActivePlayer().getName());
                 throwDice.setEnabled(true);
                 if (game.getActivePlayer().isPrisoned())
