@@ -237,10 +237,10 @@ public class Monopoly
         this.activeBidder = this.activePlayer;
         this.choice = 0; 
         
-        players.get(1).setMoney(1);
-        players.get(1).getBelongings().add((Buyable)Board.getSquares()[3]);
-        ((Buyable)Board.getSquares()[3]).setOwner(players.get(1));
-        ((Buyable)Board.getSquares()[3]).setIsMortgaged(true);
+        // players.get(1).setMoney(1);
+        // players.get(1).getBelongings().add((Buyable)Board.getSquares()[3]);
+        // ((Buyable)Board.getSquares()[3]).setOwner(players.get(1));
+        // ((Buyable)Board.getSquares()[3]).setIsMortgaged(true);
     }
                                                     // An: we should probably change this to allow each player throw dice and the one with the biggest dice value to be the first player
                                                     // Al: good idea, but let's leave it for later, if we have time 

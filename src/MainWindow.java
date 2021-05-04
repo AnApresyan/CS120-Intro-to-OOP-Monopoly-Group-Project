@@ -48,9 +48,9 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     //infoBottom buttons
-    private JButton throwDice;
-    private JButton done;
-    private JButton trade;
+    private GeneralButton throwDice;
+    private GeneralButton done;
+    private GeneralButton trade;
 
     //belongings panel
 
@@ -139,7 +139,7 @@ public class MainWindow extends JFrame implements ActionListener{
             this.youHave.setText("Your properties:");
 
             this.setLayout(new BorderLayout());
-            this.setSize(new Dimension(500, 500));    
+            //this.setSize(new Dimension(500, 500));    
             // this.setSize(new Dimension(200, 300));
             this.traderSliderValue = new JLabel();
             this.tradeeSliderValue = new JLabel();
@@ -213,7 +213,7 @@ public class MainWindow extends JFrame implements ActionListener{
             // centerLobby.setLayout(new BorderLayout());
             // centerLobby.setSize(new Dimension (400, 400));
             // centerLobby.add(lobbyPanel, BorderLayout.CENTER);
-
+            this.setPreferredSize(new Dimension(300, 600));
             this.add(this.tradeInfoPanel, BorderLayout.NORTH);
             this.add(this.lobbyPanel, BorderLayout.CENTER);
             this.add(this.tradeButtons, BorderLayout.SOUTH);
@@ -697,27 +697,29 @@ public class MainWindow extends JFrame implements ActionListener{
     {
         private TitleDeed   titleDeedPopUp;
         private JPanel      popUpButtons;
-        private JButton     build;
-        private JButton     destroy;
-        private JButton     mortgage;
-        private JButton     liftMortgage;
-        private int         coordinate;
+        private GeneralButton     build;
+        private GeneralButton     destroy;
+        private GeneralButton     mortgage;
+        private GeneralButton     liftMortgage;
+        private int               coordinate;
         
         private CustomPopUp()
         {
             this.setLayout(new BorderLayout());
-            this.setSize(new Dimension(350, 450));
+            //this.setSize(new Dimension(350, 450));
+            this.setPreferredSize(new Dimension(180, 300));
+            
             this.titleDeedPopUp = new TitleDeed();
-            this.titleDeedPopUp.setSize(new Dimension(300, 300));
+            //this.titleDeedPopUp.setSize(new Dimension(300, 400));
         
             //button panel
             this.popUpButtons = new JPanel();
             this.popUpButtons.setLayout(new GridLayout(2, 2, 5, 5));
     
-            this.build = new JButton("Erect House");
-            this.destroy = new JButton("Destroy House");
-            this.mortgage = new JButton("Mortgage Property");
-            this.liftMortgage = new JButton("Lift Mortgage");
+            this.build = new GeneralButton("Erect House");
+            this.destroy = new GeneralButton("Destroy House");
+            this.mortgage = new GeneralButton("Mortgage");
+            this.liftMortgage = new GeneralButton("Lift Mortgage");
             build.addActionListener(this);
             destroy.addActionListener(this);
             mortgage.addActionListener(this);
@@ -729,8 +731,8 @@ public class MainWindow extends JFrame implements ActionListener{
             this.popUpButtons.add(mortgage);
             this.popUpButtons.add(liftMortgage);
 
-            this.add(titleDeedPopUp, BorderLayout.NORTH);
-            this.add(popUpButtons, BorderLayout.CENTER);
+            this.add(titleDeedPopUp, BorderLayout.CENTER);
+            this.add(popUpButtons, BorderLayout.SOUTH);
         }
 
         private void updatePopUp(int coordinate)
@@ -800,6 +802,12 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }
 
+    private class CutomLabel extends JLabel{
+        private CutomLabel(){
+            this.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+            this.setFont(new Font("Futura", Font.CENTER_BASELINE, 13));
+        }
+    }
      
     private class TitleDeed extends JPanel
     {
@@ -810,22 +818,28 @@ public class MainWindow extends JFrame implements ActionListener{
         private JLabel  housePriceOfDeed;
         private JLabel  housesOfDeed;
         private JLabel  isMortgagedOfDeed;
+        private int     coordinate;
         //private JLabel mortgageValue;
 
-        private TitleDeed()
-        {
+        private TitleDeed(){
             super();
-            this.titleOfDeed = new JLabel();
-            this.priceOfDeed = new JLabel();
-            this.ownerNameOfDeed = new JLabel();
-            this.rentOfDeed = new JLabel();
-            this.housePriceOfDeed = new JLabel();
-            this.isMortgagedOfDeed = new JLabel();
-            this.housesOfDeed = new JLabel();
+            this.titleOfDeed = new CutomLabel();
+            this.priceOfDeed = new CutomLabel();
+            this.ownerNameOfDeed = new CutomLabel();
+            this.rentOfDeed = new CutomLabel();
+            this.housePriceOfDeed = new CutomLabel();
+            this.isMortgagedOfDeed = new CutomLabel();
+            this.housesOfDeed = new CutomLabel();
 
-            this.setLayout(new GridLayout(10, 1));
+            //this.setLayout(new GridLayout(10, 1));
+           this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+           this.add(Box.createRigidArea(new Dimension(20, 0)));
+           //this.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+           //this.setHori
             //this.setPreferredSize(new Dimension(150, 200));
             //this.setBorder(BorderFactory.createLineBorder(Color.black));
+            this.add(Box.createVerticalGlue());
             this.add(titleOfDeed);
             this.add(priceOfDeed);
             this.add(isMortgagedOfDeed);
@@ -833,8 +847,15 @@ public class MainWindow extends JFrame implements ActionListener{
             this.add(rentOfDeed);
             this.add(housePriceOfDeed);
             this.add(housesOfDeed);
+            this.setBorder(BorderFactory.createLineBorder(new Color(82, 82, 82, 70), 3));
+            this.add(Box.createVerticalGlue());
             // this.setBackground(Color.GRAY);
             // this.setOpaque(true);
+        }
+        private TitleDeed(int i)
+        {
+            this();
+            this.coordinate = i;
         }
         // private TitleDeed(){
         //     super();
@@ -842,6 +863,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
         private void setEverything(int i)
         {
+            this.coordinate = i;
             setEmpty();
             setTilteOfDeed(Board.getSquares()[i].getTitle());
             if(Board.getSquares()[i] instanceof Buyable)
@@ -860,7 +882,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 else
                     setOwnerNameOfDeed("none");
             }
-
+            this.repaint();
 
         }
         private void setEmpty()
@@ -907,6 +929,20 @@ public class MainWindow extends JFrame implements ActionListener{
         {
             this.housePriceOfDeed.setText("Houses cost $" + housePrice + " each");
         }
+
+        public void paintComponent(Graphics g){
+            
+            super.paintComponent(g);
+            if (coordinate < buttons.length){
+                if(buttons[coordinate].color != null)
+                    g.setColor(buttons[coordinate].color);
+                else
+                    g.setColor(new Color(214, 219, 223 ));
+                g.fillRect(0, 0, this.getWidth(), this.getHeight()/5);
+            }
+            
+        }
+
     }
    
     private class CustomButton extends JButton
@@ -1039,28 +1075,28 @@ public class MainWindow extends JFrame implements ActionListener{
         private JPanel button = new JPanel();
 
         //buttons for Buyable;
-        private JButton yes = new JButton();
-        private JButton no = new JButton();
+        private GeneralButton yes = new GeneralButton();
+        private GeneralButton no = new GeneralButton();
 
         //buttons for the cards
-        private JButton ok = new JButton();
+        private GeneralButton ok = new GeneralButton();
 
         //buttons for the Tax
-        private JButton money = new JButton();
-        private JButton percent = new JButton();
+        private GeneralButton money = new GeneralButton();
+        private GeneralButton percent = new GeneralButton();
 
         //buttons for Jail
-        private JButton pay;
-        private JButton useTheCard;
+        private GeneralButton pay;
+        private GeneralButton useTheCard;
 
 
         private Commands()
         {
             //BoxLayout theLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
            // this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            this.setLayout(new GridLayout(2, 1));
-            this.setPreferredSize(new Dimension(250, 250));
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            // this.setLayout(new GridLayout(2, 1));
+            // this.setPreferredSize(new Dimension(250, 250));
             
             //this.add(Box.createVerticalGlue()); 
             containerForLabel = new JPanel();
@@ -1072,18 +1108,19 @@ public class MainWindow extends JFrame implements ActionListener{
             this.message.setLineWrap(true);
             this.message.setEditable(false);
             this.message.setFocusable(false);
-            this.message.setFont(new Font("Futura", Font.CENTER_BASELINE, 14));
+            //this.message.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
+            this.message.setFont(new Font("Futura", Font.CENTER_BASELINE, 13));
 
             this.button = new JPanel();
             this.button.setLayout(new FlowLayout());
             
-            this.yes = new JButton("Yes");
-            this.no = new JButton("No");
-            this.ok = new JButton("Ok");
-            this.money = new JButton("200$");
-            this.percent = new JButton("10% of your wealth");
-            this.pay = new JButton("Pay 50$");
-            this.useTheCard = new JButton("Use the card");
+            this.yes = new GeneralButton("Yes");
+            this.no = new GeneralButton("No");
+            this.ok = new GeneralButton("Ok");
+            this.money = new GeneralButton("200$");
+            this.percent = new GeneralButton("10% of your wealth");
+            this.pay = new GeneralButton("Pay 50$");
+            this.useTheCard = new GeneralButton("Use the card");
 
             yes.addActionListener(this);
             no.addActionListener(this);
@@ -1105,8 +1142,12 @@ public class MainWindow extends JFrame implements ActionListener{
             this.setOpaque(true);
             this.setVisible(false);
             containerForLabel.add(message);
+            
+
+            this.add(Box.createVerticalGlue());
             this.add(containerForLabel);
             this.add(button);
+            this.add(Box.createVerticalGlue());
         }
 
         private void setAllButtonsVisible(boolean bool)
@@ -1475,12 +1516,12 @@ public class MainWindow extends JFrame implements ActionListener{
         popUpTradeSelection = new TradeSelectionPopUp();
         popUpTrade = new TradePopUp();
         // initializing player sprites
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
-        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p1.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+        sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         if (Monopoly.getPlayers().size() >= 3)
-            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         if (Monopoly.getPlayers().size() >= 4)
-            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/Player4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
+            sprites.add(new JLabel("", new ImageIcon(new ImageIcon("./images/p4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)), JLabel.CENTER));
         Border border = BorderFactory.createLineBorder(new Color(192, 192, 192), 1);
         
         this.setButtons();
@@ -1559,12 +1600,12 @@ public class MainWindow extends JFrame implements ActionListener{
 
         this.titleDeed = new TitleDeed();
         titleDeed.setEverything(0);
-        titleDeed.setPreferredSize(new Dimension(250, 250));
+        titleDeed.setPreferredSize(new Dimension(150, 150));
 
         //the components of commands
         this.commands = new Commands();
         
-        info.setLayout(new BorderLayout());
+        info.setLayout(new BorderLayout(20, 50));
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
         
         infoTop.setSize(new Dimension(300, 700));
@@ -1577,9 +1618,10 @@ public class MainWindow extends JFrame implements ActionListener{
         
        
         infoCenter.setSize(new Dimension(300, 600));
-        infoCenter.setLayout(new GridBagLayout());           //TRYING
+        infoCenter.setLayout(new GridLayout(1, 2, 70, 20));           //TRYING      GridBag
         info.setBorder(new EmptyBorder(30, 30, 30, 30));
 
+ 
         infoCenter.add(titleDeed); //, BorderLayout.WEST
         infoCenter.add(commands);  //, BorderLayout.NORTH
         
@@ -1709,9 +1751,9 @@ public class MainWindow extends JFrame implements ActionListener{
     private void setUpInfoBottom()
     {
         infoBottom.setLayout(new GridLayout());
-        this.throwDice = new JButton("Throw the dice");
-        this.done = new JButton("Done");
-        this.trade = new JButton("Trade");
+        this.throwDice = new GeneralButton("Throw the dice");
+        this.done = new GeneralButton("Done");
+        this.trade = new GeneralButton("Trade");
         done.setEnabled(false);
         throwDice.addActionListener(new ActionListener()
         {
