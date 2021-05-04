@@ -10,36 +10,22 @@ public class StartWindow extends JFrame{
     public StartWindow(){
         super("Monopoly");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(700, 400);                 //this.setSize(1300, 750);
+        this.setSize(700, 400);                 
         this.setLayout(new BorderLayout());
         this.setResizable(false);
-        //this.getContentPane().setBackground(new Color(1, 1, 1));
-
         
-
         //The images
         ImageIcon image = new ImageIcon("./images/LOGO1.png");
         ImageIcon icon = new ImageIcon("./images/icon.png");
-        this.setIconImage(icon.getImage());
-        //ImageIcon image = new ImageIcon("./images/logo2.png");
-        
+        this.setIconImage(icon.getImage());       
         
         //The main panel
         JPanel mainMenu = new JPanel();
-        // mainMenu.setBackground(new Color(255, 244, 246 ));
-        // mainMenu.setOpaque(true);
-        // mainMenu.setBackground(new Color(64, 184, 182));
 
         //Labels
         JLabel mainLabel = new JLabel("Welcome to Alexander's and Anahit's Monopoly");
-        //mainLabel.setForeground(Color.white);
-        // mainLabel.setFont(font);
-        // mainLabel.setFont(new Font("Futura", Font.ROMAN_BASELINE, 14));
-        JPanel setUp = new JPanel();        //change
-        
-        // setUp.setBackground(new Color(255, 244, 246 ));
-        // setUp.setOpaque(true);
 
+        JPanel setUp = new JPanel();        
 
         //the array list of players that will be given to the game when it is initialized
         ArrayList<Player> players = new ArrayList<>(); 
@@ -47,10 +33,9 @@ public class StartWindow extends JFrame{
         //The names of the players
         JLabel namesLabel = new JLabel();
         JTextField nameFromField = new JTextField();
-        nameFromField.setPreferredSize(new Dimension(80, 40));
+        nameFromField.setPreferredSize(new Dimension(80, 30));
         GeneralButton submitName = new GeneralButton("Submit");
         
-        //int numOfNames = 1;
         submitName.addActionListener(new ActionListener(){
 
             @Override
@@ -102,7 +87,6 @@ public class StartWindow extends JFrame{
                 submitNumberOfPlayers.setVisible(false);
                 howManyPlayers.setVisible(false);
                 namesLabel.setText("Please enter the name of Player 1");
-                //namesLabel.setForeground(Color.white);;
                 namesLabel.setVisible(true);
                 nameFromField.setVisible(true);
                 submitName.setVisible(true);
@@ -124,7 +108,7 @@ public class StartWindow extends JFrame{
             }
         });
 
-        //Adding to the setUp           //change
+        //Adding to the setUp           
         setUp.add(start); 
         setUp.add(howManyPlayers);
         setUp.add(submitNumberOfPlayers);
