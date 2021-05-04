@@ -240,51 +240,51 @@ public class Monopoly
         this.choice = 0; 
     }
     
-    public void                     build(Square property)
+    public void build(Square property)
     {
         if (property.getClass().getName().equals("Property"))
             this.activePlayer.erectHouse((Property)property);  
     }
 
-    public void                     destroy(Square property)
+    public void destroy(Square property)
     {
         if (property.getClass().getName().equals("Property"))
             this.activePlayer.degradeProperty((Property)property);
     }
 
-    public void                     mortgage(Square property)
+    public void mortgage(Square property)
     {
         if (property instanceof Buyable)
             this.activePlayer.mortgageProperty((Buyable)property);
     }
 
-    public void                     liftMortgage(Square property)
+    public void liftMortgage(Square property)
     {
         if (property instanceof Buyable)
             this.activePlayer.liftMortgage((Buyable)property);
     }
 
-    public void                     play()
+    public void play()
     {
         setMessage();    
         Board.getSquares()[this.activePlayer.getCoordinate()].doAction(this.activePlayer);
     }
 
-    public void                     play(boolean bool)
+    public void play(boolean bool)
     {
         if (Board.getSquares()[this.activePlayer.getCoordinate()] instanceof Buyable)
             ((Buyable)Board.getSquares()[this.activePlayer.getCoordinate()]).setWantsToBuy(bool);
         play();
     }
 
-    public void                     play(int choice)
+    public void play(int choice)
     {
         if (Board.getSquares()[this.activePlayer.getCoordinate()].getClass().getName().equals("Jail"))
             ((Jail)Board.getSquares()[this.activePlayer.getCoordinate()]).setUserChoice(choice);
         play();
     }
 
-    public void                     setMessage()
+    public void setMessage()
     {
         if (this.activePlayer.getCoordinate() == 10)
             ((Jail)Board.getSquares()[this.activePlayer.getCoordinate()]).checkTheStateSetMessage(this.activePlayer);
@@ -292,7 +292,7 @@ public class Monopoly
             ((Buyable)Board.getSquares()[this.activePlayer.getCoordinate()]).setMessage(this.activePlayer);
     }
 
-    public void                     removePlayer()
+    public void removePlayer()
     {
         if (Board.getSquares()[this.activePlayer.getCoordinate()] instanceof Buyable)
         {
@@ -316,7 +316,7 @@ public class Monopoly
             }
     }
 
-    public void                     startGame()
+    public void startGame()
     {
         this.moveToJail = false;
         if (!(this.activePlayer.isPrisoned()))
@@ -346,7 +346,7 @@ public class Monopoly
         this.activePlayer.movePlayer(this.activePlayer.getDice());
     }
 
-    public void                     changePlayer()
+    public void changePlayer()
     {
         if (this.activePlayer.getDoublesInARow() == 0 || (this.activePlayer.getDoublesInARow() != 0 && activePlayer.isPrisoned()))
         {
@@ -364,7 +364,7 @@ public class Monopoly
         this.indexOfBidder = this.indexOfPlayer;
     }
 
-    public void                     changeBidder()
+    public void changeBidder()
     {
         this.indexOfBidder++;
         if (indexOfBidder == bidders.size())
@@ -372,7 +372,7 @@ public class Monopoly
         this.activeBidder = bidders.get(this.indexOfBidder);
     }
 
-    public void                     setBidders(int coordinate)
+    public void setBidders(int coordinate)
     {
         bidders = new ArrayList<>();
         bidders.add(this.activeBidder);
@@ -381,7 +381,7 @@ public class Monopoly
                 bidders.add(p);
     }
 
-    public void                     setPropsToGive()
+    public void setPropsToGive()
     {
         this.selectedPropsToGive = new ArrayList<>();
         this.propsToGive = new ArrayList<>();
@@ -389,7 +389,7 @@ public class Monopoly
             this.propsToGive.add(b);
     }
 
-    public void                     setPropsToReceive()
+    public void setPropsToReceive()
     {
         this.selectedPropsToReceive = new ArrayList<>();
         this.propsToReceive = new ArrayList<>();
@@ -397,13 +397,13 @@ public class Monopoly
             this.propsToReceive.add(b);
     }
 
-    public void                     setTradeLists()
+    public void setTradeLists()
     {
         this.setPropsToGive();
         this.setPropsToReceive();
     }
 
-    public void                     nullifyTradeProps()
+    public void nullifyTradeProps()
     {
         this.propsToGive = null;
         this.propsToReceive = null;
@@ -411,7 +411,7 @@ public class Monopoly
         this.selectedPropsToReceive = null;
     }
 
-    public void                     removeActiveBidder()
+    public void removeActiveBidder()
     {
         for (Player b : bidders)
             if (b.equals(this.activeBidder))
@@ -423,42 +423,42 @@ public class Monopoly
         changeBidder();
     }
 
-    public void                     nullifyBidders()
+    public void nullifyBidders()
     {
         bidders = null;
     }
 
-    public boolean                  activePlayerWon()
+    public boolean activePlayerWon()
     {
         return (players.size() == 1);
     }
 
-    public ArrayList<Buyable>       getPropsToReceive()
+    public ArrayList<Buyable> getPropsToReceive()
     {
         return (this.propsToReceive);
     }
 
-    public ArrayList<Buyable>       getPropsToGive()
+    public ArrayList<Buyable> getPropsToGive()
     {
         return (this.propsToGive);
     }
 
-    public ArrayList<Buyable>       getSelectedPropsToReceive()
+    public ArrayList<Buyable> getSelectedPropsToReceive()
     {
         return (this.selectedPropsToReceive);
     }
 
-    public ArrayList<Buyable>       getSelectedPropsToGive()
+    public ArrayList<Buyable> getSelectedPropsToGive()
     {
         return (this.selectedPropsToGive);
     }
 
-    public boolean                  getMoveToJail()
+    public boolean getMoveToJail()
     {
         return (this.moveToJail);
     }
 
-    public ArrayList<Player>        getBidders()
+    public ArrayList<Player> getBidders()
     {
         return (bidders);
     }
@@ -468,52 +468,52 @@ public class Monopoly
         return (players);
     }
 
-    public Player                   getActivePlayer()
+    public Player getActivePlayer()
     {
         return (this.activePlayer);
     }
 
-    public Player                   getActiveBidder()
+    public Player getActiveBidder()
     {
         return (this.activeBidder);
     }
 
-    public int                      getChoice()
+    public int getChoice()
     {
         return (this.choice);
     }
 
-    public int                      getActivePlayerIndex()
+    public int getActivePlayerIndex()
     {
         return (this.indexOfPlayer);
     }
 
-    public int                      getActiveBidderIndex()
+    public int getActiveBidderIndex()
     {
         return (this.indexOfBidder);
     }
 
-    public Player                   getTradee()
+    public Player getTradee()
     {
         return (this.tradee);
     }
 
-    public int                      getNumberOfPlayers()
+    public int getNumberOfPlayers()
     {
         return (players.size());
     }
 
-    public void                     setTradee(Player tradee)
+    public void setTradee(Player tradee)
     {
         this.tradee = tradee;
     }
 
-    public void                     setPlayers(ArrayList<Player> newplayers)
+    public void setPlayers(ArrayList<Player> newplayers)
     {
         players = newplayers;             
     }
 
-    public void                     setChoice(int choice)
+    public void setChoice(int choice)
     {
         this.choice = choice;
     }
