@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.awt.event.*;
-//import java.util.concurrent.Flow;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -15,7 +14,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private ArrayList<JLabel> sprites = new ArrayList<>();
     
     private CustomButton[] buttons = new CustomButton[40];
-    private JLayeredPane boardContainer;    //was JPanel
+    private JLayeredPane boardContainer;    
 
     //board components
     private JPanel board;
@@ -1031,19 +1030,7 @@ public class MainWindow extends JFrame implements ActionListener{
         
     }
 
-    private void setCoordinatesOfBelongings(BelongingButton[] buttons)
-    {
-        int indexOfButtons = 0;
-        int indexOfSquares = 0;
-        while (indexOfButtons < buttons.length && indexOfSquares < Board.getSquares().length){
-            while (!(Board.getSquares()[indexOfSquares] instanceof Buyable)){
-                indexOfSquares++;
-            }
-            buttons[indexOfButtons++].setCoordinate(indexOfSquares++);
-        }   
-    }
 
-    
     //for Easy grouping and access
     private class Commands extends JPanel implements ActionListener
     {
@@ -1283,6 +1270,18 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }
 
+    private void setCoordinatesOfBelongings(BelongingButton[] buttons)
+    {
+        int indexOfButtons = 0;
+        int indexOfSquares = 0;
+        while (indexOfButtons < buttons.length && indexOfSquares < Board.getSquares().length){
+            while (!(Board.getSquares()[indexOfSquares] instanceof Buyable)){
+                indexOfSquares++;
+            }
+            buttons[indexOfButtons++].setCoordinate(indexOfSquares++);
+        }   
+    }
+
     private void updateBottomButtons(){
         if (!commands.yes.isVisible() && !commands.no.isVisible() && !commands.ok.isVisible() &&
             !commands.pay.isVisible() && !commands.percent.isVisible() && !commands.useTheCard.isVisible() && !commands.money.isVisible())
@@ -1361,8 +1360,6 @@ public class MainWindow extends JFrame implements ActionListener{
         this.setVisible(true);
         
     }
-
-
 
     private void setButtons(){
         for (int i = 0; i < buttons.length; i++){                   
