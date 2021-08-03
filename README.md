@@ -121,6 +121,7 @@ CLASSES TESTED: Board, Buyable, Chance, Chest, GOTaxFree, GoToJail, Railroad, Ut
 CLASSES PENGING TESTING: Jail, Property (housing features)
 
 An:
+
 10) Completely changed the board structure:D ;       // Al: haha it must've happened some day...
 11) Added some colors to the board;
 12) Added the logic for the information of titleDeeds when clicked
@@ -218,6 +219,7 @@ Al:
 An:
 
 Thanks for the kind words:D
+
 12) Separated the windows in the beginning from the MainWindow to make it look more organized;
 13) Along with that got rid of the reduntant variable numOfNames.
 
