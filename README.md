@@ -1,4 +1,4 @@
-# Anahit's and Alexander's Monopoly
+# Anahit and Alexander's Monopoly
 
 This is a program written in Java, which using Java Swing, simulates Monopoly: Classic Edition. Here is a guideline to help you get started to play it properly.
 
@@ -234,15 +234,15 @@ Al:
 5) fixed an issue causing severe sync problems with sprites after player removal;
 6) removed chunks of comments throughout the code;
 7) formatted the code to comply with School 42's coding norm (because it's beautiful!)
-
-KNOWN ISSUES:
+```
+## Known Issues
 1. the layout of trade may not contain escape buttons such as Cancel, Confirm, Accept, Decline
    when there's too many belongings of either the trader or the tradee
 2. the Accept/Decline mode of trade pop-up doesn't hide lobbyPanel during the very first trade
 3. the sprites land on the top of each other upon entering Jail and Free Parking, even though 
    their layout is set to be a FlowLayout (which is not the case for GO, oddly enough)
-```
-# Credits
+
+## Credits
 
 `Anahit Apresyan` -- lead programmer, lead UI designer
 
